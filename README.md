@@ -16,3 +16,24 @@ __global__ void kernel(T* const output, const T* const input){
 	output[tid] = cuda::math::sin( __ldg(input + tid) * cuda::type::cast<T>(PI) );
 }
 ```
+
+## Functions
+- math
+	- ceil
+	- cos
+	- exp
+	- exp10
+	- exp2
+	- floor
+	- log
+	- log10
+	- log2
+	- rcp
+	- rint
+	- rsqrt
+	- sin
+	- sqrt
+	- trunc
+
+- type
+	- cast
