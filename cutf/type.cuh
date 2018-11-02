@@ -8,6 +8,14 @@
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
 	template <> __device__ dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
 
+#define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
+	template <> __device__ dst_type rcast<dst_type, rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
+#define RCASTS(src_type, src_ty, dst_type, dst_ty) \
+	RCAST(src_type, src_ty, dst_type, dst_ty, rd); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, rn); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, ru); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, rz); 
+
 namespace{
 namespace cuda {
 namespace type {
@@ -39,6 +47,37 @@ REINTERPRET(double, double, long long, longlong);
 REINTERPRET(int, int, float, float);
 REINTERPRET(unsigned int, uint, float, float);
 REINTERPRET(long long, longlong, double, double);
+
+// rounding cast
+namespace rounding{
+	struct rd;
+	struct rn;
+	struct ru;
+	struct rz;
+};
+template <class T, class R> __device__ T rcast(const float a);
+template <class T, class R> __device__ T rcast(const double a);
+template <class T, class R> __device__ T rcast(const int a);
+template <class T, class R> __device__ T rcast(const unsigned int a);
+template <class T, class R> __device__ T rcast(const unsigned long long int a);
+template <class T, class R> __device__ T rcast(const long long int a);
+
+RCASTS(float, float, int, int);
+RCASTS(float, float, long long int, ll);
+RCASTS(float, float, unsigned int, uint);
+RCASTS(float, float, unsigned long long int, ull);
+RCASTS(double, double, float, float);
+RCASTS(double, double, int, int);
+RCASTS(double, double, long long int, ll);
+RCASTS(double, double, unsigned int, uint);
+RCASTS(double, double, unsigned long long int, ull);
+RCASTS(int, int, float, float);
+RCASTS(long long int , ll, double, double);
+RCASTS(long long int , ll, float, float);
+RCASTS(unsigned int , uint, float, float);
+RCASTS(unsigned long long int , ull, double, double);
+RCASTS(unsigned long long int , ull, float, float);
+
 
 } // namespace type	
 } // cuda
