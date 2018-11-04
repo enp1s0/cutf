@@ -13,7 +13,7 @@ __global__ void kernel(T* const output, const T* const input){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if( tid >= N ) return;
 	
-	output[tid] = cuda::math::sin( __ldg(input + tid) * cuda::type::cast<T>(PI) );
+	output[tid] = mtk::cuda::math::sin( __ldg(input + tid) * mtk::cuda::type::cast<T>(PI) );
 }
 ```
 

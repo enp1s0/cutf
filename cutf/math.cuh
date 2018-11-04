@@ -26,6 +26,7 @@ template<> __device__ double func<double>(const double a){return func( a );}
 namespace{
 __device__ float rcpf(const float a){return 1.0f / a;}
 __device__ double rcp(const double a){return 1.0 / a;}
+namespace mtk{
 namespace cuda{
 namespace math{
 MATH_FUNC(ceil);
@@ -45,5 +46,6 @@ MATH_FUNC(sqrt);
 MATH_FUNC(trunc);
 } // math
 } // cuda
+} // mtk
 } // noname
 #endif // __CUTF_MATH_CUH__
