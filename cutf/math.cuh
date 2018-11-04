@@ -4,16 +4,16 @@
 #include <cuda_fp16.h>
 
 #define DEF_TEMPLATE_MATH_FUNC_1(func) \
-template<class T> __device__ T func(const T a);
+template<class T> inline __device__ T func(const T a);
 
 #define SPEC_MATH_FUNC_1_h( func ) \
-template<> __device__ half func<half>(const half a){return h##func( a );}	
+template<> inline __device__ half func<half>(const half a){return h##func( a );}	
 #define SPEC_MATH_FUNC_1_h2( func ) \
-template<> __device__ half2 func<half2>(const half2 a){return h2##func( a );}	
+template<> inline __device__ half2 func<half2>(const half2 a){return h2##func( a );}	
 #define SPEC_MATH_FUNC_1_f( func ) \
-template<> __device__ float func<float>(const float a){return func##f( a );}	
+template<> inline __device__ float func<float>(const float a){return func##f( a );}	
 #define SPEC_MATH_FUNC_1_d( func ) \
-template<> __device__ double func<double>(const double a){return func( a );}	
+template<> inline __device__ double func<double>(const double a){return func( a );}	
 
 #define MATH_FUNC(func) \
 	DEF_TEMPLATE_MATH_FUNC_1(func) \
@@ -23,9 +23,8 @@ template<> __device__ double func<double>(const double a){return func( a );}
 	SPEC_MATH_FUNC_1_d(func) \
 
 
-namespace{
-__device__ float rcpf(const float a){return 1.0f / a;}
-__device__ double rcp(const double a){return 1.0 / a;}
+inline __device__ float rcpf(const float a){return 1.0f / a;}
+inline __device__ double rcp(const double a){return 1.0 / a;}
 namespace mtk{
 namespace cuda{
 namespace math{
@@ -47,5 +46,4 @@ MATH_FUNC(trunc);
 } // math
 } // cuda
 } // mtk
-} // noname
 #endif // __CUTF_MATH_CUH__
