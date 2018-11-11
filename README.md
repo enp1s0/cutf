@@ -38,3 +38,8 @@ __global__ void kernel(T* const output, const T* const input){
 - type
 	- cast
 	- rounding cast
+
+- memory
+	- get\_device\_unique\_ptr
+	- get\_host\_unique\_ptr
+	- copy
