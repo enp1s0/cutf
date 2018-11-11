@@ -37,3 +37,4 @@ __global__ void kernel(T* const output, const T* const input){
 
 - type
 	- cast
+	- rounding cast
