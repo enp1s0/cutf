@@ -2,6 +2,9 @@
 #define __CUTF_MEMORY_CUH__
 
 #include <memory>
+#include "error.cuh"
+
+#define MTK_CUDA_CHECK_ERROR(error_code) mtk::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
 
 namespace mtk{
 namespace cuda{
@@ -12,14 +15,14 @@ template <class T>
 class device_deleter{
 public:
 	void operator()(T* ptr){
-		cudaFree( ptr );
+		MTK_CUDA_CHECK_ERROR(cudaFree( ptr ));
 	}
 };
 template <class T>
 class host_deleter{
 public:
 	void operator()(T* ptr){
-		cudaFreeHost( ptr );
+		MTK_CUDA_CHECK_ERROR(cudaFreeHost( ptr ));
 	}
 };
 
@@ -33,20 +36,20 @@ using host_unique_ptr = std::unique_ptr<T, host_deleter<T>>;
 template <class T>
 inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
 	T* ptr;
-	cudaMalloc((void**)&ptr, sizeof(T) * size);
+	MTK_CUDA_CHECK_ERROR(cudaMalloc((void**)&ptr, sizeof(T) * size));
 	return std::unique_ptr<T, device_deleter<T>>{ptr};
 }
 template <class T>
 inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
 	T* ptr;
-	cudaMallocHost((void**)&ptr, sizeof(T) * size);
+	MTK_CUDA_CHECK_ERROR(cudaMallocHost((void**)&ptr, sizeof(T) * size));
 	return std::unique_ptr<T, host_deleter<T>>{ptr};
 }
 
 // copy
 template <class T>
 inline void copy(T* const dst, const T* const src, const std::size_t size){
-	auto result = cudaMemcpy(dst, src, sizeof(T) * size, cudaMemcpyDefault);
+	MTK_CUDA_CHECK_ERROR(cudaMemcpy(dst, src, sizeof(T) * size, cudaMemcpyDefault));
 }
 
 } // memory
