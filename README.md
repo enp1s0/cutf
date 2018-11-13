@@ -21,7 +21,7 @@ using T = float;
 int main(){
 	auto in = mtk::cuda::memory::get_device_unique_ptr<T>(N);
 	auto out = mtk::cuda::memory::get_device_unique_ptr<T>(N);
-	auto h_out = mtk::cuda::memory::get_device_unique_ptr<T>(N);
+	auto h_out = mtk::cuda::memory::get_host_unique_ptr<T>(N);
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
