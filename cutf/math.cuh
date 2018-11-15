@@ -23,8 +23,8 @@ template<>  __device__ inline double func<double>(const double a){return func( a
 	SPEC_MATH_FUNC_1_d(func) \
 
 
- __device__ inline float rcpf(const float a){return 1.0f / a;}
- __device__ inline double rcp(const double a){return 1.0 / a;}
+ __device__ inline float rcpf(const float a){return __frcp_rn(a);}
+ __device__ inline double rcp(const double a){return __drcp_rn(a);}
 namespace mtk{
 namespace cuda{
 namespace math{
