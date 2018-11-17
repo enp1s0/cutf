@@ -28,11 +28,22 @@ cutf::cuda::type::cast<type>(x);
 cutf::cuda::type::reinterpret<type>(x);
 cutf::cuda::type::rcast<type, rounding>(x);
 ```
+
+#### description
+
 |Cast| description |
 |:--------|:------------|
 |cast|`half`,`float`,`double` casts each other|
 |reinterpret|reinterpret cast|
 |rcast|rounding cast|
+
+#### rounding
+| Rounding type | description |
+|:--------------|:------------|
+|`cutf::cuda::type::rounding::rd`|round-down mode|
+|`cutf::cuda::type::rounding::rn`|round-to-nearest-even mode|
+|`cutf::cuda::type::rounding::ru`|round-up mode|
+|`cutf::cuda::type::rounding::rz`|round-towards-zero mode|
 
 - memory
 	- get\_device\_unique\_ptr
