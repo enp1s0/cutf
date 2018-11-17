@@ -732,6 +732,179 @@ HER2K_DEF(cuDoubleComplex, Z, double);
 HERKX_DEF(cuComplex, C, float);
 HERKX_DEF(cuDoubleComplex, Z, double);
 
+// ==================================================
+// BLAS Lv 1
+// ==================================================
+// geam
+#define GEAM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t geam(cublasHandle_t handle, \
+			cublasOperation_t transa, cublasOperation_t transb, \
+			int m, int n, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *beta, \
+			const type_name *B, int ldb, \
+			type_name *C, int ldc){ \
+		return cublas##short_type_name##geam(handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+GEAM_DEF(float, S);
+GEAM_DEF(double, D);
+GEAM_DEF(cuComplex, C);
+GEAM_DEF(cuDoubleComplex, Z);
+
+// dgmm
+#define DGMM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t dgmm(cublasHandle_t handle, cublasSideMode_t mode, \
+			int m, int n, \
+			const type_name *A, int lda, \
+			const type_name *x, int incx, \
+			type_name *C, int ldc){ \
+		return cublas##short_type_name##dgmm(handle, mode, m, n, A, lda, x, incx, C, ldc); \
+	}
+DGMM_DEF(float, S);
+DGMM_DEF(double, D);
+DGMM_DEF(cuComplex, C);
+DGMM_DEF(cuDoubleComplex, Z);
+
+// getrfBatched
+#define GETRF_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t getrf_batched(cublasHandle_t handle, \
+			int n,  \
+			type_name *Aarray[], \
+			int lda,  \
+			int *PivotArray, \
+			int *infoArray, \
+			int batchSize){ \
+		return cublas##short_type_name##getrfBatched(handle, n, Aarray, lda, PivotArray, infoArray, batchSize); \
+	}
+GETRF_BATCHED_DEF(float, S);
+GETRF_BATCHED_DEF(double, D);
+GETRF_BATCHED_DEF(cuComplex, C);
+GETRF_BATCHED_DEF(cuDoubleComplex, Z);
+
+// getrsBatched
+#define GETRS_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t getrs_batched(cublasHandle_t handle, \
+			cublasOperation_t trans,  \
+			int n,  \
+			int nrhs,  \
+			const type_name *Aarray[],  \
+			int lda,  \
+			const int *devIpiv,  \
+			type_name *Barray[],  \
+			int ldb,  \
+			int *info, \
+			int batchSize){ \
+		return cublas##short_type_name##getrsBatched(handle, trans, n, nrhs, Aarray, lda, devIpiv, Barray, ldb, info, batchSize); \
+	}
+GETRS_BATCHED_DEF(float, S);
+GETRS_BATCHED_DEF(double, D);
+GETRS_BATCHED_DEF(cuComplex, C);
+GETRS_BATCHED_DEF(cuDoubleComplex, Z);
+
+// getriBatched
+#define GETRI_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t getri_batched(cublasHandle_t handle, \
+			int n, \
+			type_name *Aarray[], \
+			int lda, \
+			int *PivotArray, \
+			type_name *Carray[], \
+			int ldc, \
+			int *infoArray, \
+			int batchSize){ \
+		return cublas##short_type_name##getriBatched(handle, n, Aarray, lda, PivotArray, Carray, ldc, infoArray, batchSize); \
+	}
+GETRI_BATCHED_DEF(float, S);
+GETRI_BATCHED_DEF(double, D);
+GETRI_BATCHED_DEF(cuComplex, C);
+GETRI_BATCHED_DEF(cuDoubleComplex, Z);
+
+// matinvBatched
+#define MATINV_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t matinv_batched(cublasHandle_t handle, \
+			int n,  \
+			const type_name *A[], \
+			int lda, \
+			type_name *Ainv[], \
+			int lda_inv, \
+			int *info, \
+			int batchSize){ \
+		return cublas##short_type_name##matinvBatched(handle, n, A, lda, Ainv, lda_inv, info, batchSize); \
+	}
+MATINV_BATCHED_DEF(float, S);
+MATINV_BATCHED_DEF(double, D);
+MATINV_BATCHED_DEF(cuComplex, C);
+MATINV_BATCHED_DEF(cuDoubleComplex, Z);
+
+// geqrfBatched
+#define GEQRF_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t geqrf_batched( cublasHandle_t handle,  \
+			int m,  \
+			int n, \
+			type_name *Aarray[],   \
+			int lda,  \
+			type_name *TauArray[],  \
+			int *info, \
+			int batchSize){ \
+		return cublas##short_type_name##geqrfBatched(handle, m, n, Aarray, lda, TauArray, info, batchSize); \
+	}
+GEQRF_BATCHED_DEF(float, S);
+GEQRF_BATCHED_DEF(double, D);
+GEQRF_BATCHED_DEF(cuComplex, C);
+GEQRF_BATCHED_DEF(cuDoubleComplex, Z);
+
+// gelsBatched
+#define GELS_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gels_batched( cublasHandle_t handle, \
+			cublasOperation_t trans, \
+			int m, \
+			int n, \
+			int nrhs, \
+			float *Aarray[], \
+			int lda, \
+			float *Carray[], \
+			int ldc, \
+			int *info, \
+			int *devInfoArray, \
+			int batchSize ){ \
+		return cublas##short_type_name##gelsBatched(handle, m, n, nrhs, Aarray, lda, Carray, ldc, info, devInfoArray, batchSize); \
+	}
+GELS_BATCHED_DEF(float, S);
+GELS_BATCHED_DEF(double, D);
+GELS_BATCHED_DEF(cuComplex, C);
+GELS_BATCHED_DEF(cuDoubleComplex, Z);
+
+// tpttr
+#define TPTTR_DEF(type_name, short_type_name) \
+	inline cublasStatus_t tpttr( cublasHandle_t handle, \
+			cublasFillMode_t uplo, \
+			int n, \
+			const type_name *AP, \
+			type_name *A, \
+			int lda ) { \
+		return cublas##short_type_name##tpttr(handle, uplo, n, AP, A, lda); \
+	}
+TPTTR_DEF(float, S);
+TPTTR_DEF(double, D);
+TPTTR_DEF(cuComplex, C);
+TPTTR_DEF(cuDoubleComplex, Z);
+
+// trttp
+#define TRTTP_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trttp( cublasHandle_t handle, \
+			cublasFillMode_t uplo, \
+			int n, \
+			const float *A, \
+			int lda, \
+			float *AP ){ \
+		return cublas##short_type_name##trttp(handle, uplo, n, A, lda, AP); \
+	}
+TRTTP_DEF(float, S);
+TRTTP_DEF(double, D);
+TRTTP_DEF(cuComplex, C);
+TRTTP_DEF(cuDoubleComplex, Z);
+
 } // cublas
 } // mtk
 
