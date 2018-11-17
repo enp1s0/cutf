@@ -1,6 +1,9 @@
 # CUDA Functions
 ## Implemented Functions
 ### math
+```cpp
+cutf::cuda::math::[operation]
+```
 |Operation| description |
 |:--------|:------------|
 |ceil|$`\lceil x \rceil`$|
@@ -19,9 +22,17 @@
 |sqrt|$`\sqrt{x}`$|
 |trunc|	Truncate input argument to the integral part|
 
-- type
-	- cast
-	- rounding cast
+### type
+```cpp
+cutf::cuda::type::cast<type>(x);
+cutf::cuda::type::reinterpret<type>(x);
+cutf::cuda::type::rcast<type, rounding>(x);
+```
+|Cast| description |
+|:--------|:------------|
+|cast|`half`,`float`,`double` casts each other|
+|reinterpret|reinterpret cast|
+|rcast|rounding cast|
 
 - memory
 	- get\_device\_unique\_ptr
