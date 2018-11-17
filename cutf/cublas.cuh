@@ -919,6 +919,10 @@ template <> constexpr cudaDataType_t get_cuda_data_type<float    , char>(){retur
 template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, char>(){return CUDA_C_8I;}
 template <> constexpr cudaDataType_t get_cuda_data_type<float    , unsigned char>(){return CUDA_R_8U;}
 template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, unsigned char>(){return CUDA_C_8U;}
+template <> constexpr cudaDataType_t get_cuda_data_type<float    , int>(){return CUDA_R_32I;}
+template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, int>(){return CUDA_C_32I;}
+template <> constexpr cudaDataType_t get_cuda_data_type<float    , unsigned int>(){return CUDA_R_32U;}
+template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, unsigned int>(){return CUDA_C_32U;}
 }
 
 } // cublas
