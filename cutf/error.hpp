@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <sstream>
 
-namespace mtk{
+namespace cutf{
 namespace cuda{
 namespace error{
 inline void check(cudaError_t error, const std::string filename, const std::size_t line, const std::string funcname){
@@ -15,6 +15,6 @@ inline void check(cudaError_t error, const std::string filename, const std::size
 }
 } // error
 } // cuda
-} // mtk
+} // cutf
 
 #endif // __CUTF_ERROR_CUH__

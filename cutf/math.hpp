@@ -25,7 +25,7 @@ template<>  __device__ inline double func<double>(const double a){return func( a
 
  __device__ inline float rcpf(const float a){return __frcp_rn(a);}
  __device__ inline double rcp(const double a){return __drcp_rn(a);}
-namespace mtk{
+namespace cutf{
 namespace cuda{
 namespace math{
 MATH_FUNC(ceil);
@@ -45,5 +45,5 @@ MATH_FUNC(sqrt);
 MATH_FUNC(trunc);
 } // math
 } // cuda
-} // mtk
+} // cutf
 #endif // __CUTF_MATH_CUH__

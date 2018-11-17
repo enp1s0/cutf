@@ -3,7 +3,7 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
-namespace mtk{
+namespace cutf{
 namespace cublas{
 // ==================================================
 // BLAS Lv 1
@@ -906,6 +906,6 @@ TRTTP_DEF(cuComplex, C);
 TRTTP_DEF(cuDoubleComplex, Z);
 
 } // cublas
-} // mtk
+} // cutf
 
 #endif // __CUTF_CUBLAS_CUH__

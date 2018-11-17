@@ -16,7 +16,7 @@
 	RCAST(src_type, src_ty, dst_type, dst_ty, ru); \
 	RCAST(src_type, src_ty, dst_type, dst_ty, rz); 
 
-namespace mtk{
+namespace cutf{
 namespace cuda {
 namespace type {
 template <class T>  __host__ __device__ inline T cast(const half a);
@@ -81,6 +81,6 @@ RCASTS(unsigned long long int , ull, float, float);
 
 } // namespace type	
 } // cuda
-} // mtk
+} // cutf
 
 #endif // __CUTF_TYPE_CUH__
