@@ -28,8 +28,6 @@ cutf::cuda::type::reinterpret<type>(x);
 cutf::cuda::type::rcast<type, rounding>(x);
 ```
 
-### description
-
 |Cast| description |
 |:--------|:------------|
 |cast|`half`,`float`,`double` casts each other|
@@ -46,7 +44,13 @@ cutf::cuda::type::rcast<type, rounding>(x);
 
 ## memory
 ```cpp
-auto dA = cutf::cuda::memory::get_device_unique_ptr<type>(size);
-auto hA = cutf::cuda::memory::get_host_unique_ptr<type>(size);
-cutf::cuda::memory::copy(dst_ptr, src_ptr, size);
+auto dA = cutf::cuda::memory::get_device_unique_ptr<type>(N);
+auto hA = cutf::cuda::memory::get_host_unique_ptr<type>(N);
+cutf::cuda::memory::copy(dst_ptr, src_ptr, N);
 ```
+
+| Function | description |
+|:--------------|:------------|
+|`cutf::cuda::memory::get_device_unique_ptr`|`cudaMalloc` and returns `std::unique_ptr`|
+|`cutf::cuda::memory::get_host_unique_ptr`|`cudaMallocHost` and returns `std::unique_ptr`|
+|`cutf::cuda::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
