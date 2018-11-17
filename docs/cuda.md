@@ -2,7 +2,7 @@
 ## Implemented Functions
 ### math
 ```cpp
-cutf::cuda::math::[operation]
+cutf::cuda::math::[operation](x);
 ```
 |Operation| description |
 |:--------|:------------|
