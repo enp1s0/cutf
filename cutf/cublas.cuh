@@ -707,11 +707,11 @@ HERK_DEF(cuDoubleComplex, Z, double);
 	inline cublasStatus_t her2k(cublasHandle_t handle, \
 			cublasFillMode_t uplo, cublasOperation_t trans, \
 			int n, int k, \
-			const type_name       *alpha, \
-			const type_name       *A, int lda, \
-			const type_name       *B, int ldb, \
-			const ab_type_name  *beta, \
-			type_name       *C, int ldc){ \ 
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const ab_type_name *beta, \
+			type_name *C, int ldc) { \ 
 		return cublas##short_type_name##her2k(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
 	}
 HER2K_DEF(cuComplex, C, float);
@@ -722,9 +722,9 @@ HER2K_DEF(cuDoubleComplex, Z, double);
 	inline cublasStatus_t herkx(cublasHandle_t handle, \
 			cublasFillMode_t uplo, cublasOperation_t trans, \
 			int n, int k, \
-			const type_name       *alpha, \
-			const type_name       *A, int lda, \
-			const type_name       *B, int ldb, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
 			const ab_type_name  *beta, \
 			type_name       *C, int ldc){ \ 
 		return cublas##short_type_name##herkx(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
