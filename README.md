@@ -125,3 +125,5 @@ int main(){
 |gelsBatched||S|D|C|Z|
 |tpttr||S|D|C|Z|
 |trttp||S|D|C|Z|
+
+- `mtk::cuda::cublas::ex::get_cuda_data_type<BaseT, T>()` returns `cudaDataType_t` (`CUDA_<BaseT>_<T>`)
