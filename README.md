@@ -14,23 +14,23 @@ __global__ void kernel_example(T* const output, const T* const input){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if( tid >= N ) return;
 
-	output[tid] = mtk::cuda::math::sin( __ldg(input + tid) * mtk::cuda::type::cast<T>(PI) );
+	output[tid] = cutf::cuda::math::sin( __ldg(input + tid) * cutf::cuda::type::cast<T>(PI) );
 }
 
 using T = float;
 int main(){
-	auto in = mtk::cuda::memory::get_device_unique_ptr<T>(N);
-	auto out = mtk::cuda::memory::get_device_unique_ptr<T>(N);
-	auto h_out = mtk::cuda::memory::get_host_unique_ptr<T>(N);
+	auto in = cutf::cuda::memory::get_device_unique_ptr<T>(N);
+	auto out = cutf::cuda::memory::get_device_unique_ptr<T>(N);
+	auto h_out = cutf::cuda::memory::get_host_unique_ptr<T>(N);
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
-	mtk::cuda::memory::copy(h_out.get(), out.get(), N);
+	cutf::cuda::memory::copy(h_out.get(), out.get(), N);
 }
 ```
 
 ## CUDA Functions
 [cutf CUDA Functions Reference](./docs/cuda.md)
 
-## cuBLAS
+## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
