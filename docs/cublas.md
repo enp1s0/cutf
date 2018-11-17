@@ -1,7 +1,6 @@
 # cuBLAS Functions
 ## Example
 ```cpp
-#include <cutf/math.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
 #include <cutf/cublas.hpp>
