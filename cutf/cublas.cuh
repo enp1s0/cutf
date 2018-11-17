@@ -4,6 +4,9 @@
 
 namespace mtk{
 namespace cublas{
+// ==================================================
+// BLAS Lv 1
+// ==================================================
 // amax
 #define AMAX_DEF(type_name, short_type_name)\
 	inline cublasStatus_t iamax(cublasHandle_t handle, int n, const type_name* x, int incx, int *result) {\
@@ -134,12 +137,320 @@ SCALE_DEF(cuDoubleComplex, Zd, double);
 // swap
 #define SWAP_DEF(type_name, short_type_name)\
 	inline cublasStatus_t swap(cublasHandle_t handle, int n, type_name* x, int incx, type_name* y, int incy){ \
-		return cublas##short_type_name##swap(handle, n, x, incx, y, incy);
+		return cublas##short_type_name##swap(handle, n, x, incx, y, incy); \
 	}
 SWAP_DEF(float, S);
 SWAP_DEF(double, D);
 SWAP_DEF(cuComplex, C);
 SWAP_DEF(cuDoubleComplex, Z);
+
+// ==================================================
+// BLAS Lv 2
+// ==================================================
+// gbmv
+#define GBMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gbmv(cublasHandle_t handle, \
+			cublasOperation_t trans, \
+			int m, int n, int kl, int ku, \
+			const type_name* alpha, \
+			const type_name* A, int lda, \
+			const type_name* x, int incx, \
+			const type_name* beta, \
+			type_name* y, int incy) {\
+		return cublas##short_type_name##gbmv(handle, trans, m, n, kl, ku, alpha, A, lda, x, incx, beta, y, incy); \
+	}
+GBMV_DEF(float, S);
+GBMV_DEF(double, D);
+GBMV_DEF(cuComplex, C);
+GBMV_DEF(cuDoubleComplex, Z);
+
+// gemv
+#define GEMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gbmv(cublasHandle_t handle, \
+			cublasOperation_t trans, \
+			int m, int n, \
+			const type_name* alpha, \
+			const type_name* A, int lda, \
+			const type_name* x, int incx, \
+			const type_name* beta, \
+			type_name* y, int incy) {\
+		return cublas##short_type_name##gemv(handle, trans, m, n, alpha, A, lda, x, incx, beta, y, incy); \
+	}
+GEMV_DEF(float, S);
+GEMV_DEF(double, D);
+GEMV_DEF(cuComplex, C);
+GEMV_DEF(cuDoubleComplex, Z);
+
+// ger
+#define GER_DEF(type_name, short_type_name) \
+	inline cublasStatus_t ger(cublasHandle_t handle, \
+		   	int m, int n,\
+			const type_name *alpha,\
+			const type_name *x, int incx,\
+			const type_name *y, int incy,\
+			type_name *A, int lda){ \
+		return cublas##short_type_name##ger(handle, m, n, alpha, x, incx, y, incy, A, lda);\
+	}
+#define GER_DEF(type_name, short_type_name, cu) \
+	inline cublasStatus_t ger##cu(cublasHandle_t handle, \
+		   	int m, int n,\
+			const type_name *alpha,\
+			const type_name *x, int incx,\
+			const type_name *y, int incy,\
+			type_name *A, int lda){ \
+		return cublas##short_type_name##ger##cu(handle, m, n, alpha, x, incx, y, incy, A, lda);\
+	}
+GER_DEF(float, S);
+GER_DEF(double, D);
+GER_DEF(cuComplex, C, c);
+GER_DEF(cuComplex, C, u);
+GER_DEF(cuDoubleComplex, Z, c);
+GER_DEF(cuDoubleComplex, Z, u);
+
+// sbmv
+#define SBMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t sbmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, int k, const type_name  *alpha, \
+			const type_name *A, int lda, \
+			const type_name *x, int incx, \
+			const type_name *beta, type_name*y, int incy){ \
+		return cublas##short_type_name##sbmv(handle, uplo, n, k, alpha, A, lda, x, incx, beta, y, incy); \
+	}
+SBMV_DEF(float, S);
+SBMV_DEF(double, D);
+
+// spmv
+#define SPMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t spmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name  *alpha, const type_name  *AP, \
+			const type_name  *x, int incx, const type_name  *beta, \
+			type_name  *y, int incy){ \
+		return cublas##short_type_name##spmv(handle, uplo, n, alpha, AP, x, incx, beta, y, incy); \
+	}
+SPMV_DEF(float, S);
+SPMV_DEF(double, D);
+
+// spr
+#define SPR_DEF(type_name, short_type_name) \
+	inline cublasStatus_t spr(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name  *alpha, \
+			const type_name  *x, int incx, type_name  *AP){ \
+		return cublas##short_type_name##spr(handle, uplo, n, alpha, x, incx, AP); \
+	}
+SPR_DEF(float, S);
+SPR_DEF(double, D);
+
+// spr2
+#define SPR2_DEF(type_name, short_type_name) \
+	inline cublasStatus_t spr2(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name  *alpha, \
+			const type_name *x, int incx, \
+			const type_name *y, int incy, type_name  *AP){ \
+		return cublas##short_type_name##spr2(handle, uplo, n, alpha, x, incx, AP); \
+	}
+SPR2_DEF(float, S);
+SPR2_DEF(double, D);
+
+// symv
+#define SYMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t symv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *x, int incx, const type_name *beta, \
+			type_name *y, int incy) {\
+		return cublas##short_type_name##symv(handle, uplo, n, alpha, A, lda, x, incx, beta, y, incy); \
+	}
+SYMV_DEF(float, S);
+SYMV_DEF(double, D);
+SYMV_DEF(cuComplex, C);
+SYMV_DEF(cuDoubleComplex, Z);
+
+// syr
+#define SYR_DEF(type_name, short_type_name) \
+	inline cublasStatus_t syr(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *x, int incx, type_name *A, int lda){\
+		return cublas##short_type_name##syr(handle, uplo, n, alpha, x, incx, A, lda); \
+	}
+SYR_DEF(float, S);
+SYR_DEF(double, D);
+SYR_DEF(cuComplex, C);
+SYR_DEF(cuDoubleComplex, Z);
+
+// syr2
+#define SYR2_DEF(type_name, short_type_name) \
+	inline cublasStatus_t syr2(cublasHandle_t handle, cublasFillMode_t uplo, int n, \
+			const type_name *alpha, const type_name *x, int incx, \
+			const type_name *y, int incy, type_name *A, int lda){\
+		return cublas##short_type_name##syr2(handle, uplo, n, alpha, x, incx, y, incy, A, lda); \
+	}
+SYR2_DEF(float, S);
+SYR2_DEF(double, D);
+SYR2_DEF(cuComplex, C);
+SYR2_DEF(cuDoubleComplex, Z);
+
+// tbmv
+#define TBMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t tbmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, int k, const type_name *A, int lda, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##tbmv(handle, uplo, trans, diag, n, k, A, lda, x, incx); \
+	}
+TBMV_DEF(float, S);
+TBMV_DEF(double, D);
+TBMV_DEF(cuComplex, C);
+TBMV_DEF(cuDoubleComplex, Z);
+
+// tbsv
+#define TBSV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t tbsv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, int k, const type_name *A, int lda, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##tbsv(handle, uplo, trans, diag, n, k, A, lda, x, incx); \
+	}
+TBSV_DEF(float, S);
+TBSV_DEF(double, D);
+TBSV_DEF(cuComplex, C);
+TBSV_DEF(cuDoubleComplex, Z);
+
+// tpmv
+#define TPMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t tpmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, const type_name *AP, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##tpmv(handle, uplo, trans, diag, n, AP, x, incx); \
+	}
+TPMV_DEF(float, S);
+TPMV_DEF(double, D);
+TPMV_DEF(cuComplex, C);
+TPMV_DEF(cuDoubleComplex, Z);
+
+// tpsv
+#define TPSV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t tpsv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, const type_name *AP, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##tpsv(handle, uplo, trans, diag, n, AP, x, incx); \
+	}
+TPSV_DEF(float, S);
+TPSV_DEF(double, D);
+TPSV_DEF(cuComplex, C);
+TPSV_DEF(cuDoubleComplex, Z);
+
+// trmv
+#define TRMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, const type_name *A, int lda, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##trmv(handle, uplo, trans, diag, n, A, lda, x, incx); \
+	}
+TRMV_DEF(float, S);
+TRMV_DEF(double, D);
+TRMV_DEF(cuComplex, C);
+TRMV_DEF(cuDoubleComplex, Z);
+
+// trsv
+#define TRSV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trsv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int n, const type_name *A, int lda, \
+			type_name *x, int incx){\
+		return cublas##short_type_name##trsv(handle, uplo, trans, diag, n, A, lda, x, incx); \
+	}
+TRSV_DEF(float, S);
+TRSV_DEF(double, D);
+TRSV_DEF(cuComplex, C);
+TRSV_DEF(cuDoubleComplex, Z);
+
+// hemv
+#define HEMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t hemv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *x, int incx, \
+			const type_name *beta, \
+			type_name *y, int incy){\
+		return cublas##short_type_name##hemv(handle, uplo, n, A, lda, x, incx, beta, y, incy); \
+	}
+HEMV_DEF(cuComplex, C);
+HEMV_DEF(cuDoubleComplex, Z);
+
+// hbmv
+#define HBMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t hbmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, int k, const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *x, int incx, \
+			const type_name *beta, \
+			type_name *y, int incy){\
+		return cublas##short_type_name##hbmv(handle, uplo, n, k, A, lda, x, incx, beta, y, incy); \
+	}
+HBMV_DEF(cuComplex, C);
+HBMV_DEF(cuDoubleComplex, Z);
+
+// hpmv
+#define HPMV_DEF(type_name, short_type_name) \
+	inline cublasStatus_t hpmv(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *AP,\
+			const type_name *x, int incx, \
+			const type_name *beta, \
+			type_name *y, int incy){\
+		return cublas##short_type_name##hpmv(handle, uplo, n, alpha, AP, x, incx, beta, y, incy); \
+	}
+HPMV_DEF(cuComplex, C);
+HPMV_DEF(cuDoubleComplex, Z);
+
+// her
+#define HER_DEF(type_name, short_type_name, scale_type_name) \
+	inline cublasStatus_t her(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const scale_type_name *alpha, \
+			const type_name *x, int incx, \
+			type_name *A, int lda){\
+		return cublas##short_type_name##her(handle, uplo, n, alpha, x, incx, A, lda); \
+	}
+HER_DEF(cuComplex, C, float);
+HER_DEF(cuDoubleComplex, Z, double);
+
+// her2
+#define HER2_DEF(type_name, short_type_name) \
+	inline cublasStatus_t her2(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *x, int incx, \
+			const type_name *y, int incy, \
+			type_name *A, int lda){\
+		return cublas##short_type_name##her2(handle, uplo, n, alpha, x, incx, y, incy, A, lda); \
+	}
+HER2_DEF(cuComplex, C);
+HER2_DEF(cuDoubleComplex, Z);
+
+// hpr
+#define HPR_DEF(type_name, short_type_name, scale_type_name) \
+	inline cublasStatus_t hpr(cublasHandle_t handle, cublasFillMode_t uplo, \
+                          int n, const scale_type_name *alpha, \
+                          const type_name *x, int incx, \
+                          type_name *AP){\
+		return cublas##short_type_name##hpr(handle, uplo, n, alpha, x, incx, AP); \
+	}
+HPR_DEF(cuComplex, C, float);
+HPR_DEF(cuDoubleComplex, Z, double);
+
+// hpr2
+#define HPR2_DEF(type_name, short_type_name) \
+	inline cublasStatus_t hpr2(cublasHandle_t handle, cublasFillMode_t uplo, \
+			int n, const type_name *alpha, \
+			const type_name *x, int incx, \
+			const type_name *y, int incy, \
+			type_name *AP){\
+		return cublas##short_type_name##hpr2(handle, uplo, n, alpha, x, incx, y, incy, AP); \
+	}
+HPR2_DEF(cuComplex, C);
+HPR2_DEF(cuDoubleComplex, Z);
 
 } // cublas
 } // mtk
