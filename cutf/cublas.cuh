@@ -1,6 +1,7 @@
 #ifndef __CUTF_CUBLAS_CUH__
 #define __CUTF_CUBLAS_CUH__
 #include <cublas_v2.h>
+#include <cuda_fp16.h>
 
 namespace mtk{
 namespace cublas{
@@ -432,9 +433,9 @@ HER2_DEF(cuDoubleComplex, Z);
 // hpr
 #define HPR_DEF(type_name, short_type_name, scale_type_name) \
 	inline cublasStatus_t hpr(cublasHandle_t handle, cublasFillMode_t uplo, \
-                          int n, const scale_type_name *alpha, \
-                          const type_name *x, int incx, \
-                          type_name *AP){\
+			int n, const scale_type_name *alpha, \
+			const type_name *x, int incx, \
+			type_name *AP){\
 		return cublas##short_type_name##hpr(handle, uplo, n, alpha, x, incx, AP); \
 	}
 HPR_DEF(cuComplex, C, float);
@@ -451,6 +452,285 @@ HPR_DEF(cuDoubleComplex, Z, double);
 	}
 HPR2_DEF(cuComplex, C);
 HPR2_DEF(cuDoubleComplex, Z);
+
+// ==================================================
+// BLAS Lv 3
+// ==================================================
+// gemm
+#define GEMM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gemm(cublasHandle_t handle, \
+			cublasOperation_t transa, cublasOperation_t transb, \
+			int m, int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc) { \
+		return cublas##short_type_name##gemm(handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+GEMM_DEF(float, S);
+GEMM_DEF(double, D);
+GEMM_DEF(cuComplex, C);
+GEMM_DEF(cuDoubleComplex, Z);
+GEMM_DEF(__half, H);
+
+// gemm3m
+#define GEMM3N_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gemm3m(cublasHandle_t handle, \
+			cublasOperation_t transa, cublasOperation_t transb, \
+			int m, int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc) { \
+		return cublas##short_type_name##gemm3m(handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+GEMM3M_DEF(cuComplex, C);
+GEMM3M_DEF(cuDoubleComplex, Z);
+
+// gemmBatched
+#define GEMM_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gemm_batched(cublasHandle_t handle, \
+			cublasOperation_t transa,  \
+			cublasOperation_t transb, \
+			int m, int n, int k, \
+			const type_name *alpha, \
+			const type_name *Aarray[], int lda, \
+			const type_name *Barray[], int ldb, \
+			const type_name *beta, \
+			type_name *Carray[], int ldc,  \
+			int batchCount) { \
+		return cublas##short_type_name##gemmBatched(handle, transa, transb, m, n, k, alpha, Aarray, lda, Barray, ldb, beta, Carray, ldc, batchCount); \
+	}
+GEMM_BATCHED_DEF(float, S);
+GEMM_BATCHED_DEF(double, D);
+GEMM_BATCHED_DEF(cuComplex, C);
+GEMM_BATCHED_DEF(cuDoubleComplex, Z);
+GEMM_BATCHED_DEF(__half, H);
+
+// gemmStridedBatched
+#define GEMM_STRIDED_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gemm_strided_batched(cublasHandle_t handle, \
+			cublasOperation_t transa,  \
+			cublasOperation_t transb, \
+			int m, int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			long long int strideA, \
+			const type_name *B, int ldb, \
+			long long int strideB, \
+			const type_name *beta, \
+			type_name *C, int ldc,  \
+			long long int strideC, \
+			int batchCount){ \
+		return cublas##short_type_name##gemmStridedBatched(handle, transa, transb, m, n, k, alpha, A, lda, strideA, B, ldb, strideB, beta, C, ldc, strideC, batchCount); \
+	}
+GEMM_STRIDED_BATCHED_DEF(float, S);
+GEMM_STRIDED_BATCHED_DEF(double, D);
+GEMM_STRIDED_BATCHED_DEF(cuComplex, C);
+GEMM_STRIDED_BATCHED_DEF(cuDoubleComplex, Z);
+GEMM_STRIDED_BATCHED_DEF(__half, H);
+
+// gemm3mStridedBatched
+#define GEMM3M_STRIDED_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t gemm3m_strided_batched(cublasHandle_t handle, \
+			cublasOperation_t transa,  \
+			cublasOperation_t transb, \
+			int m, int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			long long int strideA, \
+			const type_name *B, int ldb, \
+			long long int strideB, \
+			const type_name *beta, \
+			type_name *C, int ldc,  \
+			long long int strideC, \
+			int batchCount){ \
+		return cublas##short_type_name##gemm3mStridedBatched(handle, transa, transb, m, n, k, alpha, A, lda, strideA, B, ldb, strideB, beta, C, ldc, strideC, batchCount); \
+	}
+GEMM3M_STRIDED_BATCHED_DEF(cuComplex, C);
+
+// symm
+#define SYMM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t symm(cublasHandle_t handle, \
+			cublasSideMode_t side, cublasFillMode_t uplo, \
+			int m, int n, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc) { \
+		return cublas##short_type_name##symm(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+SYMM_DEF(float, S);
+SYMM_DEF(double, D);
+SYMM_DEF(cuComplex, C);
+SYMM_DEF(cuDoubleComplex, Z);
+
+// syrk
+#define SYRK_DEF(type_name, short_type_name) \
+	inline cublasStatus_t syrk(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *beta, \
+			type_name *C, int ldc) { \
+		return cublas##short_type_name##syrk(handle, uplo, trans, n, k, alpha, A, lda, beta, C, ldc); \
+	}
+SYRK_DEF(float, S);
+SYRK_DEF(double, D);
+SYRK_DEF(cuComplex, C);
+SYRK_DEF(cuDoubleComplex, Z);
+
+// syr2k
+#define SYR2K_DEF(type_name, short_type_name) \
+	inline cublasStatus_t syr2k(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc) { \
+		return cublas##short_type_name##syr2k(handle, uplo, trans, n, k, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+SYR2K_DEF(float, S);
+SYR2K_DEF(double, D);
+SYR2K_DEF(cuComplex, C);
+SYR2K_DEF(cuDoubleComplex, Z);
+
+// syrkx
+#define SYRKX_DEF(type_name, short_type_name) \
+	inline cublasStatus_t syrkx(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc){ \
+		return cublas##short_type_name##syrkx(handle, uplo, trans, n, k, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+SYRKX_DEF(float, S);
+SYRKX_DEF(double, D);
+SYRKX_DEF(cuComplex, C);
+SYRKX_DEF(cuDoubleComplex, Z);
+
+// trmm
+#define TRMM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trmm(cublasHandle_t handle, \
+			cublasSideMode_t side, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int m, int n, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			type_name *C, int ldc){ \
+		return cublas##short_type_name##trmm(handle, side, uplo, trans, diag, m, n, alpha, A, lda, B, ldb, C, ldc); \
+	}
+TRMM_DEF(float, S);
+TRMM_DEF(double, D);
+TRMM_DEF(cuComplex, C);
+TRMM_DEF(cuDoubleComplex, Z);
+
+// trsm
+#define TRSM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trsm(cublasHandle_t handle, \
+			cublasSideMode_t side, cublasFillMode_t uplo, \
+			cublasOperation_t trans, cublasDiagType_t diag, \
+			int m, int n, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			type_name *B, int ldb){ \
+		return cublas##short_type_name##trsm(handle, side, uplo, trans, diag, m, n, alpha, A, lda, B, ldb); \
+	}
+TRSM_DEF(float, S);
+TRSM_DEF(double, D);
+TRSM_DEF(cuComplex, C);
+TRSM_DEF(cuDoubleComplex, Z);
+
+// trsmBatched
+#define TRSM_BATCHED_DEF(type_name, short_type_name) \
+	inline cublasStatus_t trsm_batched( cublasHandle_t handle,  \
+			cublasSideMode_t side,  \
+			cublasFillMode_t uplo, \
+			cublasOperation_t trans,  \
+			cublasDiagType_t diag, \
+			int m,  \
+			int n,  \
+			const type_name *alpha, \
+			type_name *A[],  \
+			int lda, \
+			type_name *B[],  \
+			int ldb, \
+			int batchCount){ \
+		return cublas##short_type_name##trsmBatched(handle, side, uplo, trans, diag, m, n, alpha, A, lda, B, ldb, batchCount); \
+	}
+TRSM_BATCHED_DEF(float, S);
+TRSM_BATCHED_DEF(double, D);
+TRSM_BATCHED_DEF(cuComplex, C);
+TRSM_BATCHED_DEF(cuDoubleComplex, Z);
+
+// hemm
+#define HEMM_DEF(type_name, short_type_name) \
+	inline cublasStatus_t hemm(cublasHandle_t handle, \
+			cublasSideMode_t side, cublasFillMode_t uplo, \
+			int m, int n, \
+			const type_name *alpha, \
+			const type_name *A, int lda, \
+			const type_name *B, int ldb, \
+			const type_name *beta, \
+			type_name *C, int ldc){ \
+		return cublas##short_type_name##hemm(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+HEMM_DEF(cuComplex, C);
+HEMM_DEF(cuDoubleComplex, Z);
+
+// herk
+#define HERK_DEF(type_name, short_type_name, ab_type_name) \
+	inline cublasStatus_t herk(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const ab_type_name *alpha, \
+			const type_name       *A, int lda, \
+			const ab_type_name *beta, \
+			type_name *C, int ldc){ \ 
+		return cublas##short_type_name##herk(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+HERK_DEF(cuComplex, C, float);
+HERK_DEF(cuDoubleComplex, Z, double);
+
+// her2k
+#define HER2K_DEF(type_name, short_type_name, ab_type_name) \
+	inline cublasStatus_t her2k(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const type_name       *alpha, \
+			const type_name       *A, int lda, \
+			const type_name       *B, int ldb, \
+			const ab_type_name  *beta, \
+			type_name       *C, int ldc){ \ 
+		return cublas##short_type_name##her2k(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+HER2K_DEF(cuComplex, C, float);
+HER2K_DEF(cuDoubleComplex, Z, double);
+
+// her2k
+#define HERKX_DEF(type_name, short_type_name, ab_type_name) \
+	inline cublasStatus_t herkx(cublasHandle_t handle, \
+			cublasFillMode_t uplo, cublasOperation_t trans, \
+			int n, int k, \
+			const type_name       *alpha, \
+			const type_name       *A, int lda, \
+			const type_name       *B, int ldb, \
+			const ab_type_name  *beta, \
+			type_name       *C, int ldc){ \ 
+		return cublas##short_type_name##herkx(handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc); \
+	}
+HERKX_DEF(cuComplex, C, float);
+HERKX_DEF(cuDoubleComplex, Z, double);
 
 } // cublas
 } // mtk
