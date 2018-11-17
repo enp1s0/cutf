@@ -46,7 +46,7 @@ cutf::cuda::type::rcast<type, rounding>(x);
 
 ## memory
 ```cpp
-cutf::cuda::memory::get_device_unique_ptr<type>(size);
-cutf::cuda::memory::get_host_unique_ptr<type>(size);
+auto dA = cutf::cuda::memory::get_device_unique_ptr<type>(size);
+auto hA = cutf::cuda::memory::get_host_unique_ptr<type>(size);
 cutf::cuda::memory::copy(dst_ptr, src_ptr, size);
 ```
