@@ -2,6 +2,7 @@
 ## math
 CUDA built-in unary math functions. (SFU)
 ```cpp
+// x : half, half2, float, double
 cutf::cuda::math::[operation](x);
 ```
 |Operation| description |
