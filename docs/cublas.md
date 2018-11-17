@@ -1,6 +1,39 @@
-# cuBlas Functions
+# cuBLAS Functions
+## Example
+```cpp
+#include <cutf/math.hpp>
+#include <cutf/type.hpp>
+#include <cutf/memory.hpp>
+#include <cutf/cublas.hpp>
+constexpr std::size_t N = 1<<10;
 
-| operation | half | float | double | cuComplex | cuDoubleComplex |
+using T = half;
+int main(){
+	cublasHandle_t cublas;
+	cublasCreate( &cublas );
+	auto A = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
+	auto B = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
+	auto C = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
+	T alpha = mtk::cuda::type::cast<T>(1.0f);
+	T beta = mtk::cuda::type::cast<T>(1.0f);
+
+	mtk::cublas::gemm(cublas,
+			CUBLAS_OP_N, CUBLAS_OP_N,
+			N, N, N,
+			&alpha,
+			A.get(), N,
+			B.get(), N,
+			&beta,
+			C.get(), N);
+
+	cublasDestroy( cublas );
+}
+
+
+```
+
+## Implemented operations
+| Operation | half | float | double | cuComplex | cuDoubleComplex |
 |:----------|:-----|:------|:-------|:----------|:----------------|
 |amax||S|D|C|Z|
 |amin||S|D|C|Z|
