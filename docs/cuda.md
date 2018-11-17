@@ -4,20 +4,20 @@
 |Operation| description |
 |:--------|:------------|
 |ceil|$`\lceil x \rceil`$|
-|cos||
-|exp||
-|exp10||
-|exp2||
-|floor||
-|log||
-|log10||
-|log2||
-|rcp||
-|rint||
-|rsqrt||
-|sin||
-|sqrt||
-|trunc||
+|cos|$`\mathrm{cos}^{x}`$|
+|exp|$`\mathrm{e}^{x}`$|
+|exp10|$`10^x`$|
+|exp2|$`2^x`$|
+|floor|$`\lfloor x \rfloor`$|
+|log|$`\ln x`$|
+|log10|$`\log{10} x`$|
+|log2|$`\log{2} x`$|
+|rcp|$`frac{1}{x}`$|
+|rint|Round input to nearest integer value|
+|rsqrt|$`frac{1}{sqrt{x}}`$|
+|sin|$`\mathrm{sin}^{x} `$|
+|sqrt|$`\sqrt{x}`$|
+|trunc|	Truncate input argument to the integral part|
 
 - type
 	- cast
