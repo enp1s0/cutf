@@ -1,6 +1,5 @@
 # CUDA Functions
-## Implemented Functions
-### math
+## math
 ```cpp
 cutf::cuda::math::[operation](x);
 ```
@@ -22,14 +21,14 @@ cutf::cuda::math::[operation](x);
 |sqrt|$`\sqrt{x}`$|
 |trunc|	Truncate input argument to the integral part|
 
-### type
+## type
 ```cpp
 cutf::cuda::type::cast<type>(x);
 cutf::cuda::type::reinterpret<type>(x);
 cutf::cuda::type::rcast<type, rounding>(x);
 ```
 
-#### description
+### description
 
 |Cast| description |
 |:--------|:------------|
@@ -37,7 +36,7 @@ cutf::cuda::type::rcast<type, rounding>(x);
 |reinterpret|reinterpret cast|
 |rcast|rounding cast|
 
-#### rounding
+### rounding
 | Rounding type | description |
 |:--------------|:------------|
 |`cutf::cuda::type::rounding::rd`|round-down mode|
@@ -45,7 +44,9 @@ cutf::cuda::type::rcast<type, rounding>(x);
 |`cutf::cuda::type::rounding::ru`|round-up mode|
 |`cutf::cuda::type::rounding::rz`|round-towards-zero mode|
 
-- memory
-	- get\_device\_unique\_ptr
-	- get\_host\_unique\_ptr
-	- copy
+## memory
+```cpp
+cutf::cuda::memory::get_device_unique_ptr<type>(size);
+cutf::cuda::memory::get_host_unique_ptr<type>(size);
+cutf::cuda::memory::copy(dst_ptr, src_ptr, size);
+```
