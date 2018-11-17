@@ -905,26 +905,6 @@ TRTTP_DEF(double, D);
 TRTTP_DEF(cuComplex, C);
 TRTTP_DEF(cuDoubleComplex, Z);
 
-namespace ex{
-// cudaDataType_t 
-template <class BaseT, class T>
-constexpr cudaDataType_t get_cuda_data_type();
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , __half>(){return CUDA_R_16F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, __half>(){return CUDA_C_16F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , float>(){return CUDA_R_32F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, float>(){return CUDA_C_32F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , double>(){return CUDA_R_64F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, double>(){return CUDA_C_64F;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , char>(){return CUDA_R_8I;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, char>(){return CUDA_C_8I;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , unsigned char>(){return CUDA_R_8U;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, unsigned char>(){return CUDA_C_8U;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , int>(){return CUDA_R_32I;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, int>(){return CUDA_C_32I;}
-template <> constexpr cudaDataType_t get_cuda_data_type<float    , unsigned int>(){return CUDA_R_32U;}
-template <> constexpr cudaDataType_t get_cuda_data_type<cuComplex, unsigned int>(){return CUDA_C_32U;}
-}
-
 } // cublas
 } // mtk
 
