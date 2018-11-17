@@ -3,9 +3,9 @@ The library of the CUDA/C++ Otaku, by the CUDA/C++ Otaku(?), for the CUDA/C++ Ot
 
 ## Example
 ```cpp
-#include "cutf/math.cuh"
-#include "cutf/type.cuh"
-#include "cutf/memory.cuh"
+#include <cutf/math.hpp>
+#include <cutf/type.hpp>
+#include <cutf/memory.hpp>
 constexpr float PI = 3.f;
 constexpr std::size_t N = 15;
 
