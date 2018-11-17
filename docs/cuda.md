@@ -1,6 +1,6 @@
 # CUDA Functions
 ## math
-CUDA built-in unary math functions. (SFP)
+CUDA built-in unary math functions. (SFU)
 ```cpp
 cutf::cuda::math::[operation](x);
 ```
@@ -24,6 +24,7 @@ cutf::cuda::math::[operation](x);
 
 ## type
 ```cpp
+// cast decltype(x) to `type`
 cutf::cuda::type::cast<type>(x);
 cutf::cuda::type::reinterpret<type>(x);
 cutf::cuda::type::rcast<type, rounding>(x);
