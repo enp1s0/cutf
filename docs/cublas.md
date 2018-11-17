@@ -1,4 +1,6 @@
 # cuBLAS Functions
+Not template but overload
+
 ## Example
 ```cpp
 #include <cutf/type.hpp>
