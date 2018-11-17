@@ -126,15 +126,3 @@ int main(){
 |tpttr||||||
 |trttp||||||
 |gemmEx||||||
-|gemm||||||
-|hemm||||||
-|symm||||||
-|syrk||||||
-|syr2k||||||
-|syrkx||||||
-|herk||||||
-|her2k||||||
-|herkx||||||
-|trsm||||||
-|trmm||||||
-|spmm||||||
