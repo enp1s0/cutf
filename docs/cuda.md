@@ -1,5 +1,6 @@
 # CUDA Functions
 ## math
+CUDA built-in unary math functions. (SFP)
 ```cpp
 cutf::cuda::math::[operation](x);
 ```
