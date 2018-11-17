@@ -59,19 +59,19 @@ int main(){
 ## cuBLAS
 | operation | half | float | double | cuComplex | cuDoubleComplex |
 |:----------|:-----|:------|:-------|:----------|:----------------|
-|amax||x|x|x|x|
-|amin||x|x|x|x|
-|asum||x|x|x|x|
-|axpy||x|x|x|x|
-|copy||x|x|x|x|
-|dot||x|x|x|x|
-|nrm2||x|x|x|x|
-|rot||x|x|x|x|
-|rotg||x|x|x|x|
-|rotm||x|x|x|x|
-|rotmg||x|x|x|x|
-|scal||x|x|x|x|
-|swap||x|x|x|x|
+|amax||S|D|C|Z|
+|amin||S|D|C|Z|
+|asum||S|D|C|Z|
+|axpy||S|D|C|Z|
+|copy||S|D|C|Z|
+|dot||S|D|C - u/c|Z - u/c|
+|nrm2||S|D|Sc|Dz|
+|rot||S|D|C/Cs|Z/Zd|
+|rotg||S|D|C|Z|
+|rotm||S|D|||
+|rotmg||S|D|||
+|scal||S|D|C/Cs|Z/Zd|
+|swap||S|D|C|Z|
 |gbmv||||||
 |gemv||||||
 |ger||||||
