@@ -2,11 +2,11 @@
 #define __CUTF_MEMORY_CUH__
 
 #include <memory>
-#include "error.cuh"
+#include "error.hpp"
 
-#define MTK_CUDA_CHECK_ERROR(error_code) mtk::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
+#define MTK_CUDA_CHECK_ERROR(error_code) cutf::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
 
-namespace mtk{
+namespace cutf{
 namespace cuda{
 namespace memory{
 
@@ -54,6 +54,6 @@ inline void copy(T* const dst, const T* const src, const std::size_t size){
 
 } // memory
 } // cuda
-} // mtk
+} // cutf
 
 #endif // __CUTF_MEMORY_CUH__
