@@ -18,7 +18,7 @@ int main(){
 	T alpha = mtk::cuda::type::cast<T>(1.0f);
 	T beta = mtk::cuda::type::cast<T>(1.0f);
 
-	cutf::cublas::gemm(cublas,
+	const auto status = cutf::cublas::gemm(cublas,
 			CUBLAS_OP_N, CUBLAS_OP_N,
 			N, N, N,
 			&alpha,
