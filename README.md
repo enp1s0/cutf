@@ -32,13 +32,13 @@ int main(){
 ## Namespace structure
 ```
 cutf 
-├- cuda
-|  ├- error
-|  ├- math
-|  ├- memory
-|  └- type
-|     └- rounding
-└- cublas
+├─ cuda
+│  ├─ error
+│  ├─ math
+│  ├─ memory
+│  └─ type
+│     └─ rounding
+└─ cublas
 ```
 
 ## CUDA Functions
