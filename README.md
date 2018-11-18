@@ -52,3 +52,8 @@ cutf
 
 ## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
+
+## License
+Copyright © 2018 mutsuki (gonmoec)  
+Released under the MIT license  
+<img src="http://momo86.net/ipsolab.svg" width="120">
