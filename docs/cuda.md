@@ -57,3 +57,5 @@ cutf::cuda::memory::copy(dst_ptr, src_ptr, N);
 |`cutf::cuda::memory::get_device_unique_ptr`|`cudaMalloc` and returns `std::unique_ptr`|
 |`cutf::cuda::memory::get_host_unique_ptr`|`cudaMallocHost` and returns `std::unique_ptr`|
 |`cutf::cuda::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
+
+All functions whould throw runtime exception if anything should happen.
