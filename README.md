@@ -1,4 +1,4 @@
-<img src="./docs/cutf-logo.svg" width="150">
+<img src="./docs/cutf-logo.png" width="150">
 # cutf - CUDA Template Functions
 *The library of the CUDA/C++ Otaku, by the CUDA/C++ Otaku(?), for the CUDA/C++ Otaku shall not perish from the earth.*
 
