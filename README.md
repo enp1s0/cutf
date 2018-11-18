@@ -29,6 +29,18 @@ int main(){
 }
 ```
 
+## Namespace structure
+```
+cutf 
+├- cuda
+|  ├- error
+|  ├- math
+|  ├- memory
+|  └- type
+|     └- rounding
+└- cublas
+```
+
 ## CUDA Functions
 [cutf CUDA Functions Reference](./docs/cuda.md)
 
