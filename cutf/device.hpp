@@ -6,7 +6,7 @@
 namespace cutf{
 namespace cuda{
 namespace device{
-inline std::vector<cudaDeviceProp> get_properies_vector(){
+inline std::vector<cudaDeviceProp> get_properties_vector(){
 	int n;
 	cudaGetDeviceCount(&n);
 	std::vector<cudaDeviceProp> properties_vector;
