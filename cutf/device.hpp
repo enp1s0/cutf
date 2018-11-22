@@ -4,6 +4,7 @@
 #include <vector>
 
 namespace cutf{
+namespace cuda{
 namespace device{
 inline std::vector<cudaDeviceProp> get_properies_vector(){
 	int n;
@@ -18,6 +19,7 @@ inline std::vector<cudaDeviceProp> get_properies_vector(){
 	return properties_vector;
 }
 } // device
+} // cuda
 } // cutf
 
 #endif // __CUTF_DEVICE_HPP__
