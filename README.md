@@ -42,6 +42,7 @@ int main(){
 ```
 cutf 
 ├─ cuda
+│  ├─ device
 │  ├─ error
 │  ├─ math
 │  ├─ memory
