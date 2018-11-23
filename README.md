@@ -49,6 +49,7 @@ cutf
 │  └─ type
 │     └─ rounding
 └─ cublas
+   └─ error
 ```
 
 ## CUDA Functions
