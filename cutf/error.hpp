@@ -7,7 +7,7 @@
 namespace cutf{
 namespace cuda{
 namespace error{
-inline void check(cudaError_t error, const std::string filename = __FILE__, const std::size_t line = __LINE__, const std::string funcname = __func__){
+inline void check(cudaError_t error, const std::string filename, const std::size_t line, const std::string funcname){
 	if(error != cudaSuccess){
 		std::stringstream ss;
 		ss<< cudaGetErrorString( error ) <<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
@@ -19,7 +19,7 @@ inline void check(cudaError_t error, const std::string filename = __FILE__, cons
 } // cuda
 namespace cublas{
 namespace error{
-inline void check(cublasStatus_t error, const std::string filename = __FILE__, const std::size_t line = __LINE__, const std::string funcname = __func__){
+inline void check(cublasStatus_t error, const std::string filename, const std::size_t line, const std::string funcname){
 	if(error != CUBLAS_STATUS_SUCCESS){
 		std::string error_string;
 #define CUBLAS_ERROR_CASE(c) case c: error_string = #c; break
