@@ -23,6 +23,11 @@ cutf::cuda::math::[operation](x);
 |sqrt|$`\sqrt{x}`$|
 |trunc|	Truncate input argument to the integral part|
 
+### cutf original function
+|Operation| description |
+|:--------|:------------|
+|sign|$`|x|`$|
+
 ## type
 ```cpp
 // cast decltype(x) to `type`
