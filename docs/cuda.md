@@ -26,7 +26,7 @@ cutf::cuda::math::[operation](x);
 ### cutf original function
 |Operation| description |
 |:--------|:------------|
-|sign|`if` $`x > 0`$ `then` $`x`$ `else` $`-x`$|
+|sign|`if` $`x > 0`$ `then` $`1`$ `else` $`-1`$|
 
 ## type
 ```cpp
