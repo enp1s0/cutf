@@ -45,8 +45,8 @@ MATH_FUNC(sqrt);
 MATH_FUNC(trunc);
 
 // get sign
-template <class T> __device__ T sign(const T v);
-template <> __device__ double sign(const double v){
+template <class T> __device__ inline T sign(const T v);
+template <> __device__ inline double sign(const double v){
 	double r;
 	asm(R"({
 	.reg .b64 %u;
@@ -55,7 +55,7 @@ template <> __device__ double sign(const double v){
 })":"=d"(r):"d"(v));
 	return r;
 }
-template <> __device__ float sign(const float v){
+template <> __device__ inline float sign(const float v){
 	float r;
 	asm(R"({
 	.reg .b32 %u;
@@ -66,7 +66,7 @@ template <> __device__ float sign(const float v){
 }
 #define HALF2CUS(var) *(reinterpret_cast<const unsigned short*>(&(var)))
 #define HALF2US(var) *(reinterpret_cast<unsigned short*>(&(var)))
-template <> __device__ half sign(const half v){
+template <> __device__ inline half sign(const half v){
 	half r;
 	asm(R"({
 	.reg .b16 %u;
@@ -77,7 +77,7 @@ template <> __device__ half sign(const half v){
 }
 #define HALF22CUS(var) *(reinterpret_cast<const unsigned int*>(&(var)))
 #define HALF22US(var) *(reinterpret_cast<unsigned int*>(&(var)))
-template <> __device__ half2 sign(const half2 v){
+template <> __device__ inline half2 sign(const half2 v){
 	half2 r;
 	asm(R"({
 	.reg .b32 %u;
