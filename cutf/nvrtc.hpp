@@ -33,6 +33,7 @@ inline std::string get_ptx(
 	std::unique_ptr<char* []> header_names(new char*[num_headers]);
 	std::unique_ptr<char* []> header_sources(new char*[num_headers]);
 
+	// Creating Program 1{{{
 	for(auto i = decltype(num_headers)(0); i < num_headers; i++){
 		const auto header_name = headers[i].first;
 		const auto header_source = headers[i].second;
@@ -52,6 +53,13 @@ inline std::string get_ptx(
 					header_names.get()
 				), "@ Creating " + source_name, __FILE__, __LINE__, __func__);
 
+	for(auto i = decltype(num_headers)(0); i < num_headers; i++){
+		delete [] header_names.get()[i];
+		delete [] header_sources.get()[i];
+	}
+	/// }}}1
+
+	// Compiling 2{{{
 	for(auto i = decltype(num_options)(0); i < num_options; i++){
 		const auto option = compile_options[i];
 		options.get()[i] = new char [option.length() + 1];
@@ -64,6 +72,12 @@ inline std::string get_ptx(
 				options.get()
 				), "@ Compiling " + source_name, __FILE__, __LINE__, __func__);
 
+	for(auto i = decltype(num_options)(0); i < num_options; i++){
+		delete [] options.get()[i];
+	}
+	// }}}2
+
+	// Printing log 3{{{
 	if( print_compile_log ){
 		std::size_t log_size;
 		error::check(nvrtcGetProgramLogSize(
@@ -77,7 +91,9 @@ inline std::string get_ptx(
 					), "@ Getting compile log of " + source_name, __FILE__, __LINE__, __func__);
 		std::cout<<log.get()<<std::endl;
 	}
+	/// }}}3
 
+	// Getting PTX 4{{{
 	std::size_t ptx_size;
 	error::check(nvrtcGetPTXSize(
 				program,
@@ -87,6 +103,9 @@ inline std::string get_ptx(
 	error::check(nvrtcGetPTX(
 				program,
 				ptx_code.get()), "@ Getting PTX code of " + source_name, __FILE__, __LINE__, __func__);
+
+	// }}}4
+
 	error::check(nvrtcDestroyProgram(
 				&program), " @ Destroying program of " + source_name, __FILE__, __LINE__, __func__);
 
