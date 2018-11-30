@@ -66,3 +66,36 @@ PTX code `std::string` of `function_code`
 
 - exception  
 throw `std::runtime_error` if anything happens.
+
+### cutf::nvrtc::get_function
+- input
+
+|  name | type | default | description |
+|:------|:-----|:--------|:------------|
+|`ptx_code`|`std::string`|| ptx code   |
+|`function_name` | `std::string` || function name|
+|`device_id` | `unsigned int` |`0`| target device id of compiling |
+
+- output   
+`CUfunction`
+
+- exception  
+throw `std::runtime_error` if anything happens.
+
+### cutf::nvrtc::launch_function
+- input
+
+|  name | type | default | description |
+|:------|:-----|:--------|:------------|
+|`function`|`CUfunction`||function to launch|
+|`argument_pointers`|`std::vector<void*>`||`function` argument pointers|
+|`grid`|`dim3`||grid|
+|`block`|`dim3`||block|
+|`stream`|`CUstream`|`nullptr`|stream id|
+|`shared_memory_size`|`unsigned int`|0|dynamic shared memory size per thread block in bytes|
+
+- output  
+`void`
+
+- exception  
+throw `std::runtime_error` if anything happens.
