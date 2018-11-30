@@ -41,6 +41,8 @@ int main(){
 ## Namespace structure
 ```
 cutf 
+├─ cublas
+│  └─ error
 ├─ cuda
 │  ├─ device
 │  ├─ error
@@ -48,7 +50,11 @@ cutf
 │  ├─ memory
 │  └─ type
 │     └─ rounding
-└─ cublas
+├─ driver
+│  └─ error
+├─ cublas
+│  └─ error
+└─ nvrtc
    └─ error
 ```
 
