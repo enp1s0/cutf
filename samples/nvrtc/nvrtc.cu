@@ -1,10 +1,7 @@
 #include <iostream>
 #include <random>
-#include <cutf/math.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/cublas.hpp>
-#include <cutf/device.hpp>
 #include <cutf/error.hpp>
 #include <cutf/nvrtc.hpp>
 
