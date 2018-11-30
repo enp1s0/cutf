@@ -8,6 +8,7 @@
 #include <iostream>
 #include <nvrtc.h>
 #include <cuda.h>
+#include "error.hpp"
 
 namespace cutf{
 namespace nvrtc{
@@ -111,7 +112,45 @@ inline std::string get_ptx(
 
 	return std::string(ptx_code.get());
 }
+
+inline CUfunction get_function(
+		const std::string ptx_code,
+		const std::string function_name,
+		const unsigned int device_id = 0
+		){
+	CUdevice device;
+	CUcontext context;
+	CUmodule module;
+	CUfunction function;
+
+	cutf::driver::error::check(cuInit(0), __FILE__, __LINE__, __func__, "@ Initializing CUDA for " + function_name);
+	cutf::driver::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__, "@ Selecting device for " + function_name);
+	cutf::driver::error::check(cuCtxCreate(&context, 0, device), __FILE__, __LINE__, __func__, "@ Creating context for " + function_name);
+	cutf::driver::error::check(cuModuleLoadDataEx(&module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
+	cutf::driver::error::check(cuModuleGetFunction(&function, module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
+
+	return function;
 }
+
+inline void launch_function(
+		const CUfunction function,
+		std::vector<void*> arguments_pointers,
+		const dim3 grid,
+		const dim3 block,
+		CUstream stream = nullptr,
+		unsigned int shared_memory_size = 0
+		){
+	cutf::driver::error::check(cuLaunchKernel(
+					function,
+					grid.x, grid.y, grid.z,
+					block.x, block.y, block.z,
+					shared_memory_size,
+					stream,
+					arguments_pointers.data(),
+					nullptr
+				), __FILE__, __LINE__, __func__);
 }
+} // nvrtc
+} // cutf
 
 #endif // __CUTF_NVRTC__
