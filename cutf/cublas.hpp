@@ -6,7 +6,7 @@
 namespace cutf{
 namespace cublas{
 namespace error{
-inline void check(cublasStatus_t error, const std::string filename, const std::size_t line, const std::string funcname){
+inline void check(cublasStatus_t error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(error != CUBLAS_STATUS_SUCCESS){
 		std::string error_string;
 #define CUBLAS_ERROR_CASE(c) case c: error_string = #c; break
@@ -22,7 +22,11 @@ inline void check(cublasStatus_t error, const std::string filename, const std::s
 		default: error_string = "Unknown error"; break;
 		}
 		std::stringstream ss;
-		ss<< error_string <<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
+		ss<< error_string;
+		if(message.length() != 0){
+			ss<<" : "<<message;
+		}
+	    ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
 		throw std::runtime_error(ss.str());
 	}
 }
