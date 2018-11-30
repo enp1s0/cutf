@@ -64,6 +64,9 @@ cutf
 ## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
 
+## cuBLAS Functions
+[cutf NVRTC Functions Reference](./docs/nvrtc.md)
+
 ## License
 Copyright (c) 2018 mutsuki (gonmoec)  
 Released under the MIT license  
