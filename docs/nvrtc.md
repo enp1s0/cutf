@@ -48,3 +48,16 @@ __global__ void kernel(float *a, float *b){
 }
 
 ```
+
+## Functions
+###  cutf::nvrtc::get_ptx
+- input
+|  name | type | description |
+|:------|:-----|:------------|
+|`source_name`|`std::string`| source code name you like (e.g. kernel.cu) |
+|`function_code` | `std::string` | kernel source code |
+|`compile_options` | `std::vector<std::string>` | compile option list (e.g. {"--arch=sm70", ...})|
+|`headers` | `std::vector<std::pair<std::string, std::string>>` | header list. pair of (header name, header sources)|
+
+- output
+PTX code `std::string` of `function_code`
