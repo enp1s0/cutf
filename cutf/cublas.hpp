@@ -2,6 +2,7 @@
 #define __CUTF_CUBLAS_CUH__
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
+#include <sstream>
 
 namespace cutf{
 namespace cublas{
