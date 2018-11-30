@@ -35,7 +35,7 @@ int main(){
 
 ## Implemented operations
 | Operation | cutf::cublas:: | half | float | double | cuComplex | cuDoubleComplex |
-|:----------|:--------------:|:-----|:------|:-------|:----------|:----------------|
+|:----------|:---------------|:-----|:------|:-------|:----------|:----------------|
 |amax|iamax||S|D|C|Z|
 |amin|iamin||S|D|C|Z|
 |asum|asum||S|D|C|Z|
