@@ -61,5 +61,8 @@ __global__ void kernel(float *a, float *b){
 |`headers` | `std::vector<std::pair<std::string, std::string>>` |`{}`| header list. pair of (header name, header sources)|
 |`print_compile_log` | `bool` |`false`| if `true`, print compiling log to `stdout`|
 
-- output
+- output \\
 PTX code `std::string` of `function_code`
+
+- exception \\
+throw `std::runtime_error` if anything happens.
