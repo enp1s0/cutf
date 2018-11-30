@@ -42,7 +42,7 @@ int main(){
 ```
 cutf 
 ├─ cublas
-│ └─ error
+│  └─ error
 ├─ cuda
 │  ├─ device
 │  ├─ error
@@ -51,9 +51,9 @@ cutf
 │  └─ type
 │     └─ rounding
 ├─ driver
-│ └─ error
+│  └─ error
 ├─ cublas
-│ └─ error
+│  └─ error
 └─ nvrtc
    └─ error
 ```
