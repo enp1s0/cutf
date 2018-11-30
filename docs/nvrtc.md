@@ -52,6 +52,7 @@ __global__ void kernel(float *a, float *b){
 ## Functions
 ###  cutf::nvrtc::get_ptx
 - input
+
 |  name | type | default | description |
 |:------|:-----|:--------|:------------|
 |`source_name`|`std::string`|| source code name you like (e.g. kernel.cu) |
