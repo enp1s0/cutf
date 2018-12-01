@@ -2,6 +2,7 @@
 #define __CUTF_TYPE_CUH__
 
 #include <cuda_fp16.h>
+#include <cuComplex.h>
 
 #define CAST(from_t, to_t, func, val) \
 	 template <> __host__ __device__ inline to_t cast<to_t>(const from_t val){return func;}
@@ -78,6 +79,22 @@ RCASTS(unsigned int , uint, float, float);
 RCASTS(unsigned long long int , ull, double, double);
 RCASTS(unsigned long long int , ull, float, float);
 
+#define DATA_TYPE_DEF(type_name, number_type, type_size) \
+	template <> cudaDataType_t get_data_type<type_name>(){return CUDA_##number_type##_##type_size;}
+template <class T>
+cudaDataType_t get_data_type();
+DATA_TYPE_DEF(half, R, 16F);
+DATA_TYPE_DEF(half2, C, 16F);
+DATA_TYPE_DEF(float, R, 32F);
+DATA_TYPE_DEF(cuComplex, C, 32F);
+DATA_TYPE_DEF(double, R, 64F);
+DATA_TYPE_DEF(cuDoubleComplex, C, 64F);
+// Uncertain {{{
+DATA_TYPE_DEF(char, R, 8I);
+DATA_TYPE_DEF(short, C, 8I);
+DATA_TYPE_DEF(unsigned char, R, 8U);
+DATA_TYPE_DEF(unsigned short, C, 8U);
+// }}}
 
 } // namespace type	
 } // cuda
