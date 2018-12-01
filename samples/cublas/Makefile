@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lcublas
-TARGETS=gemm.test
+TARGETS=gemm.test c8i_gemm.test
 
 all: $(TARGETS)
 
