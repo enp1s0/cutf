@@ -7,21 +7,21 @@ constexpr std::size_t N = 1 << 17;
 constexpr std::size_t threads_per_block = 1 << 8;
 
 template <class T, std::size_t N>
-__global__ void kernel(T* const C, const T* const A, const T* const B){
+__global__ void pow2_kernel(T* const C){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if(tid >= N) return;
 
-	C[tid] = A[tid] + B[tid];
+	const auto c = __ldg(C + tid);
+
+	C[tid] = c * c;
 }
 
 using compute_t = float;
 int main(){
 	auto dA = cutf::cuda::memory::get_device_unique_ptr<compute_t>(N);
 	auto dB = cutf::cuda::memory::get_device_unique_ptr<compute_t>(N);
-	auto dC = cutf::cuda::memory::get_device_unique_ptr<compute_t>(N);
 	auto hA = cutf::cuda::memory::get_host_unique_ptr<compute_t>(N);
 	auto hB = cutf::cuda::memory::get_host_unique_ptr<compute_t>(N);
-	auto hC = cutf::cuda::memory::get_host_unique_ptr<compute_t>(N);
 
 	auto streamA = cutf::cuda::stream::get_stream_unique_ptr();
 	auto streamB = cutf::cuda::stream::get_stream_unique_ptr();
@@ -35,10 +35,9 @@ int main(){
 	cutf::cuda::memory::copy_async(dA.get(), hA.get(), N, *streamA.get());
 	cutf::cuda::memory::copy_async(dB.get(), hB.get(), N, *streamB.get());
 
-	cudaStreamSynchronize(*streamA.get());
-	cudaStreamSynchronize(*streamB.get());
+	pow2_kernel<compute_t, N><<<(N + threads_per_block - 1) / threads_per_block, threads_per_block, 0, *streamA.get()>>>(dA.get());
+	pow2_kernel<compute_t, N><<<(N + threads_per_block - 1) / threads_per_block, threads_per_block, 0, *streamB.get()>>>(dB.get());
 
-	kernel<compute_t, N><<<(N + threads_per_block - 1) / threads_per_block, threads_per_block>>>(dC.get(), dA.get(), dB.get());
-
-	cutf::cuda::memory::copy(hC.get(), dC.get(), N);
+	cutf::cuda::memory::copy_async(dA.get(), hA.get(), N, *streamA.get());
+	cutf::cuda::memory::copy_async(dB.get(), hB.get(), N, *streamB.get());
 }
