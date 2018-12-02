@@ -41,7 +41,7 @@ struct cublas_deleter{
 		delete handle;
 	}
 };
-std::unique_ptr<cublasHandle_t, cublas_deleter> get_cublas_unique_ptr(const int device_id = 0){
+inline std::unique_ptr<cublasHandle_t, cublas_deleter> get_cublas_unique_ptr(const int device_id = 0){
 	cuda::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
 	cublasHandle_t *handle = new cublasHandle_t;
 	cublasCreate(handle);
