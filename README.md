@@ -62,6 +62,9 @@ cutf
    └─ error
 ```
 
+## Smart pointers
+[Smart pointers Reference](./docs/smart_ptr.md)
+
 ## CUDA Functions
 [cutf CUDA Functions Reference](./docs/cuda.md)
 
