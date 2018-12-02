@@ -27,13 +27,12 @@ int main(){
 	cutf::cuda::memory::copy(dA.get(), hA.get(), N * N);
 	cutf::cuda::memory::copy(dB.get(), hB.get(), N * N);
 
-	cublasHandle_t cublas_handle;
+	auto cublas_handle = cutf::cublas::get_cublas_unique_ptr();
 	compute_t alpha = cutf::cuda::type::cast<compute_t>(1.0f);
 	compute_t beta = cutf::cuda::type::cast<compute_t>(1.0f);
 
-	CUBLAS_ERROR_HANDLE(cublasCreate(&cublas_handle));
 	CUBLAS_ERROR_HANDLE(cutf::cublas::gemm(
-				cublas_handle,
+				*cublas_handle.get(),
 				CUBLAS_OP_N, CUBLAS_OP_N,
 				N, N, N,
 				&alpha,

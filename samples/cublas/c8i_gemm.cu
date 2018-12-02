@@ -17,10 +17,10 @@ int main(){
 
 	compute_t alpha, beta;
 
-	cublasHandle_t cublas_handle;
-	CUBLAS_ERROR_HANDLE(cublasCreate(&cublas_handle));
+	auto cublas = cutf::cublas::get_cublas_unique_ptr();
+
 	CUBLAS_ERROR_HANDLE(cublasGemmEx(
-				cublas_handle,
+				*cublas.get(),
 				CUBLAS_OP_N,
 				CUBLAS_OP_N,
 				N, N, N,

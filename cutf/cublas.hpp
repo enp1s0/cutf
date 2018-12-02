@@ -3,6 +3,8 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 #include <sstream>
+#include <memory>
+#include "error.hpp"
 
 namespace cutf{
 namespace cublas{
@@ -33,6 +35,19 @@ inline void check(cublasStatus_t error, const std::string filename, const std::s
 }
 
 } // error
+struct cublas_deleter{
+	void operator()(cublasHandle_t* handle){
+		error::check(cublasDestroy(*handle), __FILE__, __LINE__, __func__);
+		delete handle;
+	}
+};
+std::unique_ptr<cublasHandle_t, cublas_deleter> get_cublas_unique_ptr(const int device_id = 0){
+	cuda::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
+	cublasHandle_t *handle = new cublasHandle_t;
+	cublasCreate(handle);
+	cuda::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
+	return std::unique_ptr<cublasHandle_t, cublas_deleter>{handle};
+}
 // ==================================================
 // BLAS Lv 1
 // ==================================================
