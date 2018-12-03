@@ -13,10 +13,14 @@
 namespace cutf{
 namespace nvrtc{
 namespace error{
-inline void check(const nvrtcResult result, const std::string message,  const std::string filename, const std::size_t line, const std::string funcname){
+inline void check(const nvrtcResult result,  const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(result != NVRTC_SUCCESS){
 		std::stringstream ss;
-		ss<< nvrtcGetErrorString( result ) << " : " << message <<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
+		ss<< nvrtcGetErrorString( result );
+		if(message.length() != 0){
+			ss<<" : "<<message;
+		}
+	    ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
 		throw std::runtime_error(ss.str());
 	}
 }
@@ -52,7 +56,7 @@ inline std::string get_ptx(
 					num_headers,
 					header_sources.get(),
 					header_names.get()
-				), "@ Creating " + source_name, __FILE__, __LINE__, __func__);
+				), __FILE__, __LINE__, __func__, "@ Creating " + source_name);
 
 	for(auto i = decltype(num_headers)(0); i < num_headers; i++){
 		delete [] header_names.get()[i];
@@ -71,7 +75,7 @@ inline std::string get_ptx(
 				program,
 				num_options,
 				options.get()
-				), "@ Compiling " + source_name, __FILE__, __LINE__, __func__);
+				), __FILE__, __LINE__, __func__, "@ Compiling " + source_name);
 
 	for(auto i = decltype(num_options)(0); i < num_options; i++){
 		delete [] options.get()[i];
@@ -84,12 +88,12 @@ inline std::string get_ptx(
 		error::check(nvrtcGetProgramLogSize(
 					program,
 					&log_size
-					), "@ Getting compile log size of " + source_name, __FILE__, __LINE__, __func__);
+					), __FILE__, __LINE__, __func__, "@ Getting compile log size of " + source_name);
 		std::unique_ptr<char[]> log(new char[log_size]);
 		error::check(nvrtcGetProgramLog(
 					program,
 					log.get()
-					), "@ Getting compile log of " + source_name, __FILE__, __LINE__, __func__);
+					), __FILE__, __LINE__, __func__, "@ Getting compile log of " + source_name);
 		std::cout<<log.get()<<std::endl;
 	}
 	/// }}}3
@@ -99,16 +103,16 @@ inline std::string get_ptx(
 	error::check(nvrtcGetPTXSize(
 				program,
 				&ptx_size
-				), "@ Getting ptx size of " + source_name, __FILE__, __LINE__, __func__);
+				), __FILE__, __LINE__, __func__, "@ Getting ptx size of " + source_name);
 	std::unique_ptr<char[]> ptx_code(new char[ptx_size]);
 	error::check(nvrtcGetPTX(
 				program,
-				ptx_code.get()), "@ Getting PTX code of " + source_name, __FILE__, __LINE__, __func__);
+				ptx_code.get()), __FILE__, __LINE__, __func__, "@ Getting PTX code of " + source_name);
 
 	// }}}4
 
 	error::check(nvrtcDestroyProgram(
-				&program), " @ Destroying program of " + source_name, __FILE__, __LINE__, __func__);
+				&program), __FILE__, __LINE__, __func__, " @ Destroying program of " + source_name);
 
 	return std::string(ptx_code.get());
 }
