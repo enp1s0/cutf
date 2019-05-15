@@ -6,7 +6,6 @@
 #include "error.hpp"
 
 namespace cutf{
-namespace cuda{
 namespace device{
 inline std::vector<cudaDeviceProp> get_properties_vector(){
 	int n;
@@ -27,7 +26,6 @@ inline void use_device(const int device_id, const std::function<void(void)> func
 	cutf::cuda::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
 }
 } // device
-} // cuda
 } // cutf
 
 #endif // __CUTF_DEVICE_HPP__

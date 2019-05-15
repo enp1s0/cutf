@@ -5,7 +5,6 @@
 #include "error.hpp"
 
 namespace cutf{
-namespace cuda{
 namespace stream{
 struct stream_deleter{
 	void operator()(cudaStream_t *stream){
@@ -22,7 +21,6 @@ inline std::unique_ptr<cudaStream_t, stream_deleter> get_stream_unique_ptr(const
 	return stream_unique_ptr;
 }
 } // stream
-} // cuda
 } // cutf
 
 #endif // __CUTF_STREAM_HPP__
