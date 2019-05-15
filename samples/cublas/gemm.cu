@@ -2,8 +2,7 @@
 #include <cutf/cublas.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
-
-#define CUBLAS_ERROR_HANDLE(status) cutf::error::check(status, __FILE__, __LINE__, __func__)
+#include <cutf/error.hpp>
 
 using compute_t = float;
 const std::size_t N = 1 << 10;
@@ -31,7 +30,7 @@ int main(){
 	compute_t alpha = cutf::type::cast<compute_t>(1.0f);
 	compute_t beta = cutf::type::cast<compute_t>(1.0f);
 
-	CUBLAS_ERROR_HANDLE(cutf::cublas::gemm(
+	CUTF_HANDLE_ERROR(cutf::cublas::gemm(
 				*cublas_handle.get(),
 				CUBLAS_OP_N, CUBLAS_OP_N,
 				N, N, N,
