@@ -2,7 +2,7 @@
 #include <random>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/error.hpp>
+#include <cutf/cuda.hpp>
 #include <cutf/nvrtc.hpp>
 
 int main(){
@@ -31,11 +31,11 @@ __global__ void kernel(float *a, float *b){
 			<<ptx_code<<std::endl
 			<<" -- */"<<std::endl;
 
-	auto hAB = cutf::cuda::memory::get_host_unique_ptr<float>(N);
+	auto hAB = cutf::memory::get_host_unique_ptr<float>(N);
 	for(auto i = decltype(N)(0); i < N; i++) hAB.get()[i] = static_cast<float>(i);
-	auto dA = cutf::cuda::memory::get_device_unique_ptr<float>(N);
-	auto dB = cutf::cuda::memory::get_device_unique_ptr<float>(N);
-	cutf::cuda::memory::copy(dB.get(), hAB.get(), N);
+	auto dA = cutf::memory::get_device_unique_ptr<float>(N);
+	auto dB = cutf::memory::get_device_unique_ptr<float>(N);
+	cutf::memory::copy(dB.get(), hAB.get(), N);
 
 	const float * dA_ptr = dA.get();
 	const float * dB_ptr = dB.get();
@@ -47,7 +47,7 @@ __global__ void kernel(float *a, float *b){
 			1
 			);
 
-	cutf::cuda::memory::copy(hAB.get(), dA.get(), N);
+	cutf::memory::copy(hAB.get(), dA.get(), N);
 
 	std::cout<<"/* -- kernel result" <<std::endl;
 	for(auto i = decltype(N)(0); i < N; i++) {

@@ -2,7 +2,7 @@
 #include <cutf/device.hpp>
 
 int main(){
-	const auto device_properties = cutf::cuda::device::get_properties_vector();
+	const auto device_properties = cutf::device::get_properties_vector();
 
 	int device_id = 0;
 	for(const auto property : device_properties){
