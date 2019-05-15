@@ -8,7 +8,7 @@
 #include <iostream>
 #include <nvrtc.h>
 #include <cuda.h>
-#include "error.hpp"
+#include "cuda.hpp"
 
 namespace cutf{
 namespace nvrtc{

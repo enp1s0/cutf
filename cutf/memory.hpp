@@ -2,7 +2,7 @@
 #define __CUTF_MEMORY_CUH__
 
 #include <memory>
-#include "error.hpp"
+#include "cuda.hpp"
 
 #define MTK_CUDA_CHECK_ERROR(error_code) cutf::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
 

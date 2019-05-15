@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <vector>
-#include "error.hpp"
+#include "cuda.hpp"
 
 namespace cutf{
 namespace device{

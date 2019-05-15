@@ -2,7 +2,7 @@
 #define __CUTF_STREAM_HPP__
 #include <memory>
 #include <cuda_runtime.h>
-#include "error.hpp"
+#include "cuda.hpp"
 
 namespace cutf{
 namespace stream{

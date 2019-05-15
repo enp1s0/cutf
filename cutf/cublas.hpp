@@ -4,7 +4,7 @@
 #include <cuda_fp16.h>
 #include <sstream>
 #include <memory>
-#include "error.hpp"
+#include "cuda.hpp"
 
 namespace cutf{
 namespace cublas{
