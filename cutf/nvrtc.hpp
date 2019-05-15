@@ -8,10 +8,10 @@
 #include <iostream>
 #include <nvrtc.h>
 #include <cuda.h>
-#include "error.hpp"
+#include "cuda.hpp"
+#include "driver.hpp"
 
 namespace cutf{
-namespace nvrtc{
 namespace error{
 inline void check(const nvrtcResult result,  const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(result != NVRTC_SUCCESS){
@@ -25,6 +25,7 @@ inline void check(const nvrtcResult result,  const std::string filename, const s
 	}
 }
 } // error
+namespace nvrtc{
 inline std::string get_ptx(
 		const std::string source_name, 
 		const std::string function_code, 
@@ -49,7 +50,7 @@ inline std::string get_ptx(
 	}
 
 	nvrtcProgram program;
-	error::check(nvrtcCreateProgram(
+	cutf::error::check(nvrtcCreateProgram(
 					&program,
 					function_code.c_str(),
 					source_name.c_str(),
@@ -71,7 +72,7 @@ inline std::string get_ptx(
 		std::strcpy(options.get()[i], option.c_str());
 	}
 
-	error::check(nvrtcCompileProgram(
+	cutf::error::check(nvrtcCompileProgram(
 				program,
 				num_options,
 				options.get()
@@ -100,18 +101,18 @@ inline std::string get_ptx(
 
 	// Getting PTX 4{{{
 	std::size_t ptx_size;
-	error::check(nvrtcGetPTXSize(
+	cutf::error::check(nvrtcGetPTXSize(
 				program,
 				&ptx_size
 				), __FILE__, __LINE__, __func__, "@ Getting ptx size of " + source_name);
 	std::unique_ptr<char[]> ptx_code(new char[ptx_size]);
-	error::check(nvrtcGetPTX(
+	cutf::error::check(nvrtcGetPTX(
 				program,
 				ptx_code.get()), __FILE__, __LINE__, __func__, "@ Getting PTX code of " + source_name);
 
 	// }}}4
 
-	error::check(nvrtcDestroyProgram(
+	cutf::error::check(nvrtcDestroyProgram(
 				&program), __FILE__, __LINE__, __func__, " @ Destroying program of " + source_name);
 
 	return std::string(ptx_code.get());
@@ -127,11 +128,11 @@ inline CUfunction get_function(
 	CUmodule module;
 	CUfunction function;
 
-	cutf::driver::error::check(cuInit(0), __FILE__, __LINE__, __func__, "@ Initializing CUDA for " + function_name);
-	cutf::driver::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__, "@ Selecting device for " + function_name);
-	cutf::driver::error::check(cuCtxCreate(&context, 0, device), __FILE__, __LINE__, __func__, "@ Creating context for " + function_name);
-	cutf::driver::error::check(cuModuleLoadDataEx(&module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
-	cutf::driver::error::check(cuModuleGetFunction(&function, module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
+	cutf::error::check(cuInit(0), __FILE__, __LINE__, __func__, "@ Initializing CUDA for " + function_name);
+	cutf::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__, "@ Selecting device for " + function_name);
+	cutf::error::check(cuCtxCreate(&context, 0, device), __FILE__, __LINE__, __func__, "@ Creating context for " + function_name);
+	cutf::error::check(cuModuleLoadDataEx(&module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
+	cutf::error::check(cuModuleGetFunction(&function, module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
 
 	return function;
 }
@@ -144,7 +145,7 @@ inline void launch_function(
 		CUstream stream = nullptr,
 		unsigned int shared_memory_size = 0
 		){
-	cutf::driver::error::check(cuLaunchKernel(
+	cutf::error::check(cuLaunchKernel(
 					function,
 					grid.x, grid.y, grid.z,
 					block.x, block.y, block.z,

@@ -27,18 +27,18 @@ __global__ void kernel_example(T* const output, const T* const input){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if( tid >= N ) return;
 
-	output[tid] = cutf::cuda::math::sin( __ldg(input + tid) * cutf::cuda::type::cast<T>(PI) );
+	output[tid] = cutf::math::sin( __ldg(input + tid) * cutf::cuda::type::cast<T>(PI) );
 }
 
 using T = float;
 int main(){
-	auto in = cutf::cuda::memory::get_device_unique_ptr<T>(N);
-	auto out = cutf::cuda::memory::get_device_unique_ptr<T>(N);
-	auto h_out = cutf::cuda::memory::get_host_unique_ptr<T>(N);
+	auto in = cutf::memory::get_device_unique_ptr<T>(N);
+	auto out = cutf::memory::get_device_unique_ptr<T>(N);
+	auto h_out = cutf::memory::get_host_unique_ptr<T>(N);
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
-	cutf::cuda::memory::copy(h_out.get(), out.get(), N);
+	cutf::memory::copy(h_out.get(), out.get(), N);
 }
 ```
 
@@ -46,20 +46,17 @@ int main(){
 ```
 cutf 
 ├─ cublas
-│  └─ error
 ├─ cuda
-│  ├─ device
-│  ├─ error
-│  ├─ math
-│  ├─ memory
-│  └─ type
-│     └─ rounding
+├─ device
+├─ error
+├─ math
+├─ memory
+├─ type
+│  └─ rounding
 ├─ driver
-│  └─ error
 ├─ cublas
-│  └─ error
-└─ nvrtc
-   └─ error
+├─ nvrtc
+└─ error
 ```
 
 ## Smart pointers

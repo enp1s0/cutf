@@ -5,7 +5,6 @@
 #include <nvml.h>
 
 namespace cutf{
-namespace nvml{
 namespace error{
 inline void check(nvmlReturn_t error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(error != NVML_SUCCESS){
@@ -43,7 +42,6 @@ inline void check(nvmlReturn_t error, const std::string filename, const std::siz
 	}
 }
 } // error
-} // nvml
 } // cutf
 
 #endif // __CUTF_NVML_HPP__

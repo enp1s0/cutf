@@ -11,11 +11,11 @@ constexpr std::size_t N = 1<<10;
 using T = half;
 int main(){
 	auto cublas_handle = cutf::cublas::get_ublas_unique_ptr();
-	auto A = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
-	auto B = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
-	auto C = mtk::cuda::memory::get_device_unique_ptr<T>(N * N);
-	T alpha = mtk::cuda::type::cast<T>(1.0f);
-	T beta = mtk::cuda::type::cast<T>(1.0f);
+	auto A = cutf::memory::get_device_unique_ptr<T>(N * N);
+	auto B = cutf::memory::get_device_unique_ptr<T>(N * N);
+	auto C = cutf::memory::get_device_unique_ptr<T>(N * N);
+	T alpha = cutf::type::cast<T>(1.0f);
+	T beta = cutf::type::cast<T>(1.0f);
 
 	const auto status = cutf::cublas::gemm(*cublas_handle.get(),
 			CUBLAS_OP_N, CUBLAS_OP_N,

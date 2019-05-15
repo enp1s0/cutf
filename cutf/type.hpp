@@ -18,7 +18,6 @@
 	RCAST(src_type, src_ty, dst_type, dst_ty, rz); 
 
 namespace cutf{
-namespace cuda {
 namespace type {
 template <class T>  __host__ __device__ inline T cast(const half a);
 template <class T>  __host__ __device__ inline T cast(const float a);
@@ -97,7 +96,6 @@ DATA_TYPE_DEF(unsigned short, C, 8U);
 // }}}
 
 } // namespace type	
-} // cuda
 } // cutf
 
 #endif // __CUTF_TYPE_CUH__

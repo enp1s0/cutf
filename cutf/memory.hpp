@@ -2,12 +2,11 @@
 #define __CUTF_MEMORY_CUH__
 
 #include <memory>
-#include "error.hpp"
+#include "cuda.hpp"
 
-#define MTK_CUDA_CHECK_ERROR(error_code) cutf::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
+#define MTK_CUDA_CHECK_ERROR(error_code) cutf::error::check( error_code, __FILE__, __LINE__, __func__)
 
 namespace cutf{
-namespace cuda{
 namespace memory{
 
 // deleter
@@ -59,7 +58,6 @@ inline void copy_async(T* const dst, const T* const src, const std::size_t size,
 }
 
 } // memory
-} // cuda
 } // cutf
 
 #endif // __CUTF_MEMORY_CUH__

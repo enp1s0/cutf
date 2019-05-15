@@ -3,7 +3,7 @@
 CUDA built-in unary math functions. (SFU)
 ```cpp
 // x : half, half2, float, double
-cutf::cuda::math::[operation](x);
+cutf::math::[operation](x);
 ```
 |Operation| description |
 |:--------|:------------|
@@ -31,9 +31,9 @@ cutf::cuda::math::[operation](x);
 ## type
 ```cpp
 // cast decltype(x) to `type`
-cutf::cuda::type::cast<type>(x);
-cutf::cuda::type::reinterpret<type>(x);
-cutf::cuda::type::rcast<type, rounding>(x);
+cutf::type::cast<type>(x);
+cutf::type::reinterpret<type>(x);
+cutf::type::rcast<type, rounding>(x);
 ```
 
 |Cast| description |
@@ -45,22 +45,22 @@ cutf::cuda::type::rcast<type, rounding>(x);
 ### rounding
 | Rounding type | description |
 |:--------------|:------------|
-|`cutf::cuda::type::rounding::rd`|round-down mode|
-|`cutf::cuda::type::rounding::rn`|round-to-nearest-even mode|
-|`cutf::cuda::type::rounding::ru`|round-up mode|
-|`cutf::cuda::type::rounding::rz`|round-towards-zero mode|
+|`cutf::type::rounding::rd`|round-down mode|
+|`cutf::type::rounding::rn`|round-to-nearest-even mode|
+|`cutf::type::rounding::ru`|round-up mode|
+|`cutf::type::rounding::rz`|round-towards-zero mode|
 
 ## memory
 ```cpp
-auto dA = cutf::cuda::memory::get_device_unique_ptr<type>(N);
-auto hA = cutf::cuda::memory::get_host_unique_ptr<type>(N);
-cutf::cuda::memory::copy(dst_ptr, src_ptr, N);
+auto dA = cutf::memory::get_device_unique_ptr<type>(N);
+auto hA = cutf::memory::get_host_unique_ptr<type>(N);
+cutf::memory::copy(dst_ptr, src_ptr, N);
 ```
 
 | Function | description |
 |:--------------|:------------|
-|`cutf::cuda::memory::get_device_unique_ptr`|`cudaMalloc` and returns `std::unique_ptr`|
-|`cutf::cuda::memory::get_host_unique_ptr`|`cudaMallocHost` and returns `std::unique_ptr`|
-|`cutf::cuda::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
+|`cutf::memory::get_device_unique_ptr`|`cudaMalloc` and returns `std::unique_ptr`|
+|`cutf::memory::get_host_unique_ptr`|`cudaMallocHost` and returns `std::unique_ptr`|
+|`cutf::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
 
 All functions whould throw runtime exception if anything should happen.

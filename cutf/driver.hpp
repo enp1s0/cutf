@@ -1,28 +1,11 @@
-#ifndef __CUTF_ERROR_CUH__
-#define __CUTF_ERROR_CUH__
-#include <stdexcept>
-#include <sstream>
-#include <cublas_v2.h>
-#include <cuda.h>
+#ifndef __CUTF_DEVICE_HPP__
+#define __CUTF_DEVICE_HPP__
+
+#include <functional>
+#include <vector>
+#include "cuda.hpp"
 
 namespace cutf{
-namespace cuda{
-namespace error{
-inline void check(cudaError_t error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
-	if(error != cudaSuccess){
-		std::stringstream ss;
-		ss<< cudaGetErrorString( error );
-		if(message.length() != 0){
-			ss<<" : "<<message;
-		}
-	    ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
-		throw std::runtime_error(ss.str());
-	}
-}
-
-} // error
-} // cuda
-namespace driver{
 namespace error{
 inline void check(CUresult error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(error != CUDA_SUCCESS){
@@ -88,7 +71,6 @@ inline void check(CUresult error, const std::string filename, const std::size_t 
 }
 
 } // error
-} // cublas
 } // cutf
 
-#endif // __CUTF_ERROR_CUH__
+#endif // __CUTF_DEVICE_HPP__

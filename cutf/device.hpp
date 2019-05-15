@@ -3,10 +3,9 @@
 
 #include <functional>
 #include <vector>
-#include "error.hpp"
+#include "cuda.hpp"
 
 namespace cutf{
-namespace cuda{
 namespace device{
 inline std::vector<cudaDeviceProp> get_properties_vector(){
 	int n;
@@ -22,12 +21,11 @@ inline std::vector<cudaDeviceProp> get_properties_vector(){
 }
 
 inline void use_device(const int device_id, const std::function<void(void)> function){
-	cutf::cuda::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
+	cutf::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
 	function();
-	cutf::cuda::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
+	cutf::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
 }
 } // device
-} // cuda
 } // cutf
 
 #endif // __CUTF_DEVICE_HPP__

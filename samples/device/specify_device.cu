@@ -18,24 +18,24 @@ __global__ void kernel(T* const t){
 }
 
 int main(){
-	const auto device_properties = cutf::cuda::device::get_properties_vector();
+	const auto device_properties = cutf::device::get_properties_vector();
 	std::int_fast32_t device_id = 0;
 	for(const auto & dp : device_properties){
 		std::cout<<"# "<<device_id<<std::endl
 			<<"Name          : "<<dp.name<<std::endl
 			<<"Global Memory : "<<(dp.totalGlobalMem/(1<<20))<<" MB"<<std::endl;
 
-		cutf::cuda::device::use_device(
+		cutf::device::use_device(
 				device_id,
 				[](){
-					auto dMem = cutf::cuda::memory::get_device_unique_ptr<compute_t>(N);
-					auto hMem = cutf::cuda::memory::get_host_unique_ptr<compute_t>(N);
+					auto dMem = cutf::memory::get_device_unique_ptr<compute_t>(N);
+					auto hMem = cutf::memory::get_host_unique_ptr<compute_t>(N);
 					for(auto i = decltype(N)(0); i < N; i++){
-						hMem.get()[i] = cutf::cuda::type::cast<compute_t>(1.0f * i / N);
+						hMem.get()[i] = cutf::type::cast<compute_t>(1.0f * i / N);
 					}
-					cutf::cuda::memory::copy(dMem.get(), hMem.get(), N);
+					cutf::memory::copy(dMem.get(), hMem.get(), N);
 					kernel<compute_t, N><<<(N + threads_per_block - 1)/threads_per_block, threads_per_block>>>(dMem.get());
-					cutf::cuda::memory::copy(hMem.get(), dMem.get(), N);
+					cutf::memory::copy(hMem.get(), dMem.get(), N);
 				});
 		device_id++;
 	}
