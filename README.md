@@ -18,6 +18,7 @@ cutf is a tiny CUDA template library.
 ```cpp
 #include <cutf/math.hpp>
 #include <cutf/type.hpp>
+#include <cutf/error.hpp>
 #include <cutf/memory.hpp>
 constexpr float PI = 3.f;
 constexpr std::size_t N = 15;
@@ -38,7 +39,7 @@ int main(){
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
-	cutf::memory::copy(h_out.get(), out.get(), N);
+	CUTF_HANDLE_ERROR(cutf::memory::copy(h_out.get(), out.get(), N));
 }
 ```
 

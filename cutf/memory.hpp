@@ -47,14 +47,14 @@ inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
 
 // copy
 template <class T>
-inline void copy(T* const dst, const T* const src, const std::size_t size){
-	MTK_CUDA_CHECK_ERROR(cudaMemcpy(dst, src, sizeof(T) * size, cudaMemcpyDefault));
+inline cudaError_t copy(T* const dst, const T* const src, const std::size_t size){
+	return cudaMemcpy(dst, src, sizeof(T) * size, cudaMemcpyDefault);
 }
 
 // asynchronous copy
 template <class T>
-inline void copy_async(T* const dst, const T* const src, const std::size_t size, cudaStream_t stream = 0){
-	MTK_CUDA_CHECK_ERROR(cudaMemcpyAsync(dst, src, sizeof(T) * size, cudaMemcpyDefault, stream));
+inline cudaError_t copy_async(T* const dst, const T* const src, const std::size_t size, cudaStream_t stream = 0){
+	return cudaMemcpyAsync(dst, src, sizeof(T) * size, cudaMemcpyDefault, stream);
 }
 
 } // memory
