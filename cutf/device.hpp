@@ -21,9 +21,11 @@ inline std::vector<cudaDeviceProp> get_properties_vector(){
 }
 
 inline void use_device(const int device_id, const std::function<void(void)> function){
+	int current_device_id;
+	cutf::error::check(cudaGetDevice(&current_device_id), __FILE__, __LINE__, __func__);
 	cutf::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
 	function();
-	cutf::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
+	cutf::error::check(cudaSetDevice(current_device_id), __FILE__, __LINE__, __func__);
 }
 } // device
 } // cutf
