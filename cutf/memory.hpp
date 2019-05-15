@@ -4,7 +4,7 @@
 #include <memory>
 #include "cuda.hpp"
 
-#define MTK_CUDA_CHECK_ERROR(error_code) cutf::cuda::error::check( error_code, __FILE__, __LINE__, __func__)
+#define MTK_CUDA_CHECK_ERROR(error_code) cutf::error::check( error_code, __FILE__, __LINE__, __func__)
 
 namespace cutf{
 namespace memory{
