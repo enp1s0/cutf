@@ -28,7 +28,7 @@ __global__ void kernel_example(T* const output, const T* const input){
 	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if( tid >= N ) return;
 
-	output[tid] = cutf::math::sin( __ldg(input + tid) * cutf::cuda::type::cast<T>(PI) );
+	output[tid] = cutf::math::sin( __ldg(input + tid) * cutf::type::cast<T>(PI) );
 }
 
 using T = float;
