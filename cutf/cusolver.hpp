@@ -1,5 +1,5 @@
-#ifndef __CUTF_CUSOLVER_CUH__
-#define __CUTF_CUSOLVER_CUH__
+#ifndef __CUTF_CUSOLVER_HPP__
+#define __CUTF_CUSOLVER_HPP__
 #include <cusolverDn.h>
 #include <cusolverSp.h>
 #include <sstream>
@@ -63,4 +63,4 @@ inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_
 } // cusolver
 } // cutf
 
-#endif // __CUTF_CUSOLVER_CUH__
+#endif // __CUTF_CUSOLVER_HPP__
