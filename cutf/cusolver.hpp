@@ -60,6 +60,53 @@ inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_
 	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
 }
 
+namespace dn {
+#define POTRF(type_name, short_type_name)\
+	inline cusolverStatus_t potrf(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, type_name *Workspace, int Lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##potrf(handle, uplo, n, A, lda, Workspace, Lwork, devInfo); \
+	} \
+	inline cusolverStatus_t potrf_buffer_size(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##potrf_bufferSize(handle, uplo, n, A, lda, Lwork);\
+	}
+POTRF(float, S);
+POTRF(double, D);
+POTRF(cuComplex, C);
+POTRF(cuDoubleComplex, Z);
+
+#define POTRS(type_name, short_type_name)\
+	inline cusolverStatus_t potrs(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, int nrhs, const type_name *A, int lda, type_name *B, int ldb, int *devInfo) {\
+		return cusolverDn##short_type_name##potrs(handle, uplo, n, nrhs, A, lda, B, ldb, devInfo); \
+	}
+POTRS(float, S);
+POTRS(double, D);
+POTRS(cuComplex, C);
+POTRS(cuDoubleComplex, Z);
+
+#define GEQRF(type_name, short_type_name)\
+	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
+	} \
+	inline cusolverStatus_t geqrf_buffer_size(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##geqrf_bufferSize(handle, m, n, A, lda, Lwork);\
+	}
+GEQRF(float, S);
+GEQRF(double, D);
+GEQRF(cuComplex, C);
+GEQRF(cuDoubleComplex, Z);
+
+#define GQR(type_name, short_type_name)\
+	inline cusolverStatus_t gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##gqr(handle, m, n, k, A, lda, tau, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t gqr_buffer_size(cusolverDnHandle_t handle, int m, int n, int k, const type_name *A, int lda, const type_name* tau, int *lwork) {\
+		return cusolverDn##short_type_name##gqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);\
+	}
+GQR(float, Sor);
+GQR(double, Dor);
+GQR(cuComplex, Cun);
+GQR(cuDoubleComplex, Zun);
+} // namespace dn
+
 } // cusolver
 } // cutf
 
