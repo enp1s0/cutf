@@ -45,24 +45,37 @@ int main(){
 	cutf::memory::copy(dA.get(), hA.get(), M * N);
 	auto cusolver = cutf::cusolver::get_cusolver_dn_unique_ptr();
 
-	int Lwork;
+	int Lwork_geqrf, Lwork_orgqr;
 	CUTF_HANDLE_ERROR(cutf::cusolver::dn::geqrf_buffer_size(
 			*cusolver.get(), M, N,
-			dA.get(), M, &Lwork));
-	std::cout<<"Buffer size : "<<(sizeof(compute_t) * Lwork)<<"B"<<std::endl;
+			dA.get(), M, &Lwork_geqrf));
+	CUTF_HANDLE_ERROR(cutf::cusolver::dn::gqr_buffer_size(
+			*cusolver.get(), M, N, N,
+			dA.get(), M, dTAU.get(), &Lwork_orgqr));
+	std::cout<<"Buffer size : "<<(sizeof(compute_t) * (Lwork_geqrf + Lwork_orgqr))<<"B"<<std::endl;
 
-	auto dBuffer = cutf::memory::get_device_unique_ptr<compute_t>(Lwork);
+	auto dBuffer_geqrf = cutf::memory::get_device_unique_ptr<compute_t>(Lwork_geqrf);
+	auto dBuffer_orgqr = cutf::memory::get_device_unique_ptr<compute_t>(Lwork_orgqr);
 
 	CUTF_HANDLE_ERROR(cutf::cusolver::dn::geqrf(
 				*cusolver.get(), M, N,
-				dA.get(), M, dTAU.get(), dBuffer.get(),
-				Lwork, dInfo.get()
+				dA.get(), M, dTAU.get(), dBuffer_geqrf.get(),
+				Lwork_geqrf, dInfo.get()
 				));
 
 	int hInfo;
 	cutf::memory::copy(&hInfo, dInfo.get(), 1);
-	std::cout<<"Info : "<<hInfo<<std::endl;
+	std::cout<<"geqrf info : "<<hInfo<<std::endl;
 
 	cutf::memory::copy(hA.get(), dA.get(), M * N);
 	print_matrix(hA.get(), M, N, "R");
+
+	CUTF_HANDLE_ERROR(cutf::cusolver::dn::gqr(
+				*cusolver.get(), M, N, N,
+				dA.get(), M,
+				dTAU.get(), dBuffer_orgqr.get(), Lwork_orgqr,
+				dInfo.get()
+				));
+	cutf::memory::copy(&hInfo, dInfo.get(), 1);
+	std::cout<<"orgqr info : "<<hInfo<<std::endl;
 }
