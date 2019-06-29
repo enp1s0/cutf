@@ -73,6 +73,6 @@ cutf
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
 
 ## License
-Copyright (c) 2018 mutsuki (gonmoec)  
+Copyright (c) 2018 - 2019 tsuki (enp1s0)  
 Released under the MIT license  
 <img src="http://momo86.net/ipsolab.svg" width="120">
