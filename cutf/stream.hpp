@@ -17,10 +17,10 @@ using stream_unique_ptr = std::unique_ptr<cudaStream_t, stream_deleter>;
 
 inline stream_unique_ptr get_stream_unique_ptr(const int device_id = 0){
 	cutf::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__, "@ Creating stream for device " + std::to_string(device_id));
-	stream_unique_ptr stream_unique_ptr(new cudaStream_t);
-	cutf::error::check(cudaStreamCreate(stream_unique_ptr.get()), __FILE__, __LINE__, __func__, "@ Creating stream for device " + std::to_string(device_id));
+	stream_unique_ptr stream(new cudaStream_t);
+	cutf::error::check(cudaStreamCreate(stream.get()), __FILE__, __LINE__, __func__, "@ Creating stream for device " + std::to_string(device_id));
 	cutf::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__, "@ Creating stream for device " + std::to_string(device_id));
-	return stream_unique_ptr;
+	return stream;
 }
 } // stream
 } // cutf
