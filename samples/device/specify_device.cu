@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cutf/device.hpp>
 #include <cutf/memory.hpp>
+#include <cutf/error.hpp>
 #include <cutf/type.hpp>
 
 constexpr std::size_t N = 1 << 16;
@@ -25,7 +26,7 @@ int main(){
 			<<"Name          : "<<dp.name<<std::endl
 			<<"Global Memory : "<<(dp.totalGlobalMem/(1<<20))<<" MB"<<std::endl;
 
-		cutf::device::use_device(
+		CUTF_HANDLE_ERROR(cutf::device::use_device(
 				device_id,
 				[](){
 					auto dMem = cutf::memory::get_device_unique_ptr<compute_t>(N);
@@ -36,7 +37,7 @@ int main(){
 					cutf::memory::copy(dMem.get(), hMem.get(), N);
 					kernel<compute_t, N><<<(N + threads_per_block - 1)/threads_per_block, threads_per_block>>>(dMem.get());
 					cutf::memory::copy(hMem.get(), dMem.get(), N);
-				});
+				}));
 		device_id++;
 	}
 }
