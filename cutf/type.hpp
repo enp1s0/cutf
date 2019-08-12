@@ -19,18 +19,27 @@
 
 namespace cutf{
 namespace type {
+template <class T>  __host__ __device__ inline T cast(const int a);
 template <class T>  __host__ __device__ inline T cast(const half a);
 template <class T>  __host__ __device__ inline T cast(const float a);
 template <class T>  __host__ __device__ inline T cast(const double a);
 
+CAST(int, int, a, a);
+CAST(int, half, __float2half(static_cast<float>(a)), a);
+CAST(int, float, static_cast<float>(a), a);
+CAST(int, double, static_cast<double>(a), a);
+
+CAST(half, int, static_cast<int>(__half2float(a)), a);
 CAST(half, half, a, a);
 CAST(half, float, __half2float(a), a);
 CAST(half, double, static_cast<double>(__half2float(a)), a);
 
+CAST(float, int, static_cast<int>(a), a);
 CAST(float, half, __float2half(a), a);
 CAST(float, float, a, a);
 CAST(float, double, static_cast<double>(a), a);
 
+CAST(double, int, static_cast<int>(a), a);
 CAST(double, half, __half2float(static_cast<float>(a)), a);
 CAST(double, float, static_cast<float>(a), a);
 CAST(double, double, a, a);
