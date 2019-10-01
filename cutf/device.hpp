@@ -20,6 +20,12 @@ inline std::vector<cudaDeviceProp> get_properties_vector(){
 	return properties_vector;
 }
 
+inline std::size_t get_num_devices() {
+	int n;
+	cudaGetDeviceCount(&n);
+	return static_cast<std::size_t>(n);
+}
+
 inline cudaError_t use_device(const int device_id, const std::function<void(void)> function){
 	int current_device_id;
 	cudaError_t result;
