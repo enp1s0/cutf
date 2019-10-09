@@ -4,8 +4,8 @@
 #include <memory>
 #include <cuda_runtime.h>
 #include "cuda.hpp"
+#include "error.hpp"
 
-#define MTK_CUDA_CHECK_ERROR(error_code) cutf::error::check( error_code, __FILE__, __LINE__, __func__)
 
 namespace cutf{
 namespace memory{
@@ -15,14 +15,14 @@ template <class T>
 class device_deleter{
 public:
 	void operator()(T* ptr){
-		MTK_CUDA_CHECK_ERROR(cudaFree( ptr ));
+		CUTF_HANDLE_ERROR(cudaFree( ptr ));
 	}
 };
 template <class T>
 class host_deleter{
 public:
 	void operator()(T* ptr){
-		MTK_CUDA_CHECK_ERROR(cudaFreeHost( ptr ));
+		CUTF_HANDLE_ERROR(cudaFreeHost( ptr ));
 	}
 };
 
@@ -36,13 +36,13 @@ using host_unique_ptr = std::unique_ptr<T, host_deleter<T>>;
 template <class T>
 inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
 	T* ptr;
-	MTK_CUDA_CHECK_ERROR(cudaMalloc((void**)&ptr, sizeof(T) * size));
+	CUTF_HANDLE_ERROR_M(cudaMalloc((void**)&ptr, sizeof(T) * size), "Failed to allocate " + std::to_string(size * sizeof(T)) + " Bytes of device memory");
 	return std::unique_ptr<T, device_deleter<T>>{ptr};
 }
 template <class T>
 inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
 	T* ptr;
-	MTK_CUDA_CHECK_ERROR(cudaMallocHost((void**)&ptr, sizeof(T) * size));
+	CUTF_HANDLE_ERROR_M(cudaMallocHost((void**)&ptr, sizeof(T) * size), "Failed to allocate " + std::to_string(size * sizeof(T)) + " Bytes of host memory");
 	return std::unique_ptr<T, host_deleter<T>>{ptr};
 }
 
