@@ -105,6 +105,20 @@ GQR(float, Sor);
 GQR(double, Dor);
 GQR(cuComplex, Cun);
 GQR(cuDoubleComplex, Zun);
+
+template <class T>
+inline cusolverStatus_t gesvd_buffer_size(cusolverDnHandle_t handle, int m, int n, int *Lwork);
+#define GESVD(type_name, s_type_name, short_type_name)\
+	inline cusolverStatus_t gesvd(cusolverDnHandle_t handle, signed char jobu, signed char jobvt, int m, int n, type_name* A, int lda, s_type_name* S, type_name* U, int ldu, type_name* VT, int lvt, type_name* work, int lwork, s_type_name* rwork, int *devInfo) {\
+		return cusolverDn##short_type_name##gesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT, lvt, work, lwork, rwork, devInfo); \
+	} \
+	template <> inline cusolverStatus_t gesvd_buffer_size<type_name>(cusolverDnHandle_t handle, int m, int n, int *Lwork) {\
+		return cusolverDn##short_type_name##gesvd_bufferSize(handle, m, n, Lwork);\
+	}
+GESVD(float, float, S);
+GESVD(double, double, D);
+GESVD(cuComplex, float, C);
+GESVD(cuDoubleComplex, double, Z);
 } // namespace dn
 
 } // cusolver
