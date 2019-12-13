@@ -119,6 +119,18 @@ GESVD(float, float, S);
 GESVD(double, double, D);
 GESVD(cuComplex, float, C);
 GESVD(cuDoubleComplex, double, Z);
+
+#define GESVDJ(type_name, s_type_name, short_type_name)\
+	inline cusolverStatus_t gesvdj(cusolverDnHandle_t handle, cusolverEigMode_t jobz, int econ, int m, int n, type_name* A, int lda, s_type_name* S, type_name* U, int ldu, type_name* V, int ldv, type_name* work, int lwork, int *info, gesvdjInfo_t params) {\
+		return cusolverDn##short_type_name##gesvdj(handle, jobz, econ, m, n, A, lda, S, U, ldu, V, ldv, work, lwork, info, params); \
+	} \
+	inline cusolverStatus_t gesvdj_buffer_size(cusolverDnHandle_t handle, cusolverEigMode_t jobz, int econ, int m, int n, type_name* A, int lda, s_type_name* S, type_name* U, int ldu, type_name* V, int ldv, int *lwork, gesvdjInfo_t params) {\
+		return cusolverDn##short_type_name##gesvdj_bufferSize(handle, jobz, econ, m, n, A, lda, S, U, ldu, V, ldv, lwork, params); \
+	}
+GESVDJ(float, float, S);
+GESVDJ(double, double, D);
+GESVDJ(cuComplex, float, C);
+GESVDJ(cuDoubleComplex, double, Z);
 } // namespace dn
 
 } // cusolver
