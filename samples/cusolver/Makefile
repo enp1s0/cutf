@@ -1,6 +1,6 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lcusolver
-TARGETS=geqrf.test
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lcusolver -lcublas
+TARGETS=gesvd.test
 
 all: $(TARGETS)
 
