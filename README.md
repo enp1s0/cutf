@@ -56,6 +56,7 @@ cutf
 │  └─ rounding
 ├─ driver
 ├─ cublas
+├─ curand
 ├─ nvrtc
 └─ error
 ```
