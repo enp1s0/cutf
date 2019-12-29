@@ -75,7 +75,7 @@ inline curandStatus_t generate_normal(curandGenerator_t gen, double* const outpu
 inline curandStatus_t generate_log_normal(curandGenerator_t gen, float* const output_ptr, const std::size_t size, const float mean, const float stddev) {
 	return curandGenerateLogNormal(gen, output_ptr, size, mean, stddev);
 }
-curandStatus_t generate_log_normal(curandGenerator_t gen, double* const output_ptr, const std::size_t size, const double mean, const double stddev) {
+inline curandStatus_t generate_log_normal(curandGenerator_t gen, double* const output_ptr, const std::size_t size, const double mean, const double stddev) {
 	return curandGenerateLogNormalDouble(gen, output_ptr, size, mean, stddev);
 }
 
