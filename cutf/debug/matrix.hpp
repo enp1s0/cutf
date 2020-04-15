@@ -1,5 +1,5 @@
-#ifndef __DEBUG_MATRIX_HPP
-#define __DEBUG_MATRIX_HPP
+#ifndef __DEBUG_MATRIX_HPP__
+#define __DEBUG_MATRIX_HPP__
 #include <cstddef>
 #include <stdio.h>
 #include "../type.hpp"
