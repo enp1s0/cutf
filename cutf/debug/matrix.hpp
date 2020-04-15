@@ -25,6 +25,7 @@ __device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, 
 		printf("\n");
 	}
 }
+
 template <class T>
 __device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, std::size_t ldm, const char *name = nullptr) {
 	if(name != nullptr) printf("%s = \n", name);
