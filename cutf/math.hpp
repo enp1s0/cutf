@@ -85,6 +85,42 @@ template <> __device__ inline half2 sign(const half2 v){
 })":"=r"(HALF22US(r)):"r"(HALF22CUS(v)));
 	return r;
 }
+
+// max
+__device__ inline __half2 max(const __half2 a, const __half2 b) {
+        const half2 sub = __hsub2(a, b);
+        const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
+        const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
+        const int res = __byte_perm(*reinterpret_cast<const unsigned*>(&a), *reinterpret_cast<const unsigned*>(&b), 0x00003210 | sw);
+        return *reinterpret_cast<const __half2*>(&res);
+}
+__device__ inline __half max(const __half a, const __half b) {
+        const half sub = __hsub(a, b);
+        const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
+        const unsigned sw = (sign >> 13) * 0x11;
+        const unsigned short res = __byte_perm(*reinterpret_cast<const short*>(&a), *reinterpret_cast<const short*>(&b), 0x00000010 | sw);
+        return *reinterpret_cast<const __half*>(&res);
+}
+__device__ inline float max(const float a, const float b) {return fmaxf(a, b);};
+__device__ inline double max(const double a, const double b) {return fmax(a, b);};
+
+// min
+__device__ inline __half2 min(const __half2 a, const __half2 b) {
+        const half2 sub = __hsub2(b, a);
+        const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
+        const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
+        const int res = __byte_perm(*reinterpret_cast<const unsigned*>(&a), *reinterpret_cast<const unsigned*>(&b), 0x00003210 | sw);
+        return *reinterpret_cast<const __half2*>(&res);
+}
+__device__ inline __half min(const __half a, const __half b) {
+        const half sub = __hsub(b, a);
+        const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
+        const unsigned sw = (sign >> 13) * 0x11;
+        const unsigned short res = __byte_perm(*reinterpret_cast<const short*>(&a), *reinterpret_cast<const short*>(&b), 0x00000010 | sw);
+        return *reinterpret_cast<const __half*>(&res);
+}
+__device__ inline float min(const float a, const float b) {return fminf(a, b);};
+__device__ inline double min(const double a, const double b) {return fmin(a, b);};
 } // math
 } // cutf
 #endif // __CUTF_MATH_CUH__
