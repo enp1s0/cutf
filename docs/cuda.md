@@ -28,6 +28,14 @@ cutf::math::[operation](x);
 |:--------|:------------|
 |sign|`if` $`x > 0`$ `then` $`1`$ `else` $`-1`$|
 
+### horizontal operators of `half2`
+|Operation|
+|:--------|
+|add      |
+|mul      |
+|max      |
+|min      |
+
 ## type
 ```cpp
 // cast decltype(x) to `type`
