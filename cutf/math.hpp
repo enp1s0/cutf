@@ -121,6 +121,13 @@ __device__ inline __half min(const __half a, const __half b) {
 }
 __device__ inline float min(const float a, const float b) {return fminf(a, b);};
 __device__ inline double min(const double a, const double b) {return fmin(a, b);};
+
+namespace horizontal {
+__half add(__half2 a) {return a.x + a.y;}
+__half mul(__half2 a) {return a.x * a.y;}
+__half max(__half2 a) {return cutf::math::max(a.x, a.y);}
+__half min(__half2 a) {return cutf::math::min(a.x, a.y);}
+} // namespace horizontal
 } // math
 } // cutf
 #endif // __CUTF_MATH_CUH__
