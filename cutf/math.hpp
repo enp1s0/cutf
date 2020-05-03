@@ -23,8 +23,8 @@ template<>  __device__ inline double func<double>(const double a){return func( a
 	SPEC_MATH_FUNC_1_d(func) \
 
 
- __device__ inline float rcpf(const float a){return __frcp_rn(a);}
- __device__ inline double rcp(const double a){return __drcp_rn(a);}
+__device__ inline float rcpf(const float a){return __frcp_rn(a);}
+__device__ inline double rcp(const double a){return __drcp_rn(a);}
 namespace cutf{
 namespace math{
 MATH_FUNC(ceil);
