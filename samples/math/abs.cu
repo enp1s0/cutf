@@ -11,12 +11,13 @@ template <class T, std::size_t N>
 __global__ void abs_kernel(T* const m){
 	auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if(tid >= N) return;
-	m[tid] = cutf::math::sin(__ldg(m + tid));
+	m[tid] = cutf::math::abs(*(m + tid));
 }
 template <class T> std::string get_type_name();
 template <> std::string get_type_name<half>(){return "half";};
 template <> std::string get_type_name<float>(){return "float";};
 template <> std::string get_type_name<double>(){return "double";};
+
 template <class T, std::size_t N>
 void test_abs(){
 	std::cout<<"# "<<get_type_name<T>()<<" test --"<<std::endl;
