@@ -43,6 +43,19 @@ MATH_FUNC(sin);
 MATH_FUNC(sqrt);
 MATH_FUNC(trunc);
 
+// abs
+template <class T> T abs(const T a);
+template <> __device__ inline double abs<double>(const double a){return fabs(a);}
+template <> __device__ inline float abs<float>(const float a){return fabsf(a);}
+template <> __device__ inline __half abs<__half>(const __half a){
+    const auto abs_a = *reinterpret_cast<const unsigned short*>(&a) & 0x7fff;
+    return *reinterpret_cast<const __half*>(&abs_a);
+}
+template <> __device__ inline __half2 abs<__half2>(const __half2 a){
+    const auto abs_a = *reinterpret_cast<const unsigned *>(&a) & 0x7fff7fff;
+    return *reinterpret_cast<const __half2*>(&abs_a);
+}
+
 // get sign
 template <class T> __device__ inline T sign(const T v);
 template <> __device__ inline double sign(const double v){
