@@ -50,6 +50,12 @@ cutf::type::rcast<type, rounding>(x);
 |reinterpret|reinterpret cast|
 |rcast|rounding cast|
 
+### type name
+```
+cutf::type::get_type_name<T>();
+```
+This function returns the type name (`const char*`).
+
 ### rounding
 | Rounding type | description |
 |:--------------|:------------|
