@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
-TARGETS=cos.test
+TARGETS=cos.test type.test
 
 all: $(TARGETS)
 
