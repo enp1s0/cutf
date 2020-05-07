@@ -7,7 +7,7 @@ cutf::math::[operation](x);
 ```
 |Operation| description |
 |:--------|:------------|
-|abs|$`|x|`$|
+|abs|$` \|x\| `$|
 |ceil|$`\lceil x \rceil`$|
 |cos|$`\mathrm{cos} x`$|
 |exp|$`\mathrm{e}^{x}`$|
