@@ -106,11 +106,11 @@ DATA_TYPE_DEF(unsigned short, C, 8U);
 
 // name string
 template <class T>
-__host__ __device__ inline char* get_type_name();
-template <> __host__ __device__ inline char* get_type_name<double >() {return "double";}
-template <> __host__ __device__ inline char* get_type_name<float  >() {return "float";}
-template <> __host__ __device__ inline char* get_type_name<__half >() {return "half";}
-template <> __host__ __device__ inline char* get_type_name<__half2>() {return "half2";}
+__host__ __device__ inline const char* get_type_name();
+template <> __host__ __device__ inline const char* get_type_name<double >() {return "double";}
+template <> __host__ __device__ inline const char* get_type_name<float  >() {return "float";}
+template <> __host__ __device__ inline const char* get_type_name<__half >() {return "half";}
+template <> __host__ __device__ inline const char* get_type_name<__half2>() {return "half2";}
 
 } // namespace type	
 } // cutf
