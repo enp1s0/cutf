@@ -13,14 +13,10 @@ __global__ void abs_kernel(T* const m){
 	if(tid >= N) return;
 	m[tid] = cutf::math::abs(*(m + tid));
 }
-template <class T> std::string get_type_name();
-template <> std::string get_type_name<half>(){return "half";};
-template <> std::string get_type_name<float>(){return "float";};
-template <> std::string get_type_name<double>(){return "double";};
 
 template <class T, std::size_t N>
 void test_abs(){
-	std::cout<<"# "<<get_type_name<T>()<<" test --"<<std::endl;
+	std::cout<<"# "<<cutf::type::get_type_name<T>()<<" test --"<<std::endl;
 	auto dM = cutf::memory::get_device_unique_ptr<T>(N);
 	auto hM = cutf::memory::get_host_unique_ptr<T>(N);
 	std::cout<<"m = ";
