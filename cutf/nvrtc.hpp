@@ -121,12 +121,12 @@ inline std::string get_ptx(
 inline CUfunction get_function(
 		const std::string ptx_code,
 		const std::string function_name,
+		CUmodule *cu_module,
 		const unsigned int device_id = 0
 		){
 	CUfunction function;
-	auto cumodule = cutf::cu::get_module_unique_ptr();
-	cutf::error::check(cuModuleLoadDataEx(cumodule.get(), ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
-	cutf::error::check(cuModuleGetFunction(&function, *cumodule.get(), function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
+	cutf::error::check(cuModuleLoadDataEx(cu_module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
+	cutf::error::check(cuModuleGetFunction(&function, *cu_module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
 
 	return function;
 }
