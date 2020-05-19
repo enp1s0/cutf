@@ -29,7 +29,7 @@ struct cumodule_deleter{
 		delete cumodule;
 	}
 };
-inline std::unique_ptr<CUmodule, cumodule_deleter> get_cumodule_unique_ptr(){
+inline std::unique_ptr<CUmodule, cumodule_deleter> get_module_unique_ptr(){
 	CUmodule *cumodule= new CUmodule;
 	return std::unique_ptr<CUmodule, cumodule_deleter>{cumodule};
 }
