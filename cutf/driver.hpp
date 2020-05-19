@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <memory>
 #include "cuda.hpp"
 
 namespace cutf{
@@ -69,8 +70,39 @@ inline void check(CUresult error, const std::string filename, const std::size_t 
 		throw std::runtime_error(ss.str());
 	}
 }
-
 } // error
+
+namespace cu {
+struct cumodule_deleter{
+	void operator()(CUmodule* cumodule){
+		cutf::error::check(cuModuleUnload(*cumodule), __FILE__, __LINE__, __func__);
+		delete cumodule;
+	}
+};
+inline std::unique_ptr<CUmodule, cumodule_deleter> get_module_unique_ptr(){
+	cutf::error::check(cuCtxSynchronize(), __FILE__, __LINE__, __func__, "You must create cuContext before calling this function");
+	CUmodule *cumodule= new CUmodule;
+	return std::unique_ptr<CUmodule, cumodule_deleter>{cumodule};
+}
+
+struct cucontext_deleter{
+	void operator()(CUcontext* cucontext){
+		cutf::error::check(cuCtxDestroy(*cucontext), __FILE__, __LINE__, __func__);
+		delete cucontext;
+	}
+};
+inline std::unique_ptr<CUcontext, cucontext_deleter> get_context_unique_ptr(){
+	CUcontext *cucontext= new CUcontext;
+	return std::unique_ptr<CUcontext, cucontext_deleter>{cucontext};
+}
+inline void create_context(CUcontext* cucontext, const unsigned device_id) {
+	CUdevice device;
+
+	cutf::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__);
+	cutf::error::check(cuCtxCreate(cucontext, 0, device), __FILE__, __LINE__, __func__);
+}
+} // namespace cu
+
 } // cutf
 
 #endif // __CUTF_DEVICE_HPP__

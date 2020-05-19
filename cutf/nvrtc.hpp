@@ -121,18 +121,12 @@ inline std::string get_ptx(
 inline CUfunction get_function(
 		const std::string ptx_code,
 		const std::string function_name,
+		CUmodule *cu_module,
 		const unsigned int device_id = 0
 		){
-	CUdevice device;
-	CUcontext context;
-	CUmodule module;
 	CUfunction function;
-
-	cutf::error::check(cuInit(0), __FILE__, __LINE__, __func__, "@ Initializing CUDA for " + function_name);
-	cutf::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__, "@ Selecting device for " + function_name);
-	cutf::error::check(cuCtxCreate(&context, 0, device), __FILE__, __LINE__, __func__, "@ Creating context for " + function_name);
-	cutf::error::check(cuModuleLoadDataEx(&module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
-	cutf::error::check(cuModuleGetFunction(&function, module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
+	cutf::error::check(cuModuleLoadDataEx(cu_module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
+	cutf::error::check(cuModuleGetFunction(&function, *cu_module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
 
 	return function;
 }
