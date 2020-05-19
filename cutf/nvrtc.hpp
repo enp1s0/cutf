@@ -123,16 +123,10 @@ inline CUfunction get_function(
 		const std::string function_name,
 		const unsigned int device_id = 0
 		){
-	CUdevice device;
-	CUcontext context;
-	CUmodule module;
 	CUfunction function;
-
-	cutf::error::check(cuInit(0), __FILE__, __LINE__, __func__, "@ Initializing CUDA for " + function_name);
-	cutf::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__, "@ Selecting device for " + function_name);
-	cutf::error::check(cuCtxCreate(&context, 0, device), __FILE__, __LINE__, __func__, "@ Creating context for " + function_name);
-	cutf::error::check(cuModuleLoadDataEx(&module, ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
-	cutf::error::check(cuModuleGetFunction(&function, module, function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
+	auto cumodule = cutf::cu::get_module_unique_ptr();
+	cutf::error::check(cuModuleLoadDataEx(cumodule.get(), ptx_code.c_str(), 0, 0, 0), __FILE__, __LINE__, __func__, "@ Loading module(ptx) " + function_name);
+	cutf::error::check(cuModuleGetFunction(&function, *cumodule.get(), function_name.c_str()), __FILE__, __LINE__, __func__, "@ Getting function " + function_name);
 
 	return function;
 }
