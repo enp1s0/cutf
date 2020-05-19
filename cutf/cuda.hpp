@@ -33,6 +33,17 @@ inline std::unique_ptr<CUmodule, cumodule_deleter> get_module_unique_ptr(){
 	CUmodule *cumodule= new CUmodule;
 	return std::unique_ptr<CUmodule, cumodule_deleter>{cumodule};
 }
+
+struct cucontext_deleter{
+	void operator()(CUcontext* cucontext){
+		cutf::error::check(cuCtxDestroy(*cucontext), __FILE__, __LINE__, __func__);
+		delete cucontext;
+	}
+};
+inline std::unique_ptr<CUcontext, cucontext_deleter> get_context_unique_ptr(){
+	CUcontext *cucontext= new CUcontext;
+	return std::unique_ptr<CUcontext, cucontext_deleter>{cucontext};
+}
 } // namespace cu
 } // cutf
 
