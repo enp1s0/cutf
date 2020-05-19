@@ -79,6 +79,7 @@ struct cumodule_deleter{
 	}
 };
 inline std::unique_ptr<CUmodule, cumodule_deleter> get_module_unique_ptr(){
+	cutf::error::check(cuCtxSynchronize(), __FILE__, __LINE__, __func__, "You must create cuContext before calling this function");
 	CUmodule *cumodule= new CUmodule;
 	return std::unique_ptr<CUmodule, cumodule_deleter>{cumodule};
 }
