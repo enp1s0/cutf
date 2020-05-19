@@ -4,6 +4,7 @@
 #include <cutf/memory.hpp>
 #include <cutf/cuda.hpp>
 #include <cutf/nvrtc.hpp>
+#include <cutf/error.hpp>
 
 int main(){
 	const std::size_t N = 1 << 8;
@@ -14,6 +15,11 @@ __global__ void kernel(float *a, float *b){
 	a[tid] = b[tid];
 }
 )";
+	CUTF_HANDLE_ERROR(cuInit(0));
+	auto cu_module = cutf::cu::get_module_unique_ptr();
+	auto cu_context = cutf::cu::get_context_unique_ptr();
+	cutf::cu::create_context(cu_context.get(), 0);
+
 	const auto ptx_code = cutf::nvrtc::get_ptx(
 				"kernel.cu",
 				code,
