@@ -2,7 +2,6 @@
 #define __CUTF_ERROR_CUH__
 #include <stdexcept>
 #include <sstream>
-#include <memory>
 #include <cuda_device_runtime_api.h>
 #include <cuda.h>
 

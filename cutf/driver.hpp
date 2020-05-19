@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <memory>
 #include "cuda.hpp"
 
 namespace cutf{
