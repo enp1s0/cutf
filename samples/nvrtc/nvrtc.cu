@@ -16,9 +16,9 @@ __global__ void kernel(float *a, float *b){
 }
 )";
 	CUTF_HANDLE_ERROR(cuInit(0));
-	auto cu_module = cutf::cu::get_module_unique_ptr();
 	auto cu_context = cutf::cu::get_context_unique_ptr();
 	cutf::cu::create_context(cu_context.get(), 0);
+	auto cu_module = cutf::cu::get_module_unique_ptr();
 
 	const auto ptx_code = cutf::nvrtc::get_ptx(
 				"kernel.cu",
@@ -30,7 +30,8 @@ __global__ void kernel(float *a, float *b){
 
 	const auto function = cutf::nvrtc::get_function(
 			ptx_code,
-			"kernel"
+			"kernel",
+			cu_module.get()
 			);
 
 	std::cout<<"/* -- PTX" <<std::endl
@@ -45,6 +46,8 @@ __global__ void kernel(float *a, float *b){
 
 	const float * dA_ptr = dA.get();
 	const float * dB_ptr = dB.get();
+
+	std::cout<<"# -- kernel launch" <<std::endl;
 
 	cutf::nvrtc::launch_function(
 			function,
