@@ -44,6 +44,12 @@ inline std::unique_ptr<CUcontext, cucontext_deleter> get_context_unique_ptr(){
 	CUcontext *cucontext= new CUcontext;
 	return std::unique_ptr<CUcontext, cucontext_deleter>{cucontext};
 }
+inline void create_context(CUcontext cucontext, const unsigned device_id) {
+	CUdevice device;
+
+	cutf::error::check(cuDeviceGet(&device, device_id), __FILE__, __LINE__, __func__);
+	cutf::error::check(cuCtxCreate(&cucontext, 0, device), __FILE__, __LINE__, __func__);
+}
 } // namespace cu
 } // cutf
 
