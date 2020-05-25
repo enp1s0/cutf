@@ -1,5 +1,5 @@
-#ifndef __CURAND_HPP__
-#define __CURAND_HPP__
+#ifndef __CUTF_CURAND_HPP__
+#define __CUTF_CURAND_HPP__
 #include <curand.h>
 #include <cstddef>
 #include <memory>
