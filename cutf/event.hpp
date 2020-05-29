@@ -7,7 +7,7 @@ namespace event {
 struct event_deleter{
 	void operator()(cudaEvent_t* event){
 		cutf::error::check(cudaEventDestroy(*event), __FILE__, __LINE__, __func__);
-		delete handle;
+		delete event;
 	}
 };
 inline std::unique_ptr<cudaEvent_t, event_deleter> get_event_unique_ptr(){
@@ -19,6 +19,7 @@ inline std::unique_ptr<cudaEvent_t, event_deleter> get_event_unique_ptr(){
 float get_elapsed_time(const cudaEvent_t end_event, const cudaEvent_t start_event) {
 	float elapsed_time;
 	cutf::error::check(cudaEventElapsedTime(&elapsed_time, start_event, end_event), __FILE__, __LINE__, __func__);
+	return elapsed_time;
 }
 } // namespace event
 } // namespace cutf
