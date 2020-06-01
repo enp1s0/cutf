@@ -30,7 +30,7 @@ int main(){
 	compute_t alpha = cutf::type::cast<compute_t>(1.0f);
 	compute_t beta = cutf::type::cast<compute_t>(1.0f);
 
-	CUTF_HANDLE_ERROR(cutf::cublas::gemm(
+	CUTF_CHECK_ERROR(cutf::cublas::gemm(
 				*cublas_handle.get(),
 				CUBLAS_OP_N, CUBLAS_OP_N,
 				N, N, N,
