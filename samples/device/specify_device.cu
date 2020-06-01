@@ -26,7 +26,7 @@ int main(){
 			<<"Name          : "<<dp.name<<std::endl
 			<<"Global Memory : "<<(dp.totalGlobalMem/(1<<20))<<" MB"<<std::endl;
 
-		CUTF_HANDLE_ERROR(cutf::device::use_device(
+		CUTF_CHECK_ERROR(cutf::device::use_device(
 				device_id,
 				[](){
 					auto dMem = cutf::memory::get_device_unique_ptr<compute_t>(N);

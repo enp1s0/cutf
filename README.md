@@ -39,7 +39,7 @@ int main(){
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
-	CUTF_HANDLE_ERROR(cutf::memory::copy(h_out.get(), out.get(), N));
+	CUTF_CHECK_ERROR(cutf::memory::copy(h_out.get(), out.get(), N));
 }
 ```
 

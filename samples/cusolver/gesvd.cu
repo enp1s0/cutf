@@ -53,13 +53,13 @@ int main(){
 	auto cusolver = cutf::cusolver::get_cusolver_dn_unique_ptr();
 
 	int Lwork;
-	CUTF_HANDLE_ERROR(cutf::cusolver::dn::gesvd_buffer_size<compute_t>(*cusolver.get(), M, N, &Lwork));
+	CUTF_CHECK_ERROR(cutf::cusolver::dn::gesvd_buffer_size<compute_t>(*cusolver.get(), M, N, &Lwork));
 	std::cout<<"Buffer size : "<<(sizeof(compute_t) * (Lwork))<<"B"<<std::endl;
 
 	auto dLwork_buffer = cutf::memory::get_device_unique_ptr<compute_t>(Lwork);
 	auto dRwork_buffer = cutf::memory::get_device_unique_ptr<compute_t>(num_s - 1);
 
-	CUTF_HANDLE_ERROR(cutf::cusolver::dn::gesvd(
+	CUTF_CHECK_ERROR(cutf::cusolver::dn::gesvd(
 				*cusolver.get(),
 				'S', 'S',
 				M, N,

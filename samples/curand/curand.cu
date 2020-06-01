@@ -8,16 +8,16 @@ int main() {
 	unsigned long long seed = 10;
 	auto cugen = cutf::curand::get_curand_unique_ptr(CURAND_RNG_PSEUDO_MT19937);
 	auto cugen_host = cutf::curand::get_curand_host_unique_ptr(CURAND_RNG_PSEUDO_MT19937);
-	CUTF_HANDLE_ERROR(curandSetPseudoRandomGeneratorSeed(*cugen.get(), seed));
-	CUTF_HANDLE_ERROR(curandSetPseudoRandomGeneratorSeed(*cugen_host.get(), seed));
+	CUTF_CHECK_ERROR(curandSetPseudoRandomGeneratorSeed(*cugen.get(), seed));
+	CUTF_CHECK_ERROR(curandSetPseudoRandomGeneratorSeed(*cugen_host.get(), seed));
 
 	auto dA = cutf::memory::get_device_unique_ptr<float>(N);
 	auto hA = cutf::memory::get_host_unique_ptr<float>(N);
 	auto hA_host = cutf::memory::get_host_unique_ptr<float>(N);
 
-	CUTF_HANDLE_ERROR(cutf::curand::generate_uniform(*cugen.get(), dA.get(), N));
+	CUTF_CHECK_ERROR(cutf::curand::generate_uniform(*cugen.get(), dA.get(), N));
 	cutf::memory::copy(hA.get(), dA.get(), N);
-	CUTF_HANDLE_ERROR(cutf::curand::generate_uniform(*cugen_host.get(), hA_host.get(), N));
+	CUTF_CHECK_ERROR(cutf::curand::generate_uniform(*cugen_host.get(), hA_host.get(), N));
 
 	double error_sum = 0.0;
 	for (std::size_t i = 0; i < N; i++) {
