@@ -4,9 +4,10 @@
 
 namespace cutf {
 namespace debug {
-using tf32 = float;
+namespace tf32 {
+using tf32_t = float;
 
-__device__ __host__ inline cutf::debug::tf32 to_tf32(const float v) {
+__device__ __host__ inline cutf::debug::tf32::tf32_t to_tf32(const float v) {
 	const uint32_t in = *reinterpret_cast<const uint32_t*>(&v);
 	const uint32_t c0 = (in & 0b0'00000000'0000000000'1000000000000u);
 	const uint32_t m = (in & 0b0'00000000'1111111111'0000000000000u);
@@ -22,6 +23,7 @@ __device__ __host__ inline cutf::debug::tf32 to_tf32(const float v) {
 	return *reinterpret_cast<const float*>(&out);
 }
 
+} // namespace tf32
 } // namespace debug
 } // namespace cutf
 
