@@ -73,6 +73,9 @@ cutf
 ## NVRTC Functions
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
 
+## Debug functions
+[cutf Debug Functions Reference](./docs/debug.md)
+
 ## License
 Copyright (c) 2018 - 2019 tsuki (enp1s0)  
 Released under the MIT license  
