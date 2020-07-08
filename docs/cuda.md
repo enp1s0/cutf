@@ -79,3 +79,20 @@ cutf::memory::copy(dst_ptr, src_ptr, N);
 |`cutf::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
 
 All functions whould throw runtime exception if anything should happen.
+
+## device
+```cpp
+CUTF_CHECK_ERROR(cutf::device::use_device(
+	device_id,
+	[]() {
+		cudaMalloc(...);
+	}));
+```
+
+| Function | description |
+|:--------------|:------------|
+|`cutf::device::get_properties_vector`|Getting the `std::vector` of `cudaDeviceProp`|
+|`cutf::device::get_num_devices`|Getting the number of devices|
+|`cutf::device::use_device`|Executing lambda function on a specified device|
+|`cutf::device::get_device`|Getting device ID|
+|`cutf::device::set_device`|Setting device ID|
