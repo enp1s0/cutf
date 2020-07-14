@@ -8,6 +8,7 @@
 
 #include <cuda_fp16.h>
 #include <cuComplex.h>
+#include "debug/tf32.hpp"
 
 #define CAST(from_t, to_t, func, val) \
 	 template <> __host__ __device__ inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
@@ -61,6 +62,36 @@ CAST(double, int, static_cast<int>(a), a);
 CAST(double, half, __half2float(static_cast<float>(a)), a);
 CAST(double, float, static_cast<float>(a), a);
 CAST(double, double, a, a);
+
+// cast to tf32
+template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
+#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
+	return __float_to_tf32(cutf::type::cast<float>(a));
+#else
+	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+#endif
+}
+template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
+#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
+	return __float_to_tf32(cutf::type::cast<float>(a));
+#else
+	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+#endif
+}
+template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
+#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
+	return __float_to_tf32(cutf::type::cast<float>(a));
+#else
+	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+#endif
+}
+template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
+#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
+	return __float_to_tf32(cutf::type::cast<float>(a));
+#else
+	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+#endif
+}
 
 // reinterpret
 template <class T>  __device__ inline T reinterpret(const float a);
