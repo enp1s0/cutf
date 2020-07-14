@@ -50,14 +50,14 @@ CAST(double, float, static_cast<float>(a), a);
 CAST(double, double, a, a);
 
 #ifdef __CUTF_AMPERE_MMA__
-template <class NAME_T, class T>  __host__ __device__ inline T cast(const int a);
-template <class NAME_T, class T>  __host__ __device__ inline T cast(const half a);
-template <class NAME_T, class T>  __host__ __device__ inline T cast(const float a);
-template <class NAME_T, class T>  __host__ __device__ inline T cast(const double a);
-template <> float cast<nvcuda::wmma::precision::tf32, float>(const int    a) {return __float_to_tf32(cutf::type::cast<float>(a));};
-template <> float cast<nvcuda::wmma::precision::tf32, float>(const half   a) {return __float_to_tf32(cutf::type::cast<float>(a));};
-template <> float cast<nvcuda::wmma::precision::tf32, float>(const float  a) {return __float_to_tf32(cutf::type::cast<float>(a));};
-template <> float cast<nvcuda::wmma::precision::tf32, float>(const double a) {return __float_to_tf32(cutf::type::cast<float>(a));};
+template <class NAME_T, class T> __device__ inline T cast(const int a);
+template <class NAME_T, class T> __device__ inline T cast(const half a);
+template <class NAME_T, class T> __device__ inline T cast(const float a);
+template <class NAME_T, class T> __device__ inline T cast(const double a);
+template <> __device__ inline float cast<nvcuda::wmma::precision::tf32, float>(const int    a) {return __float_to_tf32(cutf::type::cast<float>(a));};
+template <> __device__ inline float cast<nvcuda::wmma::precision::tf32, float>(const half   a) {return __float_to_tf32(cutf::type::cast<float>(a));};
+template <> __device__ inline float cast<nvcuda::wmma::precision::tf32, float>(const float  a) {return __float_to_tf32(cutf::type::cast<float>(a));};
+template <> __device__ inline float cast<nvcuda::wmma::precision::tf32, float>(const double a) {return __float_to_tf32(cutf::type::cast<float>(a));};
 #endif
 
 // reinterpret
