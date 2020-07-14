@@ -10,7 +10,7 @@
 #include <cuComplex.h>
 
 #define CAST(from_t, to_t, func, val) \
-	 template <> __host__ __device__ inline to_t cast<to_t>(const from_t val){return func;}
+	 template <> __host__ __device__ inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
 	 template <> __device__ inline dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
 
@@ -24,10 +24,23 @@
 
 namespace cutf{
 namespace type {
-template <class T>  __host__ __device__ inline T cast(const int a);
-template <class T>  __host__ __device__ inline T cast(const half a);
-template <class T>  __host__ __device__ inline T cast(const float a);
-template <class T>  __host__ __device__ inline T cast(const double a);
+template <class T>
+struct data_t {using type = T;};
+#ifndef __CUTF_AMPERE_MMA__
+namespace nvcuda {
+namespace wmma {
+namespace precision {
+struct tf32;
+}
+}
+}
+#endif
+template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
+
+template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const int a);
+template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const half a);
+template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const float a);
+template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const double a);
 
 CAST(int, int, a, a);
 CAST(int, half, __float2half(static_cast<float>(a)), a);
