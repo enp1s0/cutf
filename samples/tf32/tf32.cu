@@ -15,7 +15,7 @@ __global__ void m16n16k16(float* const c_ptr, const float* const a_ptr, const fl
 		const auto n = i + n_offset;
 		float sum = 0.0f;
 		for (unsigned k = 0; k < N; k++) {
-			sum += cutf::debug::tf32::to_tf32(a_ptr[m + k * N]) * cutf::debug::tf32::to_tf32(b_ptr[k + n * N]);
+			sum += cutf::type::cast<nvcuda::wmma::precision::tf32>(a_ptr[m + k * N]) * cutf::type::cast<nvcuda::wmma::precision::tf32>(b_ptr[k + n * N]);
 		}
 		c_ptr[m + n * N] += sum;
 	}
