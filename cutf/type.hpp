@@ -64,29 +64,37 @@ CAST(double, double, a, a);
 
 // cast to tf32
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
-#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
-	return __float_to_tf32(cutf::type::cast<float>(a));
+#if defined(__CUTF_AMPERE_MMA__)
+    float ret;
+    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
-#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
-	return __float_to_tf32(cutf::type::cast<float>(a));
+#if defined(__CUTF_AMPERE_MMA__)
+    float ret;
+    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
-#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
-	return __float_to_tf32(cutf::type::cast<float>(a));
+#if defined(__CUTF_AMPERE_MMA__)
+    float ret;
+    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
-#if defined(__CUTF_AMPERE_MMA__) && defined(__CUDA_ARCH__)
-	return __float_to_tf32(cutf::type::cast<float>(a));
+#if defined(__CUTF_AMPERE_MMA__)
+    float ret;
+    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
