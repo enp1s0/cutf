@@ -1,14 +1,22 @@
 #ifndef __CUTF_TYPE_CUH__
 #define __CUTF_TYPE_CUH__
 
-#if (defined(CUDART_VERSION) && CUDART_VERSION >= 11000)
-#define __CUTF_AMPERE_MMA__
-#include <mma.h>
-#endif
-
 #include <cuda_fp16.h>
 #include <cuComplex.h>
 #include "debug/tf32.hpp"
+
+#if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
+#include <mma.h>
+#define __CUTF_AMPERE_MMA__
+#else
+namespace nvcuda {
+namespace wmma {
+namespace precision {
+struct tf32;
+} // precision
+} // nvcuda
+} // nvcuda
+#endif
 
 #define CAST(from_t, to_t, func, val) \
 	 template <> __host__ __device__ inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
@@ -27,15 +35,6 @@ namespace cutf{
 namespace type {
 template <class T>
 struct data_t {using type = T;};
-#ifndef __CUTF_AMPERE_MMA__
-namespace nvcuda {
-namespace wmma {
-namespace precision {
-struct tf32;
-}
-}
-}
-#endif
 template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
 
 template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const int a);
