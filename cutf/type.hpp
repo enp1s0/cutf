@@ -66,7 +66,9 @@ CAST(double, double, a, a);
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
-    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    asm("{.reg .b32 %mr;\n"
+        "cvt.rna.tf32.f32 %mr, %1;\n"
+        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
@@ -75,7 +77,9 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
-    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    asm("{.reg .b32 %mr;\n"
+        "cvt.rna.tf32.f32 %mr, %1;\n"
+        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
@@ -84,7 +88,9 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
-    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    asm("{.reg .b32 %mr;\n"
+        "cvt.rna.tf32.f32 %mr, %1;\n"
+        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
@@ -93,7 +99,9 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
-    asm("{cvt.rna.tf32.f32 %%0, %%1;}" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+    asm("{.reg .b32 %mr;\n"
+        "cvt.rna.tf32.f32 %mr, %1;\n"
+        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
 	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
