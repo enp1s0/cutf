@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include <cutf/memory.hpp>
-#include <cutf/debug/tf32.hpp>
+#include <cutf/type.hpp>
 #include <cutf/debug/matrix.hpp>
 constexpr unsigned warp_size = 32;
 
