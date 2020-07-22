@@ -3,7 +3,7 @@
 
 #include <cuda_fp16.h>
 #include <cuComplex.h>
-#include "debug/tf32.hpp"
+#include "experimental/tf32.hpp"
 
 #if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
 #include <mma.h>
@@ -71,7 +71,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
         "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
-	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
@@ -82,7 +82,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
         "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
-	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
@@ -93,7 +93,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
         "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
-	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
@@ -104,7 +104,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
         "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
     return ret;
 #else
-	return cutf::debug::tf32::to_tf32(cutf::type::cast<float>(a));
+	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
 
