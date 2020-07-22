@@ -76,6 +76,9 @@ cutf
 ## Debug functions
 [cutf Debug Functions Reference](./docs/debug.md)
 
+## Experimental  functions
+[cutf Experimental Functions Reference](./docs/experimental.md)
+
 ## License
 Copyright (c) 2018 - 2019 tsuki (enp1s0)  
 Released under the MIT license  
