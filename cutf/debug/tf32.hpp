@@ -5,6 +5,11 @@
 namespace cutf {
 namespace debug {
 namespace tf32 {
+union uint32_bitstring_convert {
+	float fp;
+	uint32_t bitstring;
+};
+
 using tf32_t = float;
 
 __device__ __host__ inline cutf::debug::tf32::tf32_t to_tf32(const float v) {
