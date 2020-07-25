@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
-TARGETS=tf32.test
+TARGETS=tf32.test fp64_mantissa_cutter.test
 
 all: $(TARGETS)
 
