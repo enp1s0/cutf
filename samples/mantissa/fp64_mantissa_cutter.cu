@@ -5,7 +5,7 @@
 #include <cutf/debug/matrix.hpp>
 constexpr unsigned warp_size = 32;
 
-__global__ void m16n16k16_tf32(double* const c_ptr, const double* const a_ptr, const double* const b_ptr) {
+__global__ void m16n16k16_cut(double* const c_ptr, const double* const a_ptr, const double* const b_ptr) {
 	constexpr unsigned N = 16;
 	const unsigned lane_id = threadIdx.x & 0x1f;
 
@@ -21,7 +21,7 @@ __global__ void m16n16k16_tf32(double* const c_ptr, const double* const a_ptr, c
 	}
 }
 
-__global__ void m16n16k16_fp32(double* const c_ptr, const double* const a_ptr, const double* const b_ptr) {
+__global__ void m16n16k16_base(double* const c_ptr, const double* const a_ptr, const double* const b_ptr) {
 	constexpr unsigned N = 16;
 	const unsigned lane_id = threadIdx.x & 0x1f;
 
@@ -41,7 +41,7 @@ double get_max_error(const double* const fp32_ptr, const double* const tf32_ptr,
 	double max_error = 0.0;
 	for (unsigned i = 0; i < m; i++) {
 		for (unsigned j = 0; j < n; j++) {
-			max_error = std::max(std::abs(static_cast<double>(fp32_ptr[i * n + j]) - static_cast<double>(tf32_ptr[i * n + j])), max_error);
+			max_error = std::max(std::abs(fp32_ptr[i * n + j] - tf32_ptr[i * n + j]), max_error);
 		}
 	}
 	return max_error;
@@ -66,8 +66,8 @@ int main() {
 		C_fp32.get()[i] = 0.0f;
 	}
 
-	m16n16k16_tf32<<<1, warp_size>>>(C_tf32.get(), A.get(), B.get());
-	m16n16k16_fp32<<<1, warp_size>>>(C_fp32.get(), A.get(), B.get());
+	m16n16k16_cut<<<1, warp_size>>>(C_tf32.get(), A.get(), B.get());
+	m16n16k16_base<<<1, warp_size>>>(C_fp32.get(), A.get(), B.get());
 
 	cudaDeviceSynchronize();
 
