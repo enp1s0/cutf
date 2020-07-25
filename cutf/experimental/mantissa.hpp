@@ -17,6 +17,9 @@ union bitstring_to_fp32 {
 
 template <unsigned mantissa_length>
 __device__ __host__ inline float cut_mantissa(const float v) {
+	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
+	static_assert(mantissa_length < 23, "mantissa_length must be smaller than 23");
+
 	constexpr unsigned cut_length = 23u - mantissa_length;
 	const uint32_t in = cutf::experimental::detail::fp32_to_bitstring{v}.bitstring;
 	const uint32_t c0 = (in & (1u << (cut_length - 1)));
