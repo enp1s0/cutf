@@ -32,11 +32,11 @@ __device__ __host__ inline float cut_mantissa(const float v) {
 	const uint32_t in = cutf::experimental::detail::fp32_to_bitstring{v}.bitstring;
 	const uint32_t c0 = (in & (1u << (cut_length - 1)));
 	const uint32_t m = (in & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
-	const uint32_t e = (in & 0b0'11111111'0000000000'0000000000000u);
-	const uint32_t s = (in & 0b1'00000000'0000000000'0000000000000u);
+	const uint32_t e = (in & 0b0'11111111'00000000000000000000000u);
+	const uint32_t s = (in & 0b1'00000000'00000000000000000000000u);
 
 	const uint32_t m0 = m + (c0 << 1);
-	const uint32_t c1 = (m0 & 0b0'00000001'0000000000'0000000000000u) >> 23;
+	const uint32_t c1 = (m0 & 0b0'00000001'00000000000000000000000u) >> 23;
 	const uint32_t m_pre = m0 & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1));
 	const uint32_t e_pre = e + (c1 << 23);
 
