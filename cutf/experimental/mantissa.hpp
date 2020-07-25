@@ -13,6 +13,14 @@ union bitstring_to_fp32 {
 	uint32_t bitstring;
 	float fp;
 };
+union fp64_to_bitstring {
+	double fp;
+	uint64_t bitstring;
+};
+union bitstring_to_fp64 {
+	uint64_t bitstring;
+	double fp;
+};
 } // namespace detail
 
 template <unsigned mantissa_length>
