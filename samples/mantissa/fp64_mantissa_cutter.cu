@@ -37,11 +37,11 @@ __global__ void m16n16k16_base(double* const c_ptr, const double* const a_ptr, c
 	}
 }
 
-double get_max_error(const double* const fp32_ptr, const double* const tf32_ptr, const unsigned m, const unsigned n) {
+double get_max_error(const double* const base_ptr, const double* const cut_ptr, const unsigned m, const unsigned n) {
 	double max_error = 0.0;
 	for (unsigned i = 0; i < m; i++) {
 		for (unsigned j = 0; j < n; j++) {
-			max_error = std::max(std::abs(fp32_ptr[i * n + j] - tf32_ptr[i * n + j]), max_error);
+			max_error = std::max(std::abs(base_ptr[i * n + j] - cut_ptr[i * n + j]), max_error);
 		}
 	}
 	return max_error;
@@ -52,8 +52,8 @@ int main() {
 
 	auto A = cutf::memory::get_host_unique_ptr<double>(N * N);
 	auto B = cutf::memory::get_host_unique_ptr<double>(N * N);
-	auto C_tf32 = cutf::memory::get_host_unique_ptr<double>(N * N);
-	auto C_fp32 = cutf::memory::get_host_unique_ptr<double>(N * N);
+	auto C_cut = cutf::memory::get_host_unique_ptr<double>(N * N);
+	auto C_base = cutf::memory::get_host_unique_ptr<double>(N * N);
 
 	std::mt19937 mt(std::random_device{}());
 	double max_range = 1.0f;
@@ -62,14 +62,14 @@ int main() {
 	for (unsigned i = 0; i < N * N; i++) {
 		A.get()[i] = dist(mt);
 		B.get()[i] = dist(mt);
-		C_tf32.get()[i] = 0.0f;
-		C_fp32.get()[i] = 0.0f;
+		C_cut.get()[i] = 0.0f;
+		C_base.get()[i] = 0.0f;
 	}
 
-	m16n16k16_cut<<<1, warp_size>>>(C_tf32.get(), A.get(), B.get());
-	m16n16k16_base<<<1, warp_size>>>(C_fp32.get(), A.get(), B.get());
+	m16n16k16_cut<<<1, warp_size>>>(C_cut.get(), A.get(), B.get());
+	m16n16k16_base<<<1, warp_size>>>(C_base.get(), A.get(), B.get());
 
 	cudaDeviceSynchronize();
 
-	std::printf("max_error = %e\n", get_max_error(C_fp32.get(), C_tf32.get(), N, N));
+	std::printf("max_error = %e\n", get_max_error(C_base.get(), C_cut.get(), N, N));
 }
