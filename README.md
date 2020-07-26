@@ -12,7 +12,7 @@ cutf is a tiny CUDA template library.
 
 ## Development
 - release/devel : [GitLab momo86.net - mutsuki/cutf](https://gitlab.momo86.net/mutsuki/cutf)
-- release : [GitHub - gonmoec/cutf](https://github.com/gonmoec/cutf)
+- release : [GitHub - enp1s0/cutf](https://github.com/enp1s0/cutf)
 
 ## Example
 ```cpp
