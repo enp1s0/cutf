@@ -122,12 +122,6 @@ REINTERPRET(unsigned int, uint, float, float);
 REINTERPRET(long long, longlong, double, double);
 
 // rounding cast
-namespace rounding{
-	struct rd;
-	struct rn;
-	struct ru;
-	struct rz;
-};
 template <class T, class R>  __device__ inline T rcast(const float a);
 template <class T, class R>  __device__ inline T rcast(const double a);
 template <class T, class R>  __device__ inline T rcast(const int a);
