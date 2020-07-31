@@ -2,6 +2,7 @@
 #define __CUTF_ROUNDING_MODE_HPP__
 namespace cutf {
 namespace rounding {
+struct rr;
 struct rd;
 struct rn;
 struct ru;
