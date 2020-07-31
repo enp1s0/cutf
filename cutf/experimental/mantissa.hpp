@@ -25,7 +25,7 @@ union bitstring_to_fp64 {
 template <class rounding>
 uint32_t rounding_mantissa(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up);
 template <>
-uint32_t rounding_mantissa<cutf::rounding::rd>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
+uint32_t rounding_mantissa<cutf::rounding::rz>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
 	move_up = 0;
 	return (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 }
