@@ -4,6 +4,7 @@
 #include <cuda_fp16.h>
 #include <cuComplex.h>
 #include "experimental/tf32.hpp"
+#include "rounding_mode.hpp"
 
 #if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
 #include <mma.h>
@@ -26,10 +27,10 @@ struct tf32;
 #define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
 	 template <> __device__ inline dst_type rcast<dst_type, rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
 #define RCASTS(src_type, src_ty, dst_type, dst_ty) \
-	RCAST(src_type, src_ty, dst_type, dst_ty, rd); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, rn); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, ru); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, rz); 
+	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rd); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rn); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::ru); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rz);
 
 namespace cutf{
 namespace type {
