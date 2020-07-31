@@ -29,6 +29,13 @@ uint32_t rounding_mantissa<cutf::rounding::rd>(const uint32_t fp_bitstring, cons
 	move_up = 0;
 	return (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 }
+template <>
+uint32_t rounding_mantissa<cutf::rounding::ru>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
+	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
+	const uint32_t m1 = m0 + (1u << cut_length);
+	move_up = (m1 & 0b0'00000001'00000000000000000000000u) >> 23;
+	return m1 >> move_up;
+}
 } // namespace detail
 
 template <unsigned mantissa_length>
