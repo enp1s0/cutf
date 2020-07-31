@@ -1,6 +1,7 @@
 #ifndef __CUTF_EXPERIMENTAL_MANTISSA_HPP__
 #define __CUTF_EXPERIMENTAL_MANTISSA_HPP__
 #include <cinttypes>
+#include "../rounding_mode.hpp"
 
 namespace cutf {
 namespace experimental {
@@ -21,6 +22,13 @@ union bitstring_to_fp64 {
 	uint64_t bitstring;
 	double fp;
 };
+template <class rounding>
+uint32_t rounding_mantissa(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up);
+template <>
+uint32_t rounding_mantissa<cutf::rounding::rd>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
+	move_up = 0;
+	return (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
+}
 } // namespace detail
 
 template <unsigned mantissa_length>
