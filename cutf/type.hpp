@@ -25,12 +25,12 @@ struct tf32;
 	 template <> __device__ inline dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
 
 #define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
-	 template <> __device__ inline dst_type rcast<dst_type, rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
+	 template <> __device__ inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
 #define RCASTS(src_type, src_ty, dst_type, dst_ty) \
-	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rd); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rn); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::ru); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, cutf::rounding::rz);
+	RCAST(src_type, src_ty, dst_type, dst_ty, rd); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, rn); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, ru); \
+	RCAST(src_type, src_ty, dst_type, dst_ty, rz);
 
 namespace cutf{
 namespace type {
