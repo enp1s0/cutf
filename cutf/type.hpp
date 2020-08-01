@@ -4,6 +4,7 @@
 #include <cuda_fp16.h>
 #include <cuComplex.h>
 #include "experimental/tf32.hpp"
+#include "rounding_mode.hpp"
 
 #if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
 #include <mma.h>
@@ -24,12 +25,12 @@ struct tf32;
 	 template <> __device__ inline dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
 
 #define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
-	 template <> __device__ inline dst_type rcast<dst_type, rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
+	 template <> __device__ inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
 #define RCASTS(src_type, src_ty, dst_type, dst_ty) \
 	RCAST(src_type, src_ty, dst_type, dst_ty, rd); \
 	RCAST(src_type, src_ty, dst_type, dst_ty, rn); \
 	RCAST(src_type, src_ty, dst_type, dst_ty, ru); \
-	RCAST(src_type, src_ty, dst_type, dst_ty, rz); 
+	RCAST(src_type, src_ty, dst_type, dst_ty, rz);
 
 namespace cutf{
 namespace type {
@@ -122,12 +123,6 @@ REINTERPRET(unsigned int, uint, float, float);
 REINTERPRET(long long, longlong, double, double);
 
 // rounding cast
-namespace rounding{
-	struct rd;
-	struct rn;
-	struct ru;
-	struct rz;
-};
 template <class T, class R>  __device__ inline T rcast(const float a);
 template <class T, class R>  __device__ inline T rcast(const double a);
 template <class T, class R>  __device__ inline T rcast(const int a);
