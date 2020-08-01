@@ -7,6 +7,7 @@ struct rd;
 struct rn;
 struct ru;
 struct rz;
+struct none;
 } // namespace rounding
 } // namespace cutf
 #endif
