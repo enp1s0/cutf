@@ -50,6 +50,35 @@ __device__ __host__ uint32_t rounding_mantissa<cutf::rounding::rn>(const uint32_
 	const uint32_t m_pre = m1 & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1));
 	return m_pre;
 }
+
+template <class rounding>
+__device__ __host__ uint64_t rounding_mantissa(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up);
+
+template <>
+__device__ __host__ uint64_t rounding_mantissa<cutf::rounding::rz>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+	move_up = 0;
+	return (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
+}
+
+template <>
+__device__ __host__ uint64_t rounding_mantissa<cutf::rounding::rr>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
+	const uint64_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
+	const uint64_t m1 = m0 + (c0 << 1);
+	move_up = (m1 & 0x0010000000000000lu) >> 52;
+	const uint64_t m_pre = m1 & (0x000ffffffffffffflu - ((1lu << cut_length) - 1));
+	return m_pre;
+}
+
+template <>
+__device__ __host__ uint64_t rounding_mantissa<cutf::rounding::rn>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
+	const uint64_t c0 = (fp_bitstring & (1u << cut_length));
+	const uint64_t m1 = m0 + c0;
+	move_up = (m1 & 0x0010000000000000lu) >> 52;
+	const uint64_t m_pre = m1 & (0x000ffffffffffffflu - ((1lu << cut_length) - 1));
+	return m_pre;
+}
 } // namespace detail
 
 template <unsigned mantissa_length, class rounding = cutf::rounding::rn>
