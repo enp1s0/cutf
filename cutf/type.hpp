@@ -21,8 +21,14 @@ struct tf32;
 
 #define CAST(from_t, to_t, func, val) \
 	 template <> __host__ __device__ inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
+
+#ifdef __CUDA_ARCH__
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
 	 template <> __device__ inline dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
+#else
+#define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
+	 template <> __device__ __host__ inline dst_type reinterpret<dst_type>(const src_type a){return *reinterpret_cast<const dst_type*>(&a);}
+#endif
 
 #define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
 	 template <> __device__ inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
