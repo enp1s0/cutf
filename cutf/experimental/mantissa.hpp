@@ -24,17 +24,21 @@ union bitstring_to_fp64 {
 };
 template <class rounding>
 uint32_t rounding_mantissa(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up);
+
 template <>
 uint32_t rounding_mantissa<cutf::rounding::rz>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
 	move_up = 0;
 	return (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 }
+
 template <>
-uint32_t rounding_mantissa<cutf::rounding::ru>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
+uint32_t rounding_mantissa<cutf::rounding::rr>(const uint32_t fp_bitstring, const unsigned cut_length, unsigned &move_up) {
 	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
-	const uint32_t m1 = m0 + (1u << cut_length);
+	const uint32_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
+	const uint32_t m1 = m0 + (c0 << 1);
 	move_up = (m1 & 0b0'00000001'00000000000000000000000u) >> 23;
-	return m1 >> move_up;
+	const uint32_t m_pre = m1 & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1));
+	return m_pre;
 }
 } // namespace detail
 
