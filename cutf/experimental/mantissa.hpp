@@ -106,14 +106,11 @@ __device__ __host__ inline double cut_mantissa(const double v) {
 
 	constexpr unsigned cut_length = 52u - mantissa_length;
 	const uint64_t in = cutf::experimental::detail::fp64_to_bitstring{v}.bitstring;
-	const uint64_t c0 = (in & (1u << (cut_length - 1)));
-	const uint64_t m = (in & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 	const uint64_t e = (in & 0xfff0000000000000lu);
 	const uint64_t s = (in & 0x8000000000000000lu);
 
-	const uint64_t m0 = m + (c0 << 1);
-	const uint64_t c1 = (m0 & 0x0010000000000000lu) >> 52;
-	const uint64_t m_pre = m0 & (0x000ffffffffffffflu - ((1lu << cut_length) - 1));
+	uint64_t c1;
+	const uint64_t m_pre = detail::rounding_mantissa<rounding>(in, cut_length, c1);
 	const uint64_t e_pre = e + (c1 << 52);
 
 	const uint64_t out = s | m_pre | e_pre;
