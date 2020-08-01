@@ -81,7 +81,7 @@ __device__ __host__ uint64_t rounding_mantissa<cutf::rounding::rn>(const uint64_
 }
 } // namespace detail
 
-template <unsigned mantissa_length, class rounding = cutf::rounding::rn>
+template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
 __device__ __host__ inline float cut_mantissa(const float v) {
 	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
 	static_assert(mantissa_length < 23, "mantissa_length must be smaller than 23");
@@ -99,7 +99,7 @@ __device__ __host__ inline float cut_mantissa(const float v) {
 	return cutf::experimental::detail::bitstring_to_fp32{out}.fp;
 }
 
-template <unsigned mantissa_length, class rounding = cutf::rounding::rn>
+template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
 __device__ __host__ inline double cut_mantissa(const double v) {
 	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
 	static_assert(mantissa_length < 52, "mantissa_length must be smaller than 52");
