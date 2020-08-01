@@ -63,7 +63,7 @@ __device__ __host__ inline float cut_mantissa(const float v) {
 	const uint32_t s = (in & 0b1'00000000'00000000000000000000000u);
 
 	uint32_t c1;
-	const uint32_t m_pre = rounding_mantissa<rounding>(in, cut_length, c1);
+	const uint32_t m_pre = detail::rounding_mantissa<rounding>(in, cut_length, c1);
 	const uint32_t e_pre = e + (c1 << 23);
 
 	const uint32_t out = s | m_pre | e_pre;
