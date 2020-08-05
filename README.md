@@ -8,7 +8,7 @@
 cutf is a tiny CUDA template library.
 
 - header file only
-- at least C++11
+- at least C++14
 
 ## Development
 - release/devel : [GitLab momo86.net - mutsuki/cutf](https://gitlab.momo86.net/mutsuki/cutf)
