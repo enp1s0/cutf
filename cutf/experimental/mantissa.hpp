@@ -24,16 +24,16 @@ union bitstring_to_fp64 {
 	double fp;
 };
 template <class rounding>
-CUTF_DEVICE_HOST uint32_t rounding_mantissa(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up);
+CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up);
 
 template <>
-CUTF_DEVICE_HOST uint32_t rounding_mantissa<cutf::rounding::rz>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rz>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
 	move_up = 0;
 	return (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 }
 
 template <>
-CUTF_DEVICE_HOST uint32_t rounding_mantissa<cutf::rounding::rr>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rr>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
 	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 	const uint32_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
 	const uint32_t m1 = m0 + (c0 << 1);
@@ -43,7 +43,7 @@ CUTF_DEVICE_HOST uint32_t rounding_mantissa<cutf::rounding::rr>(const uint32_t f
 }
 
 template <>
-CUTF_DEVICE_HOST uint32_t rounding_mantissa<cutf::rounding::rn>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rn>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
 	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 	const uint32_t c0 = (fp_bitstring & (1u << cut_length));
 	const uint32_t m1 = m0 + c0;
@@ -53,16 +53,16 @@ CUTF_DEVICE_HOST uint32_t rounding_mantissa<cutf::rounding::rn>(const uint32_t f
 }
 
 template <class rounding>
-CUTF_DEVICE_HOST uint64_t rounding_mantissa(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up);
+CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up);
 
 template <>
-CUTF_DEVICE_HOST uint64_t rounding_mantissa<cutf::rounding::rz>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa<cutf::rounding::rz>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
 	move_up = 0;
 	return (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 }
 
 template <>
-CUTF_DEVICE_HOST uint64_t rounding_mantissa<cutf::rounding::rr>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa<cutf::rounding::rr>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
 	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 	const uint64_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
 	const uint64_t m1 = m0 + (c0 << 1);
@@ -72,7 +72,7 @@ CUTF_DEVICE_HOST uint64_t rounding_mantissa<cutf::rounding::rr>(const uint64_t f
 }
 
 template <>
-CUTF_DEVICE_HOST uint64_t rounding_mantissa<cutf::rounding::rn>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
+CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa<cutf::rounding::rn>(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up) {
 	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 	const uint64_t c0 = (fp_bitstring & (1u << cut_length));
 	const uint64_t m1 = m0 + c0;
@@ -83,7 +83,7 @@ CUTF_DEVICE_HOST uint64_t rounding_mantissa<cutf::rounding::rn>(const uint64_t f
 } // namespace detail
 
 template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
-CUTF_DEVICE_HOST inline float cut_mantissa(const float v) {
+CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v) {
 	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
 	static_assert(mantissa_length < 23, "mantissa_length must be smaller than 23");
 
@@ -101,7 +101,7 @@ CUTF_DEVICE_HOST inline float cut_mantissa(const float v) {
 }
 
 template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
-CUTF_DEVICE_HOST inline double cut_mantissa(const double v) {
+CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v) {
 	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
 	static_assert(mantissa_length < 52, "mantissa_length must be smaller than 52");
 
