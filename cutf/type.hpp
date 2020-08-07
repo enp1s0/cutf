@@ -6,6 +6,10 @@
 #include "experimental/tf32.hpp"
 #include "rounding_mode.hpp"
 
+#if !defined(CUTF_DEVICE_HOST) && defined(__CUDA_ARCH__)
+#define CUTF_DEVICE_HOST
+#endif
+
 #if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
 #include <mma.h>
 #define __CUTF_AMPERE_MMA__
@@ -20,7 +24,7 @@ struct tf32;
 #endif
 
 #define CAST(from_t, to_t, func, val) \
-	 template <> __host__ __device__ inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
+	 template <> CUTF_DEVICE_HOST inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
 
 #ifdef __CUDA_ARCH__
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
@@ -44,10 +48,10 @@ template <class T>
 struct data_t {using type = T;};
 template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
 
-template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const int a);
-template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const half a);
-template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const float a);
-template <class T>  __host__ __device__ inline typename data_t<T>::type cast(const double a);
+template <class T>  CUTF_DEVICE_HOST inline typename data_t<T>::type cast(const int a);
+template <class T>  CUTF_DEVICE_HOST inline typename data_t<T>::type cast(const half a);
+template <class T>  CUTF_DEVICE_HOST inline typename data_t<T>::type cast(const float a);
+template <class T>  CUTF_DEVICE_HOST inline typename data_t<T>::type cast(const double a);
 
 CAST(int, int, a, a);
 CAST(int, half, __float2half(static_cast<float>(a)), a);
@@ -70,7 +74,7 @@ CAST(double, float, static_cast<float>(a), a);
 CAST(double, double, a, a);
 
 // cast to tf32
-template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
+template <>  CUTF_DEVICE_HOST inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
     asm("{.reg .b32 %mr;\n"
@@ -81,7 +85,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
-template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
+template <>  CUTF_DEVICE_HOST inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
     asm("{.reg .b32 %mr;\n"
@@ -92,7 +96,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
-template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
+template <>  CUTF_DEVICE_HOST inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
     asm("{.reg .b32 %mr;\n"
@@ -103,7 +107,7 @@ template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision:
 	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
 #endif
 }
-template <>  __host__ __device__ inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
+template <>  CUTF_DEVICE_HOST inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
     asm("{.reg .b32 %mr;\n"
@@ -171,11 +175,11 @@ DATA_TYPE_DEF(unsigned short, C, 8U);
 
 // name string
 template <class T>
-__host__ __device__ inline const char* get_type_name();
-template <> __host__ __device__ inline const char* get_type_name<double >() {return "double";}
-template <> __host__ __device__ inline const char* get_type_name<float  >() {return "float";}
-template <> __host__ __device__ inline const char* get_type_name<__half >() {return "half";}
-template <> __host__ __device__ inline const char* get_type_name<__half2>() {return "half2";}
+CUTF_DEVICE_HOST inline const char* get_type_name();
+template <> CUTF_DEVICE_HOST inline const char* get_type_name<double >() {return "double";}
+template <> CUTF_DEVICE_HOST inline const char* get_type_name<float  >() {return "float";}
+template <> CUTF_DEVICE_HOST inline const char* get_type_name<__half >() {return "half";}
+template <> CUTF_DEVICE_HOST inline const char* get_type_name<__half2>() {return "half2";}
 
 } // namespace type	
 } // cutf
