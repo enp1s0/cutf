@@ -3,12 +3,7 @@
 #include <cstddef>
 #include <stdio.h>
 #include "../type.hpp"
-
-#if !defined(CUTF_DEVICE_HOST_FUNC) && defined(__CUDA_ARCH__)
-#define CUTF_DEVICE_HOST_FUNC __device__ __host__
-#else
-#define CUTF_DEVICE_HOST_FUNC
-#endif
+#include "../macro.hpp"
 
 namespace cutf {
 namespace debug {

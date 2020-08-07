@@ -2,12 +2,7 @@
 #define __CUTF_EXPERIMENTAL_MANTISSA_HPP__
 #include <cinttypes>
 #include "../rounding_mode.hpp"
-
-#if !defined(CUTF_DEVICE_HOST) && defined(__CUDA_ARCH__)
-#define CUTF_DEVICE_HOST __device__ __host__
-#else
-#define CUTF_DEVICE_HOST
-#endif
+#include "../macro.hpp"
 
 namespace cutf {
 namespace experimental {

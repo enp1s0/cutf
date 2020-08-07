@@ -1,13 +1,8 @@
 #ifndef __CUTF_DEBUG_TF32_HPP__
 #define __CUTF_DEBUG_TF32_HPP__
 #include <cinttypes>
+#include "../macro.hpp"
 #include "mantissa.hpp"
-
-#if !defined(CUTF_DEVICE_HOST) && defined(__CUDA_ARCH__)
-#define CUTF_DEVICE_HOST CUTF_DEVICE_HOST
-#else
-#define CUTF_DEVICE_HOST
-#endif
 
 namespace cutf {
 namespace experimental {

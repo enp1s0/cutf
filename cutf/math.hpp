@@ -2,12 +2,7 @@
 #define __CUTF_MATH_CUH__
 
 #include <cuda_fp16.h>
-
-#if !defined(CUTF_DEVICE_HOST_FUNC) && defined(__CUDA_ARCH__)
-#define CUTF_DEVICE_FUNC __device__
-#else
-#define CUTF_DEVICE_FUNC
-#endif
+#include "macro.hpp"
 
 #define DEF_TEMPLATE_MATH_FUNC_1(func) \
 template<class T>  CUTF_DEVICE_FUNC inline T func(const T a);
