@@ -4,12 +4,18 @@
 #include <stdio.h>
 #include "../type.hpp"
 
+#if !defined(CUTF_DEVICE_HOST_FUNC) && defined(__CUDA_ARCH__)
+#define CUTF_DEVICE_HOST_FUNC __device__ __host__
+#else
+#define CUTF_DEVICE_HOST_FUNC
+#endif
+
 namespace cutf {
 namespace debug {
 namespace matrix {
 
 template <class T>
-__device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
 	if(name != nullptr) printf("%s = \n", name);
 	for(std::size_t i = 0; i < m; i++) {
 		for(std::size_t j = 0; j < n; j++) {
@@ -27,7 +33,7 @@ __device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, 
 }
 
 template <class T>
-__device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, std::size_t ldm, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, std::size_t ldm, const char *name = nullptr) {
 	if(name != nullptr) printf("%s = \n", name);
 	for(std::size_t i = 0; i < m; i++) {
 		for(std::size_t j = 0; j < n; j++) {
