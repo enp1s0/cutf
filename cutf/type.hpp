@@ -7,6 +7,8 @@
 #include "rounding_mode.hpp"
 
 #if !defined(CUTF_DEVICE_HOST) && defined(__CUDA_ARCH__)
+#define CUTF_DEVICE_HOST __device__ __host__
+#else
 #define CUTF_DEVICE_HOST
 #endif
 
