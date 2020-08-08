@@ -7,6 +7,7 @@
 #define DEF_TEMPLATE_MATH_FUNC_1(func) \
 template<class T>  CUTF_DEVICE_FUNC inline T func(const T a);
 
+#ifdef __CUDA_ARCH__
 #define SPEC_MATH_FUNC_1_h( func ) \
 template<> CUTF_DEVICE_FUNC inline half func<half>(const half a){return h##func( a );}	
 #define SPEC_MATH_FUNC_1_h2( func ) \
@@ -15,6 +16,17 @@ template<> CUTF_DEVICE_FUNC inline half2 func<half2>(const half2 a){return h2##f
 template<> CUTF_DEVICE_FUNC inline float func<float>(const float a){return func##f( a );}	
 #define SPEC_MATH_FUNC_1_d( func ) \
 template<> CUTF_DEVICE_FUNC inline double func<double>(const double a){return func( a );}	
+#else
+// Prototype only
+#define SPEC_MATH_FUNC_1_h( func ) \
+template<> CUTF_DEVICE_FUNC inline half func<half>(const half a);
+#define SPEC_MATH_FUNC_1_h2( func ) \
+template<> CUTF_DEVICE_FUNC inline half2 func<half2>(const half2 a);
+#define SPEC_MATH_FUNC_1_f( func ) \
+template<> CUTF_DEVICE_FUNC inline float func<float>(const float a);
+#define SPEC_MATH_FUNC_1_d( func ) \
+template<> CUTF_DEVICE_FUNC inline double func<double>(const double a);
+#endif
 
 #define MATH_FUNC(func) \
 	DEF_TEMPLATE_MATH_FUNC_1(func) \
@@ -24,8 +36,11 @@ template<> CUTF_DEVICE_FUNC inline double func<double>(const double a){return fu
 	SPEC_MATH_FUNC_1_d(func) \
 
 
+#ifdef __CUDA_ARCH__
 CUTF_DEVICE_FUNC inline float rcpf(const float a){return __frcp_rn(a);}
 CUTF_DEVICE_FUNC inline double rcp(const double a){return __drcp_rn(a);}
+#endif
+
 namespace cutf{
 namespace math{
 MATH_FUNC(ceil);
@@ -59,6 +74,7 @@ template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
 
 // get sign
 template <class T> CUTF_DEVICE_FUNC inline T sign(const T v);
+#ifdef __CUDA_ARCH__
 template <> CUTF_DEVICE_FUNC inline double sign(const double v){
 	double r;
 	asm(R"({
@@ -99,7 +115,9 @@ template <> CUTF_DEVICE_FUNC inline half2 sign(const half2 v){
 })":"=r"(HALF22US(r)):"r"(HALF22CUS(v)));
 	return r;
 }
+#endif
 
+#ifdef __CUDA_ARCH__
 // max
 CUTF_DEVICE_FUNC inline __half2 max(const __half2 a, const __half2 b) {
         const half2 sub = __hsub2(a, b);
@@ -135,12 +153,30 @@ CUTF_DEVICE_FUNC inline __half min(const __half a, const __half b) {
 }
 CUTF_DEVICE_FUNC inline float min(const float a, const float b) {return fminf(a, b);};
 CUTF_DEVICE_FUNC inline double min(const double a, const double b) {return fmin(a, b);};
+#else
+// prototype
+CUTF_DEVICE_FUNC inline __half2 max(const __half2 a, const __half2 b);
+CUTF_DEVICE_FUNC inline __half max(const __half a, const __half b);
+CUTF_DEVICE_FUNC inline float max(const float a, const float b);
+CUTF_DEVICE_FUNC inline double max(const double a, const double b);
+CUTF_DEVICE_FUNC inline __half2 min(const __half2 a, const __half2 b);
+CUTF_DEVICE_FUNC inline __half min(const __half a, const __half b);
+CUTF_DEVICE_FUNC inline float min(const float a, const float b);
+CUTF_DEVICE_FUNC inline double min(const double a, const double b);
+#endif
 
 namespace horizontal {
+#ifdef __CUDA_ARCH__
 inline CUTF_DEVICE_FUNC __half add(const __half2 a) {return a.x + a.y;}
 inline CUTF_DEVICE_FUNC __half mul(const __half2 a) {return a.x * a.y;}
 inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return cutf::math::max(a.x, a.y);}
 inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return cutf::math::min(a.x, a.y);}
+#else
+inline CUTF_DEVICE_FUNC __half add(const __half2 a);
+inline CUTF_DEVICE_FUNC __half mul(const __half2 a);
+inline CUTF_DEVICE_FUNC __half max(const __half2 a);
+inline CUTF_DEVICE_FUNC __half min(const __half2 a);
+#endif
 } // namespace horizontal
 } // math
 } // cutf
