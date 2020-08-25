@@ -20,3 +20,8 @@ cutf::experimental::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>
 
 This function cuts mantissa of FP32/FP64 value `v`.  
 `to_tf32` is an alias of `cut_mantissa<10, cutf::rounding::rr>(:float)`.
+
+### Supported rounding
+- `cutf::rounding::rz`
+- `cutf::rounding::rr`
+- `cutf::rounding::rb`
