@@ -46,6 +46,19 @@ CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rn>(const uint3
 	return m_pre;
 }
 
+template <>
+CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rb>(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up) {
+	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
+	const uint32_t m0_res = (fp_bitstring & ((1u << cut_length) - 1));
+	uint32_t c0 = 0;
+	if (m0_res != 0) {
+		c0 = 1u << cut_length;
+	}
+	const uint32_t m1 = m0 + c0;
+	const uint32_t m_pre = adjust_mantissa(m1, (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)), 23, move_up);
+	return m_pre;
+}
+
 template <class rounding>
 CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa(const uint64_t fp_bitstring, const uint64_t cut_length, uint64_t &move_up);
 
