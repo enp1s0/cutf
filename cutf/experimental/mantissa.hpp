@@ -13,6 +13,12 @@ union fp_reinterpret {
 	BS_T bs;
 };
 
+template <class T>
+CUTF_DEVICE_HOST_FUNC T adjust_mantissa(const T mantissa, const T mantissa_mask, const uint32_t carry_bit, T& move_up) {
+	move_up = (mantissa >> carry_bit) & 0x1;
+	return mantissa & mantissa_mask;
+}
+
 template <class rounding>
 CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa(const uint32_t fp_bitstring, const uint32_t cut_length, uint32_t &move_up);
 
