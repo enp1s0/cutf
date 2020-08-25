@@ -12,10 +12,12 @@ int main() {
 	const auto tf32_rz = cutf::experimental::cut_mantissa<10, cutf::rounding::rz>(fp32);
 	const auto tf32_rn = cutf::experimental::cut_mantissa<10, cutf::rounding::rn>(fp32);
 	const auto tf32_rr = cutf::experimental::cut_mantissa<10, cutf::rounding::rr>(fp32);
+	const auto tf32_rb = cutf::experimental::cut_mantissa<10, cutf::rounding::rb>(fp32);
 
 	std::printf("fp32    %08x\n", cutf::type::reinterpret<unsigned>(fp32));
 	std::printf("fp16    %08x\n", cutf::type::reinterpret<unsigned>(fp16));
 	std::printf("tf32_rz %08x\n", cutf::type::reinterpret<unsigned>(tf32_rz));
 	std::printf("tf32_rn %08x\n", cutf::type::reinterpret<unsigned>(tf32_rn));
 	std::printf("tf32_rr %08x\n", cutf::type::reinterpret<unsigned>(tf32_rr));
+	std::printf("tf32_rb %08x\n", cutf::type::reinterpret<unsigned>(tf32_rb));
 }
