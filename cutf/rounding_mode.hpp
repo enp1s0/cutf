@@ -7,6 +7,7 @@ struct rd;
 struct rn;
 struct ru;
 struct rz;
+struct rb; // bias-corrected force-1 rounding
 } // namespace rounding
 } // namespace cutf
 #endif
