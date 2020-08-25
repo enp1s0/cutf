@@ -33,8 +33,7 @@ CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rr>(const uint3
 	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 	const uint32_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
 	const uint32_t m1 = m0 + (c0 << 1);
-	move_up = (m1 & 0b0'00000001'00000000000000000000000u) >> 23;
-	const uint32_t m_pre = m1 & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1));
+	const uint32_t m_pre = adjust_mantissa(m1, (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)), 23, move_up);
 	return m_pre;
 }
 
@@ -43,8 +42,7 @@ CUTF_DEVICE_HOST_FUNC uint32_t rounding_mantissa<cutf::rounding::rn>(const uint3
 	const uint32_t m0 = (fp_bitstring & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)));
 	const uint32_t c0 = (fp_bitstring & (1u << cut_length));
 	const uint32_t m1 = m0 + c0;
-	move_up = (m1 & 0b0'00000001'00000000000000000000000u) >> 23;
-	const uint32_t m_pre = m1 & (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1));
+	const uint32_t m_pre = adjust_mantissa(m1, (0b0'00000000'1111111111'1111111111111u - ((1u << cut_length) - 1)), 23, move_up);
 	return m_pre;
 }
 
@@ -62,8 +60,7 @@ CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa<cutf::rounding::rr>(const uint6
 	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 	const uint64_t c0 = (fp_bitstring & (1u << (cut_length - 1)));
 	const uint64_t m1 = m0 + (c0 << 1);
-	move_up = (m1 & 0x0010000000000000lu) >> 52;
-	const uint64_t m_pre = m1 & (0x000ffffffffffffflu - ((1lu << cut_length) - 1));
+	const uint64_t m_pre = adjust_mantissa(m1, (0x000ffffffffffffflu - ((1lu << cut_length) - 1)), 53, move_up);
 	return m_pre;
 }
 
@@ -72,8 +69,7 @@ CUTF_DEVICE_HOST_FUNC uint64_t rounding_mantissa<cutf::rounding::rn>(const uint6
 	const uint64_t m0 = (fp_bitstring & (0x000ffffffffffffflu - ((1llu << cut_length) - 1)));
 	const uint64_t c0 = (fp_bitstring & (1u << cut_length));
 	const uint64_t m1 = m0 + c0;
-	move_up = (m1 & 0x0010000000000000lu) >> 52;
-	const uint64_t m_pre = m1 & (0x000ffffffffffffflu - ((1lu << cut_length) - 1));
+	const uint64_t m_pre = adjust_mantissa(m1, (0x000ffffffffffffflu - ((1lu << cut_length) - 1)), 53, move_up);
 	return m_pre;
 }
 } // namespace detail
