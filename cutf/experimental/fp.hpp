@@ -41,12 +41,12 @@ template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_bias<double>() {return 0x3
 
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uint(const T fp) {
-	return reinterpret_medium<T, typename same_size_uint<T>::type>{.fp = fp;}.bs;
+	return detail::reinterpret_medium<T, typename same_size_uint<T>::type>{.fp = fp;}.bs;
 }
 
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline T reinterpret_as_fp(const typename same_size_uint<T>::type bs) {
-	return reinterpret_medium<T, typename same_size_uint<T>::type>{.bs = bs;}.fp;
+	return detail::reinterpret_medium<T, typename same_size_uint<T>::type>{.bs = bs;}.fp;
 }
 } // namespace fp
 } // namespace experimental
