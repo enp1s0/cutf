@@ -34,6 +34,12 @@ template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size<float >() {r
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size<double>() {return 52;}
 
 template <class T>
+CUTF_DEVICE_HOST_FUNC inline unsigned get_bias();
+template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_bias<half  >() {return 0xf;}
+template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_bias<float >() {return 0x7f;}
+template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_bias<double>() {return 0x3ff;}
+
+template <class T>
 CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uint(const T fp) {
 	return reinterpret_medium<T, typename same_size_uint<T>::type>{.fp = fp;}.bs;
 }
