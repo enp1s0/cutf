@@ -25,3 +25,11 @@ This function cuts mantissa of FP32/FP64 value `v`.
 - `cutf::rounding::rz`
 - `cutf::rounding::rr`
 - `cutf::rounding::rb`
+
+## force_underflow
+```cpp
+// T = half / float / double
+cutf::experimental::exponent::force_underflow<min_exponent, T>(T v)
+```
+
+This function overwrite zero if the exponent of `v` id smaller than `min_exponent`.
