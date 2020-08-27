@@ -14,8 +14,8 @@ Otherwise it uses a PTX instruction `cvt.rna.tf32.f32`.
 
 ## cut_mantissa
 ```cpp
-cutf::experimental::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : float)
-cutf::experimental::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : double)
+cutf::experimental::mantissa::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : float)
+cutf::experimental::mantissa::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : double)
 ```
 
 This function cuts mantissa of FP32/FP64 value `v`.  
@@ -25,3 +25,11 @@ This function cuts mantissa of FP32/FP64 value `v`.
 - `cutf::rounding::rz`
 - `cutf::rounding::rr`
 - `cutf::rounding::rb`
+
+## force_underflow
+```cpp
+// T = half / float / double
+cutf::experimental::exponent::force_underflow<min_exponent, T>(T v)
+```
+
+This function overwrite zero if the exponent of `v` id smaller than `min_exponent`.

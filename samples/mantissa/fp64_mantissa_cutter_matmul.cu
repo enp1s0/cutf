@@ -15,7 +15,7 @@ __global__ void m16n16k16_cut(double* const c_ptr, const double* const a_ptr, co
 		const auto n = i + n_offset;
 		double sum = 0.0f;
 		for (unsigned k = 0; k < N; k++) {
-			sum += cutf::experimental::cut_mantissa<23>(a_ptr[m + k * N]) * cutf::experimental::cut_mantissa<23>(b_ptr[k + n * N]);
+			sum += cutf::experimental::mantissa::cut_mantissa<23>(a_ptr[m + k * N]) * cutf::experimental::mantissa::cut_mantissa<23>(b_ptr[k + n * N]);
 		}
 		c_ptr[m + n * N] += sum;
 	}

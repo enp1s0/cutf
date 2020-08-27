@@ -16,7 +16,7 @@ __global__ void m16n16k16_cut(float* const c_ptr, const float* const a_ptr, cons
 		const auto n = i + n_offset;
 		float sum = 0.0f;
 		for (unsigned k = 0; k < N; k++) {
-			sum += cutf::experimental::cut_mantissa<10, cutf::rounding::rr>(a_ptr[m + k * N]) * cutf::experimental::cut_mantissa<10, cutf::rounding::rr>(b_ptr[k + n * N]);
+			sum += cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rr>(a_ptr[m + k * N]) * cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rr>(b_ptr[k + n * N]);
 		}
 		c_ptr[m + n * N] += sum;
 	}
