@@ -14,8 +14,8 @@ Otherwise it uses a PTX instruction `cvt.rna.tf32.f32`.
 
 ## cut_mantissa
 ```cpp
-cutf::experimental::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : float)
-cutf::experimental::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : double)
+cutf::experimental::mantissa::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : float)
+cutf::experimental::mantissa::cut_mantissa<mantissa_length, rounging = cutf::rounding::rr>(v : double)
 ```
 
 This function cuts mantissa of FP32/FP64 value `v`.  
