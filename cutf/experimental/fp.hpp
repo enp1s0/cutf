@@ -32,6 +32,16 @@ CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size();
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size<half  >() {return 10;}
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size<float >() {return 23;}
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_mantissa_size<double>() {return 52;}
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uint(const T fp) {
+	return reinterpret_medium<T, typename same_size_uint<T>::type>{.fp = fp;}.bs;
+}
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline T reinterpret_as_fp(const typename same_size_uint<T>::type bs) {
+	return reinterpret_medium<T, typename same_size_uint<T>::type>{.bs = bs;}.fp;
+}
 } // namespace fp
 } // namespace experimental
 } // namespace cutf
