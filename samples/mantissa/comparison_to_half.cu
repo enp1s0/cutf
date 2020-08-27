@@ -9,10 +9,10 @@ int main() {
 
 	const auto fp32 = dist(mt);
 	const auto fp16 = cutf::type::cast<float>(cutf::type::cast<half>(fp32));
-	const auto tf32_rz = cutf::experimental::cut_mantissa<10, cutf::rounding::rz>(fp32);
-	const auto tf32_rn = cutf::experimental::cut_mantissa<10, cutf::rounding::rn>(fp32);
-	const auto tf32_rr = cutf::experimental::cut_mantissa<10, cutf::rounding::rr>(fp32);
-	const auto tf32_rb = cutf::experimental::cut_mantissa<10, cutf::rounding::rb>(fp32);
+	const auto tf32_rz = cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rz>(fp32);
+	const auto tf32_rn = cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rn>(fp32);
+	const auto tf32_rr = cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rr>(fp32);
+	const auto tf32_rb = cutf::experimental::mantissa::cut_mantissa<10, cutf::rounding::rb>(fp32);
 
 	std::printf("fp32    %08x\n", cutf::type::reinterpret<unsigned>(fp32));
 	std::printf("fp16    %08x\n", cutf::type::reinterpret<unsigned>(fp16));
