@@ -13,7 +13,7 @@ __global__ void force_underflow_kernel(T* const dst_ptr, const T* const src_ptr,
 	const auto tid = threadIdx.x + blockIdx.x * blockDim.x;
 	if (tid >= N) return;
 
-	dst_ptr[tid] = cutf::experimental::exponent::force_underflow<T, min_exponent>(src_ptr[tid]);
+	dst_ptr[tid] = cutf::experimental::exponent::force_underflow<min_exponent>(src_ptr[tid]);
 }
 
 template <class T>
