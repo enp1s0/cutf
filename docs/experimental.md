@@ -32,4 +32,4 @@ This function cuts mantissa of FP32/FP64 value `v`.
 cutf::experimental::exponent::force_underflow<min_exponent, T>(T v)
 ```
 
-This function overwrite zero if the exponent of `v` id smaller than `min_exponent`.
+This function returns zero if the exponent of `v` id smaller than `min_exponent` else `v`.
