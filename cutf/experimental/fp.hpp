@@ -7,6 +7,14 @@
 namespace cutf {
 namespace experimental {
 namespace fp {
+namespace detail {
+template <class FP_T, class BS_T>
+union reinterpret_medium {
+	FP_T fp;
+	BS_T bs;
+};
+} // namespace detail
+
 template <class T>
 struct same_size_uint {using type = void;};
 template <> struct same_size_uint<half  > {using type = uint16_t;};
