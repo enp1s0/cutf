@@ -22,6 +22,12 @@ template <> struct same_size_uint<float > {using type = uint32_t;};
 template <> struct same_size_uint<double> {using type = uint64_t;};
 
 template <class T>
+struct same_size_fp {using type = float;};
+template <> struct same_size_fp<uint16_t> {using type = half  ;};
+template <> struct same_size_fp<uint32_t> {using type = float ;};
+template <> struct same_size_fp<uint64_t> {using type = double;};
+
+template <class T>
 CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size();
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size<half  >() {return 5;}
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size<float >() {return 8;}
@@ -45,8 +51,8 @@ CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uin
 }
 
 template <class T>
-CUTF_DEVICE_HOST_FUNC inline T reinterpret_as_fp(const typename same_size_uint<T>::type bs) {
-	return detail::reinterpret_medium<T, typename same_size_uint<T>::type>{.bs = bs}.fp;
+CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<T>::type reinterpret_as_fp(const T bs) {
+	return detail::reinterpret_medium<typename same_size_fp<T>::type, T>{.bs = bs}.fp;
 }
 } // namespace fp
 } // namespace experimental
