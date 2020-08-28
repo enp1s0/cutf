@@ -3,6 +3,7 @@
 
 #include <cuda_fp16.h>
 #include "macro.hpp"
+#include "experimental/fp.hpp"
 
 #define DEF_TEMPLATE_MATH_FUNC_1(func) \
 template<class T>  CUTF_DEVICE_FUNC inline T func(const T a);
@@ -64,11 +65,12 @@ template <class T> T abs(const T a);
 template <> CUTF_DEVICE_FUNC inline double abs<double>(const double a){return fabs(a);}
 template <> CUTF_DEVICE_FUNC inline float abs<float>(const float a){return fabsf(a);}
 template <> CUTF_DEVICE_FUNC inline __half abs<__half>(const __half a){
-    const auto abs_a = *reinterpret_cast<const unsigned short*>(&a) & 0x7fff;
-    return *reinterpret_cast<const __half*>(&abs_a);
+    const auto abs_a = cutf::experimental::fp::reinterpret_as_uint(a) & 0x7fff;
+    return cutf::experimental::fp::reinterpret_as_fp(abs_a);
 }
 template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
-    const auto abs_a = *reinterpret_cast<const unsigned *>(&a) & 0x7fff7fff;
+    const auto abs_a = cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.fp = a}.bs & 0x7fff7fff;
+    // This reinterpretation can't avoid using `reinterpret_cast` because `__half2` is not a standard numeric type but struct.
     return *reinterpret_cast<const __half2*>(&abs_a);
 }
 
