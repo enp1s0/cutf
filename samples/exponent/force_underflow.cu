@@ -57,9 +57,9 @@ void test_force_underflow() {
 }
 
 int main() {
-	test_force_underflow<float , -1  >();
-	test_force_underflow<float , -4  >();
-	test_force_underflow<float , -10 >();
+	test_force_underflow<half   , -1  >();
+	test_force_underflow<half   , -4  >();
+	test_force_underflow<half   , -10 >();
 
 	test_force_underflow<float , -10 >();
 	test_force_underflow<float , -20 >();
