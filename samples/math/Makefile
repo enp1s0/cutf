@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -Xcompiler="-Wall"
 TARGETS=abs.test maxmin.test horizontal.test
 
 all: $(TARGETS)
