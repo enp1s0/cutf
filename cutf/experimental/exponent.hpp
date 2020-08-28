@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "fp.hpp"
 #include "../macro.hpp"
+#include "../type.hpp"
 
 namespace cutf {
 namespace experimental {
@@ -14,7 +15,7 @@ CUTF_DEVICE_HOST_FUNC T force_underflow(const T v, const int min_exponent) {
 	const auto sp_exponent = static_cast<int>(exponent) - static_cast<int>(cutf::experimental::fp::get_bias<T>());
 	if (sp_exponent < min_exponent) {
 		// multiply zero to keep sign
-		return v * 0;
+		return v * cutf::type::cast<T>(0);
 	}
 	return v;
 }
