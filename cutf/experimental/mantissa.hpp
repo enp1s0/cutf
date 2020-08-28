@@ -3,16 +3,12 @@
 #include <cinttypes>
 #include "../rounding_mode.hpp"
 #include "../macro.hpp"
+#include "fp.hpp"
 
 namespace cutf {
 namespace experimental {
 namespace mantissa {
 namespace detail {
-template <class FP_T, class BS_T>
-union fp_reinterpret {
-	FP_T fp;
-	BS_T bs;
-};
 
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline T adjust_mantissa(const T mantissa, const T mantissa_mask, const uint32_t carry_bit, T& move_up) {
@@ -107,7 +103,7 @@ CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v) {
 	static_assert(mantissa_length < 23, "mantissa_length must be smaller than 23");
 
 	constexpr unsigned cut_length = 23u - mantissa_length;
-	const uint32_t in = cutf::experimental::mantissa::detail::fp_reinterpret<float, uint32_t>{.fp = v}.bs;
+	const uint32_t in = cutf::experimental::fp::reinterpret_as_uint(v);
 	const uint32_t e = (in & 0b0'11111111'00000000000000000000000u);
 	const uint32_t s = (in & 0b1'00000000'00000000000000000000000u);
 
@@ -116,7 +112,7 @@ CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v) {
 	const uint32_t e_pre = e + (c1 << 23);
 
 	const uint32_t out = s | m_pre | e_pre;
-	return cutf::experimental::mantissa::detail::fp_reinterpret<float, uint32_t>{.bs = out}.fp;
+	return cutf::experimental::fp::reinterpret_as_fp(out);
 }
 
 template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
@@ -125,7 +121,7 @@ CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v) {
 	static_assert(mantissa_length < 52, "mantissa_length must be smaller than 52");
 
 	constexpr unsigned cut_length = 52u - mantissa_length;
-	const uint64_t in = cutf::experimental::mantissa::detail::fp_reinterpret<double, uint64_t>{.fp = v}.bs;
+	const uint64_t in = cutf::experimental::fp::reinterpret_as_uint(v);
 	const uint64_t e = (in & 0xfff0000000000000lu);
 	const uint64_t s = (in & 0x8000000000000000lu);
 
@@ -134,7 +130,7 @@ CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v) {
 	const uint64_t e_pre = e + (c1 << 52);
 
 	const uint64_t out = s | m_pre | e_pre;
-	return cutf::experimental::mantissa::detail::fp_reinterpret<double, uint64_t>{.bs = out}.fp;
+	return cutf::experimental::fp::reinterpret_as_fp(out);
 }
 } // namespace mantissa
 } // namespace experimental
