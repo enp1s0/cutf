@@ -4,6 +4,7 @@
 #include <cuda_fp16.h>
 #include <cuComplex.h>
 #include "experimental/tf32.hpp"
+#include "experimental/fp.hpp"
 #include "rounding_mode.hpp"
 #include "macro.hpp"
 
@@ -28,7 +29,7 @@ struct tf32;
 	 template <> CUTF_DEVICE_FUNC inline dst_type reinterpret<dst_type>(const src_type a){return __##src_ty##_as_##dst_ty(a);}
 #else
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
-	 template <> CUTF_DEVICE_FUNC inline dst_type reinterpret<dst_type>(const src_type a){return *reinterpret_cast<const dst_type*>(&a);}
+	 template <> CUTF_DEVICE_FUNC inline dst_type reinterpret<dst_type>(const src_type a){return cutf::experimental::fp::detail::reinterpret_medium<src_type, dst_type>{.fp = a}.bs;}
 #endif
 
 #ifdef __CUDA_ARCH__
@@ -36,7 +37,7 @@ struct tf32;
 	 template <> CUTF_DEVICE_FUNC inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return __##src_ty##2##dst_ty##_##r(a);}
 #else
 #define RCAST(src_type, src_ty, dst_type, dst_ty, r) \
-	 template <> CUTF_DEVICE_FUNC inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return *reinterpret_cast<const dst_type*>(&a);}
+	 template <> CUTF_DEVICE_FUNC inline dst_type rcast<dst_type, cutf::rounding::r>(const src_type a){return static_cast<dst_type>(a);}
 #endif
 #define RCASTS(src_type, src_ty, dst_type, dst_ty) \
 	RCAST(src_type, src_ty, dst_type, dst_ty, rd); \
