@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
-TARGETS=force_underflow.test
+TARGETS=min_exponent.test
 
 all: $(TARGETS)
 
