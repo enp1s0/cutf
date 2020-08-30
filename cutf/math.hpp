@@ -1,6 +1,7 @@
 #ifndef __CUTF_MATH_CUH__
 #define __CUTF_MATH_CUH__
 
+#include <algorithm>
 #include <cuda_fp16.h>
 #include "macro.hpp"
 #include "experimental/fp.hpp"
@@ -174,10 +175,10 @@ inline CUTF_DEVICE_FUNC __half mul(const __half2 a) {return a.x * a.y;}
 inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return cutf::math::max(a.x, a.y);}
 inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return cutf::math::min(a.x, a.y);}
 #else
-inline CUTF_DEVICE_FUNC __half add(const __half2 a);
-inline CUTF_DEVICE_FUNC __half mul(const __half2 a);
-inline CUTF_DEVICE_FUNC __half max(const __half2 a);
-inline CUTF_DEVICE_FUNC __half min(const __half2 a);
+inline CUTF_DEVICE_FUNC __half add(const __half2 a) {return __float2half(__half2float(a.x) + __half2float(a.y));}
+inline CUTF_DEVICE_FUNC __half mul(const __half2 a) {return __float2half(__half2float(a.x) * __half2float(a.y));}
+inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return __float2half(std::max(__half2float(a.x), __half2float(a.y)));}
+inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return __float2half(std::min(__half2float(a.x), __half2float(a.y)));}
 #endif
 } // namespace horizontal
 } // math

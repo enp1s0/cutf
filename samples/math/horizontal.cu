@@ -24,25 +24,34 @@ void print(const half a, const std::string str) {
 }
 
 int main() {
+	const auto input = __float22half2_rn({4.0f, 2.0f});
 	auto h = cutf::memory::get_host_unique_ptr<half>(1);
 
-	kernel_add<<<1, 1>>>(h.get(), __float22half2_rn({4.0f, 2.0f}));
+	std::printf("----\n");
+	kernel_add<<<1, 1>>>(h.get(), input);
 	cudaDeviceSynchronize();
-	print(*h.get(), "add");
-	cudaDeviceSynchronize();
-
-	kernel_mul<<<1, 1>>>(h.get(), __float22half2_rn({4.0f, 2.0f}));
-	cudaDeviceSynchronize();
-	print(*h.get(), "mul");
+	print(*h.get(), "add (d)");
+	print(cutf::math::horizontal::add(input), "add (h)");
 	cudaDeviceSynchronize();
 
-	kernel_max<<<1, 1>>>(h.get(), __float22half2_rn({4.0f, 2.0f}));
+	std::printf("----\n");
+	kernel_mul<<<1, 1>>>(h.get(), input);
 	cudaDeviceSynchronize();
-	print(*h.get(), "max");
+	print(*h.get(), "mul (d)");
+	print(cutf::math::horizontal::mul(input), "mul (h)");
 	cudaDeviceSynchronize();
 
-	kernel_min<<<1, 1>>>(h.get(), __float22half2_rn({4.0f, 2.0f}));
+	std::printf("----\n");
+	kernel_max<<<1, 1>>>(h.get(), input);
 	cudaDeviceSynchronize();
-	print(*h.get(), "min");
+	print(*h.get(), "max (d)");
+	print(cutf::math::horizontal::max(input), "max (h)");
+	cudaDeviceSynchronize();
+
+	std::printf("----\n");
+	kernel_min<<<1, 1>>>(h.get(), input);
+	cudaDeviceSynchronize();
+	print(*h.get(), "min (d)");
+	print(cutf::math::horizontal::min(input), "min (h)");
 	cudaDeviceSynchronize();
 }

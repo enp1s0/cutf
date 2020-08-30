@@ -29,7 +29,7 @@ cutf::math::[operation](x);
 |:--------|:------------|
 |sign|`if` $`x > 0`$ `then` $`1`$ `else` $`-1`$|
 
-### horizontal operators of `half2`
+### horizontal operators for `half2`
 |Operation|
 |:--------|
 |add      |
