@@ -1,8 +1,8 @@
-#ifndef __CUTF_THREADS_HPP__
-#define __CUTF_THREADS_HPP__
+#ifndef __CUTF_THREAD_HPP__
+#define __CUTF_THREAD_HPP__
 
 namespace cutf {
-namespace threads {
+namespace thread {
 __device__ inline unsigned get_lane_id() {
 	unsigned lane_id;
 	asm(R"({mov.s32 %0, %laneid;})":"=r"(lane_id));
