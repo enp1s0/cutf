@@ -58,6 +58,7 @@ cutf
 ├─ cublas
 ├─ curand
 ├─ nvrtc
+├─ thread
 └─ error
 ```
 

@@ -96,3 +96,19 @@ CUTF_CHECK_ERROR(cutf::device::use_device(
 |`cutf::device::use_device`|Executing lambda function on a specified device|
 |`cutf::device::get_device`|Getting device ID|
 |`cutf::device::set_device`|Setting device ID|
+
+## thread
+```cpp
+const auto lane_id = cutf::thread::get_lane_id();
+const auto warp_id = cutf::thread::get_warp_id();
+```
+
+`lane_id` means an unique id for a thread within a warp and `warp_id` means an unique id for a warp within a thread-block.
+Thus when you lauch threads with 1D thread block,
+- `warp_id` equals to `threadIdx.x / 32`
+- `lane_id` equals to `threadIdx.x % 32`
+
+
+.
+
+This functions get these values from PTX predefines `%warpid` and `%laneid`.
