@@ -110,4 +110,5 @@ Thus when you lauch threads with 1D thread block,
 
 
 .
-This functions get these values from `%warpid` and `%laneid` PTX predefines.
+
+This functions get these values from PTX predefines `%warpid` and `%laneid`.
