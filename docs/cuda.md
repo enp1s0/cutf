@@ -103,7 +103,7 @@ const auto lane_id = cutf::thread::get_lane_id();
 const auto warp_id = cutf::thread::get_warp_id();
 ```
 
-`lane_id` means unique thread id within a warp and `lane_id` means a unique warp id within a thread-block.
+`lane_id` means an unique id for a thread within a warp and `warp_id` means an unique id for a warp within a thread-block.
 Thus when you lauch threads with 1D thread block,
 - `warp_id` equals to `threadIdx.x / 32`
 - `lane_id` equals to `threadIdx.x % 32`
