@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <cuda_fp16.h>
-#include <cuda_runtime_api.h>
 #include "macro.hpp"
 #include "experimental/fp.hpp"
 
