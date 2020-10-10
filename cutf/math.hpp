@@ -124,7 +124,7 @@ template <> CUTF_DEVICE_FUNC inline half2 sign(const half2 v){
 #ifdef __CUDA_ARCH__
 // max
 CUTF_DEVICE_FUNC inline __half2 max(const __half2 a, const __half2 b) {
-#if CUDART_VERSION < 11000
+#if __CUDA_ARCH__ < 800
         const half2 sub = __hsub2(a, b);
         const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
         const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
@@ -135,7 +135,7 @@ CUTF_DEVICE_FUNC inline __half2 max(const __half2 a, const __half2 b) {
 #endif
 }
 CUTF_DEVICE_FUNC inline __half max(const __half a, const __half b) {
-#if CUDART_VERSION < 11000
+#if __CUDA_ARCH__ < 800
         const half sub = __hsub(a, b);
         const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
         const unsigned sw = (sign >> 13) * 0x11;
@@ -150,7 +150,7 @@ CUTF_DEVICE_FUNC inline double max(const double a, const double b) {return fmax(
 
 // min
 CUTF_DEVICE_FUNC inline __half2 min(const __half2 a, const __half2 b) {
-#if CUDART_VERSION < 11000
+#if __CUDA_ARCH__ < 800
         const half2 sub = __hsub2(b, a);
         const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
         const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
@@ -161,7 +161,7 @@ CUTF_DEVICE_FUNC inline __half2 min(const __half2 a, const __half2 b) {
 #endif
 }
 CUTF_DEVICE_FUNC inline __half min(const __half a, const __half b) {
-#if CUDART_VERSION < 11000
+#if __CUDA_ARCH__ < 800
         const half sub = __hsub(b, a);
         const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
         const unsigned sw = (sign >> 13) * 0x11;
