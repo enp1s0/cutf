@@ -37,6 +37,15 @@ cutf::math::[operation](x);
 |max      |
 |min      |
 
+### SIMD functions for half2
+|Operation|
+|:--------|
+|max      |
+|min      |
+
+Before Ampare architecture there is no `max` and `min` function for `half2`.
+These functions are implemented with `__byte_perm` built function.
+
 ## type
 ```cpp
 // cast decltype(x) to `type`
