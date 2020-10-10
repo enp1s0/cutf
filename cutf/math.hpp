@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cuda_fp16.h>
+#include <cuda_runtime_api.h>
 #include "macro.hpp"
 #include "experimental/fp.hpp"
 
@@ -123,36 +124,52 @@ template <> CUTF_DEVICE_FUNC inline half2 sign(const half2 v){
 #ifdef __CUDA_ARCH__
 // max
 CUTF_DEVICE_FUNC inline __half2 max(const __half2 a, const __half2 b) {
+#if CUDART_VERSION < 11000
         const half2 sub = __hsub2(a, b);
         const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
         const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
         const int res = __byte_perm(*reinterpret_cast<const unsigned*>(&a), *reinterpret_cast<const unsigned*>(&b), 0x00003210 | sw);
         return *reinterpret_cast<const __half2*>(&res);
+#else
+        return __hmax2(a, b);
+#endif
 }
 CUTF_DEVICE_FUNC inline __half max(const __half a, const __half b) {
+#if CUDART_VERSION < 11000
         const half sub = __hsub(a, b);
         const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
         const unsigned sw = (sign >> 13) * 0x11;
         const unsigned short res = __byte_perm(*reinterpret_cast<const short*>(&a), *reinterpret_cast<const short*>(&b), 0x00000010 | sw);
         return *reinterpret_cast<const __half*>(&res);
+#else
+        return __hmax(a, b);
+#endif
 }
 CUTF_DEVICE_FUNC inline float max(const float a, const float b) {return fmaxf(a, b);};
 CUTF_DEVICE_FUNC inline double max(const double a, const double b) {return fmax(a, b);};
 
 // min
 CUTF_DEVICE_FUNC inline __half2 min(const __half2 a, const __half2 b) {
+#if CUDART_VERSION < 11000
         const half2 sub = __hsub2(b, a);
         const unsigned sign = (*reinterpret_cast<const unsigned*>(&sub)) & 0x80008000u;
         const unsigned sw = ((sign >> 21) | (sign >> 13)) * 0x11;
         const int res = __byte_perm(*reinterpret_cast<const unsigned*>(&a), *reinterpret_cast<const unsigned*>(&b), 0x00003210 | sw);
         return *reinterpret_cast<const __half2*>(&res);
+#else
+        return __hmin2(a, b);
+#endif
 }
 CUTF_DEVICE_FUNC inline __half min(const __half a, const __half b) {
+#if CUDART_VERSION < 11000
         const half sub = __hsub(b, a);
         const unsigned sign = (*reinterpret_cast<const short*>(&sub)) & 0x8000u;
         const unsigned sw = (sign >> 13) * 0x11;
         const unsigned short res = __byte_perm(*reinterpret_cast<const short*>(&a), *reinterpret_cast<const short*>(&b), 0x00000010 | sw);
         return *reinterpret_cast<const __half*>(&res);
+#else
+        return __hmin(a, b);
+#endif
 }
 CUTF_DEVICE_FUNC inline float min(const float a, const float b) {return fminf(a, b);};
 CUTF_DEVICE_FUNC inline double min(const double a, const double b) {return fmin(a, b);};
