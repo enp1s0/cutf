@@ -1,10 +1,10 @@
-#ifndef __CUTF_DEBUG_FP_HPP__
-#define __CUTF_DEBUG_FP_HPP__
+#ifndef __CUTF_DEBUG_PRINT_HPP__
+#define __CUTF_DEBUG_PRINT_HPP__
 #include <stdio.h>
 #include <cuda_fp16.h>
 namespace cutf {
 namespace debug {
-namespace fp {
+namespace print {
 template <class T>
 struct bitstring_t {using type = T;};
 template <> struct bitstring_t<half  > {using type = uint16_t;};
@@ -36,7 +36,7 @@ __device__ __host__ inline void print_bin(const T v, const bool line_break = tru
 template <> __device__ __host__ inline void print_bin<half  >(const half   v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<half  >::type*>(&v), line_break);}
 template <> __device__ __host__ inline void print_bin<float >(const float  v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<float >::type*>(&v), line_break);}
 template <> __device__ __host__ inline void print_bin<double>(const double v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<double>::type*>(&v), line_break);}
-} // namespace fp
+} // namespace print
 } // namespace debug
 } // namespace cutf
 #endif
