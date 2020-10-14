@@ -12,7 +12,7 @@ template <> struct bitstring_t<float > {using type = uint32_t;};
 template <> struct bitstring_t<double> {using type = uint64_t;};
 template <> struct bitstring_t<const double> {using type = uint64_t;};
 template <> struct bitstring_t<const float > {using type = uint32_t;};
-template <> struct bitstring_t<const double> {using type = uint64_t;};
+template <> struct bitstring_t<const half  > {using type = uint64_t;};
 
 template <class T>
 __device__ __host__ inline void print_hex(const T v, const bool line_break = true);
