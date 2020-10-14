@@ -1,12 +1,12 @@
 # cutf Debug Functions Reference
 
-## matrix
+## matrix namespace
 ```cpp
 cutf::debug::matrix::*
 ```
 - `print_matrix` : This function prints a matrix.
 
-## matrix
+## fp namespace
 ```cpp
 cutf::debug::fp::*
 ```
@@ -19,7 +19,7 @@ using bitstring_t = typename cutf::debug::fp::bitstring_t<half>::type;
 // bitstring_t = uint16_t
 ```
 
-## print
+## print namespace
 ```cpp
 cutf::debug::print::*
 ```
@@ -27,6 +27,9 @@ cutf::debug::print::*
 - `print_bin` : This function prints bitstring of an input variable
 - `print_hex` : This function prints hex-code of an input variable
 
-### Supported types
+Supported types are below.
+
 - Integer : `uint8_t`, `uint16_t`, `uint32_t`, `uint64_t`
 - Floating point : `half`, `float`, `double`
+
+.
