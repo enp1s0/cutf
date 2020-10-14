@@ -4,8 +4,20 @@
 ```cpp
 cutf::debug::matrix::*
 ```
+- `print_matrix` : This function prints a matrix.
 
-- `print_matrix`
+## matrix
+```cpp
+cutf::debug::fp::*
+```
+
+- `bitstring_t` : This structure contains same size integer type of a given floating point type.
+
+### Example
+```cpp
+using bitstring_t = typename cutf::debug::fp::bitstring_t<half>::type;
+// bitstring_t = uint16_t
+```
 
 ## print
 ```cpp
