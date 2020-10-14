@@ -1,13 +1,16 @@
 #ifndef __CUTF_DEBUG_FP_HPP__
 #define __CUTF_DEBUG_FP_HPP__
 #include <stdio.h>
+#include <cuda_fp16.h>
 namespace cutf {
 namespace debug {
 namespace fp {
 template <class T>
 struct bitstring_t {using type = T;};
+template <> struct bitstring_t<half  > {using type = uint16_t;};
 template <> struct bitstring_t<float > {using type = uint32_t;};
 template <> struct bitstring_t<double> {using type = uint64_t;};
+template <> struct bitstring_t<const double> {using type = uint64_t;};
 template <> struct bitstring_t<const float > {using type = uint32_t;};
 template <> struct bitstring_t<const double> {using type = uint64_t;};
 
@@ -19,6 +22,7 @@ template <> __device__ __host__ inline void print_hex<uint16_t>(const uint16_t v
 template <> __device__ __host__ inline void print_hex<uint8_t >(const uint8_t  v, const bool line_break) {printf("0x%02x", v);if(line_break)printf("\n");}
 template <> __device__ __host__ inline void print_hex<double  >(const double   v, const bool line_break) {print_hex(*reinterpret_cast<const typename bitstring_t<double>::type*>(&v), line_break);}
 template <> __device__ __host__ inline void print_hex<float   >(const float    v, const bool line_break) {print_hex(*reinterpret_cast<const typename bitstring_t<float >::type*>(&v), line_break);}
+template <> __device__ __host__ inline void print_hex<half    >(const half     v, const bool line_break) {print_hex(*reinterpret_cast<const typename bitstring_t<half  >::type*>(&v), line_break);}
 
 template <class T>
 __device__ __host__ inline void print_bin(const T v, const bool line_break = true) {
@@ -29,8 +33,9 @@ __device__ __host__ inline void print_bin(const T v, const bool line_break = tru
 		printf("\n");
 	}
 }
-template <> __device__ __host__ inline void print_bin<double>(const double v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<double>::type*>(&v), line_break);}
+template <> __device__ __host__ inline void print_bin<half  >(const half   v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<half  >::type*>(&v), line_break);}
 template <> __device__ __host__ inline void print_bin<float >(const float  v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<float >::type*>(&v), line_break);}
+template <> __device__ __host__ inline void print_bin<double>(const double v, const bool line_break) {print_bin(*reinterpret_cast<const typename bitstring_t<double>::type*>(&v), line_break);}
 } // namespace fp
 } // namespace debug
 } // namespace cutf
