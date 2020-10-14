@@ -7,13 +7,13 @@ cutf::debug::matrix::*
 
 - `print_matrix`
 
-## fp (floating point)
+## print
 ```cpp
-cutf::debug::fp::*
+cutf::debug::print::*
 ```
 
-- `print_bin` : This function prints bitstring of an input floating point
-- `print_hex` : This function prints hex-code of an input floating point
+- `print_bin` : This function prints bitstring of an input variable
+- `print_hex` : This function prints hex-code of an input variable
 
 ### Supported types
 - Integer : `uint8_t`, `uint16_t`, `uint32_t`, `uint64_t`
