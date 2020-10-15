@@ -1,6 +1,7 @@
 #ifndef __CUTF_EXPERIMENTAL_FP_HPP__
 #define __CUTF_EXPERIMENTAL_FP_HPP__
 #include "../macro.hpp"
+#include "../debug/fp.hpp"
 #include <cuda_fp16.h>
 #include <cstdint>
 
@@ -53,6 +54,27 @@ CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uin
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<T>::type reinterpret_as_fp(const T bs) {
 	return detail::reinterpret_medium<typename same_size_fp<T>::type, T>{.bs = bs}.fp;
+}
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type mask_mantissa(const T fp) {
+	const auto uint = cutf::experimental::fp::reinterpret_as_uint(fp);
+	const auto mask = (decltype(uint)(1) << get_mantissa_size<T>()) - 1;
+	return uint & mask;
+}
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type mask_exponent(const T fp) {
+	const auto uint = cutf::experimental::fp::reinterpret_as_uint(fp);
+	const auto mask = ((decltype(uint)(1) << get_exponent_size<T>()) - 1) << cutf::experimental::fp::get_mantissa_size<T>();
+	return uint & mask;
+}
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type mask_sign(const T fp) {
+	const auto uint = cutf::experimental::fp::reinterpret_as_uint(fp);
+	const auto mask = decltype(uint)(1) << (sizeof(decltype(uint)) * 8 - 1);
+	return uint & mask;
 }
 } // namespace fp
 } // namespace experimental

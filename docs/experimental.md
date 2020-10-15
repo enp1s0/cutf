@@ -33,3 +33,19 @@ cutf::experimental::exponent::min_exponent<T>(T v, int min_exponent)
 ```
 
 This function returns zero if the exponent of `v` id smaller than `min_exponent` else `v`.
+
+## mask_XXXX
+```cpp
+cutf::experimental::fp::mask_mantissa(T fp)
+cutf::experimental::fp::mask_exponent(T fp)
+cutf::experimental::fp::mask_sign(T fp)
+```
+
+These functions get each part of floating point values like below.
+```
+Float (-)
+[original] 10111110100001110101001110011101
+[sign    ] 10000000000000000000000000000000
+[exponent] 00111110100000000000000000000000
+[mantissa] 00000000000001110101001110011101
+```
