@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
-TARGETS=min_exponent.test
+TARGETS=min_exponent.test fp_mask.test
 
 all: $(TARGETS)
 
