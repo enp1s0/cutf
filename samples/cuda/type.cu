@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cutf/type.hpp>
+#include <cutf/debug/type.hpp>
 
 template <class T>
 __global__ void print_typename_test() {
-	const auto type_string = cutf::type::get_type_name<T>();
+	const auto type_string = cutf::debug::type::get_type_name<T>();
 	printf("%s\n", type_string);
 }
 

@@ -2,6 +2,7 @@
 #include <cutf/memory.hpp>
 #include <cutf/math.hpp>
 #include <cutf/type.hpp>
+#include <cutf/debug/type.hpp>
 
 constexpr std::size_t N = 1 << 4;
 constexpr std::size_t threads_per_block = 1 << 7;
@@ -16,7 +17,7 @@ __global__ void abs_kernel(T* const m, const std::size_t N){
 
 template <class T>
 void test_abs(const std::size_t N){
-	std::cout<<"# "<<cutf::type::get_type_name<T>()<<" test --"<<std::endl;
+	std::cout<<"# "<<cutf::debug::type::get_type_name<T>()<<" test --"<<std::endl;
 	auto dM = cutf::memory::get_device_unique_ptr<T>(N);
 	auto hM = cutf::memory::get_host_unique_ptr<T>(N);
 	std::cout<<"m = ";
@@ -40,7 +41,7 @@ void test_abs(const std::size_t N){
 
 template <>
 void test_abs<half2>(const std::size_t N){
-	std::cout<<"# "<<cutf::type::get_type_name<half2>()<<" test --"<<std::endl;
+	std::cout<<"# "<<cutf::debug::type::get_type_name<half2>()<<" test --"<<std::endl;
 	auto dM = cutf::memory::get_device_unique_ptr<half2>(N);
 	auto hM = cutf::memory::get_host_unique_ptr<half2>(N);
 	std::cout<<"m = ";
