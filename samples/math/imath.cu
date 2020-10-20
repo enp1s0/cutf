@@ -9,14 +9,14 @@ constexpr std::size_t threads_per_block = 1 << 7;
 namespace{
 template <class T>
 __global__ void abs_kernel(T* const m, const std::size_t N){
-	auto tid = blockIdx.x * blockDim.x + threadIdx.x;
+	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if(tid >= N) return;
 	m[tid] = cutf::math::abs(*(m + tid));
 }
 
 template <class T>
 __global__ void maxmin_kernel(T* const max_array, T* const min_array, const T* const m0_array, const T* const m1_array, const std::size_t N){
-	auto tid = blockIdx.x * blockDim.x + threadIdx.x;
+	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if(tid >= N) return;
 
 	const auto a = *(m0_array + tid), b = *(m1_array + tid);
