@@ -1,6 +1,6 @@
 # CUDA Functions
 ## math
-CUDA built-in unary math functions. (SFU)
+CUDA built-in unary math functions.
 ```cpp
 // x : half, half2, float, double
 cutf::math::[operation](x);
@@ -29,11 +29,27 @@ cutf::math::[operation](x);
 |:--------|:------------|
 |sign|`if` $`x > 0`$ `then` $`1`$ `else` $`-1`$|
 
-### horizontal operators of `half2`
+### horizontal operators for `half2`
 |Operation|
 |:--------|
 |add      |
 |mul      |
+|max      |
+|min      |
+
+### SIMD functions for half2
+|Operation|
+|:--------|
+|max      |
+|min      |
+
+Before Ampare architecture there is no `max` and `min` function for `half2`.
+These functions are implemented with `__byte_perm` built function.
+
+### math functions for integer
+|Operation|
+|:--------|
+|abs      |
 |max      |
 |min      |
 
@@ -47,7 +63,7 @@ cutf::type::rcast<type, rounding>(x);
 
 |Cast| description |
 |:--------|:------------|
-|cast|`half`,`float`,`double` casts each other|
+|cast|`half`,`float`,`double`,`tf32` casts each other|
 |reinterpret|reinterpret cast|
 |rcast|rounding cast|
 
@@ -79,3 +95,36 @@ cutf::memory::copy(dst_ptr, src_ptr, N);
 |`cutf::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
 
 All functions whould throw runtime exception if anything should happen.
+
+## device
+```cpp
+CUTF_CHECK_ERROR(cutf::device::use_device(
+	device_id,
+	[]() {
+		cudaMalloc(...);
+	}));
+```
+
+| Function | description |
+|:--------------|:------------|
+|`cutf::device::get_properties_vector`|Getting the `std::vector` of `cudaDeviceProp`|
+|`cutf::device::get_num_devices`|Getting the number of devices|
+|`cutf::device::use_device`|Executing lambda function on a specified device|
+|`cutf::device::get_device`|Getting device ID|
+|`cutf::device::set_device`|Setting device ID|
+
+## thread
+```cpp
+const auto lane_id = cutf::thread::get_lane_id();
+const auto warp_id = cutf::thread::get_warp_id();
+```
+
+`lane_id` means an unique id for a thread within a warp and `warp_id` means an unique id for a warp within a thread-block.
+Thus when you lauch threads with 1D thread block,
+- `warp_id` equals to `threadIdx.x / 32`
+- `lane_id` equals to `threadIdx.x % 32`
+
+
+.
+
+This functions get these values from PTX predefines `%warpid` and `%laneid`.

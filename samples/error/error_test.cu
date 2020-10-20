@@ -3,5 +3,5 @@
 #include <cutf/error.hpp>
 
 int main(){
-	CUTF_HANDLE_ERROR_M(cudaErrorInvalidValue, "Here :)");
+	CUTF_CHECK_ERROR_M(cudaErrorInvalidValue, "Here :)");
 }

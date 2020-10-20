@@ -8,11 +8,11 @@
 cutf is a tiny CUDA template library.
 
 - header file only
-- at least C++11
+- at least C++14
 
 ## Development
 - release/devel : [GitLab momo86.net - mutsuki/cutf](https://gitlab.momo86.net/mutsuki/cutf)
-- release : [GitHub - gonmoec/cutf](https://github.com/gonmoec/cutf)
+- release : [GitHub - enp1s0/cutf](https://github.com/enp1s0/cutf)
 
 ## Example
 ```cpp
@@ -39,7 +39,7 @@ int main(){
 
 	kernel_example<T, N><<<(N+15)/16,16>>>(out.get(), in.get());
 
-	CUTF_HANDLE_ERROR(cutf::memory::copy(h_out.get(), out.get(), N));
+	CUTF_CHECK_ERROR(cutf::memory::copy(h_out.get(), out.get(), N));
 }
 ```
 
@@ -58,6 +58,7 @@ cutf
 ├─ cublas
 ├─ curand
 ├─ nvrtc
+├─ thread
 └─ error
 ```
 
@@ -72,6 +73,12 @@ cutf
 
 ## NVRTC Functions
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
+
+## Debug functions
+[cutf Debug Functions Reference](./docs/debug.md)
+
+## Experimental  functions
+[cutf Experimental Functions Reference](./docs/experimental.md)
 
 ## License
 Copyright (c) 2018 - 2019 tsuki (enp1s0)  

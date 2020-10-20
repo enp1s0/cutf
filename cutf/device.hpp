@@ -39,6 +39,16 @@ inline cudaError_t use_device(const int device_id, const std::function<void(void
 
 	return cudaSuccess;
 }
+
+inline int get_device_id() {
+	int device_id;
+	cudaGetDevice(&device_id);
+	return device_id;
+}
+
+inline void set_device_id(const int device_id) {
+	cudaSetDevice(device_id);
+}
 } // device
 } // cutf
 

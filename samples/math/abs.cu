@@ -9,7 +9,7 @@ constexpr std::size_t threads_per_block = 1 << 7;
 namespace{
 template <class T>
 __global__ void abs_kernel(T* const m, const std::size_t N){
-	auto tid = blockIdx.x * blockDim.x + threadIdx.x;
+	const auto tid = blockIdx.x * blockDim.x + threadIdx.x;
 	if(tid >= N) return;
 	m[tid] = cutf::math::abs(*(m + tid));
 }

@@ -15,7 +15,7 @@ __global__ void kernel(float *a, float *b){
 	a[tid] = b[tid];
 }
 )";
-	CUTF_HANDLE_ERROR(cuInit(0));
+	CUTF_CHECK_ERROR(cuInit(0));
 	auto cu_context = cutf::cu::get_context_unique_ptr();
 	cutf::cu::create_context(cu_context.get(), 0);
 	auto cu_module = cutf::cu::get_module_unique_ptr();
