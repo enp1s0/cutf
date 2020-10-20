@@ -1,6 +1,6 @@
 #ifndef __CUTF_DEBUG_RTPE_HPP__
 #define __CUTF_DEBUG_RTPE_HPP__
-#include "macro.hpp"
+#include "../macro.hpp"
 
 namespace cutf {
 namespace debug {
