@@ -162,22 +162,6 @@ DATA_TYPE_DEF(short, C, 8I);
 DATA_TYPE_DEF(unsigned char, R, 8U);
 DATA_TYPE_DEF(unsigned short, C, 8U);
 // }}}
-
-// name string
-template <class T>
-CUTF_DEVICE_HOST_FUNC inline const char* get_type_name();
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<double >() {return "double";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<float  >() {return "float";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__half >() {return "half/(u)int16_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__half2>() {return "half2";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<long long>() {return "uint64_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<uint64_t>() {return "uint64_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<uint32_t>() {return "uint32_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<uint16_t>() {return "uint8_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int64_t>() {return "int64_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int32_t>() {return "int32_t";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int16_t>() {return "int8_t";}
-
 } // namespace type	
 } // cutf
 
