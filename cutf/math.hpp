@@ -74,6 +74,9 @@ template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
     // This reinterpretation can't avoid using `reinterpret_cast` because `__half2` is not a standard numeric type but struct.
     return *reinterpret_cast<const __half2*>(&abs_a);
 }
+template <> CUTF_DEVICE_FUNC inline int abs<int>(const int a){return ::abs(a);}
+template <> CUTF_DEVICE_FUNC inline long int abs<long int>(const long int a){return labs(a);}
+template <> CUTF_DEVICE_FUNC inline long long int abs<long long int>(const long long int a){return llabs(a);}
 
 // get sign
 template <class T> CUTF_DEVICE_FUNC inline T sign(const T v);
@@ -146,6 +149,40 @@ CUTF_DEVICE_FUNC inline __half max(const __half a, const __half b) {
 }
 CUTF_DEVICE_FUNC inline float max(const float a, const float b) {return fmaxf(a, b);};
 CUTF_DEVICE_FUNC inline double max(const double a, const double b) {return fmax(a, b);};
+
+// For math functions for integers
+#define CUTF_MATH_IMAX(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC type_r max(const type_a a, const type_b b) {return ::bfunc(a, b);}
+CUTF_MATH_IMAX(max   , unsigned long long int, unsigned long long int, unsigned long long int);
+CUTF_MATH_IMAX(max   , unsigned long long int, long long int         , unsigned long long int);
+CUTF_MATH_IMAX(max   , unsigned long long int, unsigned long long int, long long int         );
+CUTF_MATH_IMAX(max   , long long int         , long long int         , long long int         );
+
+CUTF_MATH_IMAX(max   , unsigned long int     , unsigned long int     , unsigned long int     );
+CUTF_MATH_IMAX(max   , unsigned long int     , unsigned long int     , long int              );
+CUTF_MATH_IMAX(max   , unsigned long int     , long int              , unsigned long int     );
+CUTF_MATH_IMAX(max   , long int              , long int              , long int              );
+
+CUTF_MATH_IMAX(umax  , unsigned int          , unsigned int          , unsigned int          );
+CUTF_MATH_IMAX(max   , unsigned int          , unsigned int          , int                   );
+CUTF_MATH_IMAX(max   , unsigned int          , int                   , unsigned int          );
+CUTF_MATH_IMAX(max   , int                   , int                   , int                   );
+
+#define CUTF_MATH_IMIN(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC type_r min(const type_a a, const type_b b) {return ::bfunc(a, b);}
+CUTF_MATH_IMIN(min   , unsigned long long int, unsigned long long int, unsigned long long int);
+CUTF_MATH_IMIN(min   , unsigned long long int, long long int         , unsigned long long int);
+CUTF_MATH_IMIN(min   , unsigned long long int, unsigned long long int, long long int         );
+CUTF_MATH_IMIN(min   , long long int         , long long int         , long long int         );
+
+CUTF_MATH_IMIN(min   , unsigned long int     , unsigned long int     , unsigned long int     );
+CUTF_MATH_IMIN(min   , unsigned long int     , unsigned long int     , long int              );
+CUTF_MATH_IMIN(min   , unsigned long int     , long int              , unsigned long int     );
+CUTF_MATH_IMIN(min   , long int              , long int              , long int              );
+
+CUTF_MATH_IMIN(umin  , unsigned int          , unsigned int          , unsigned int          );
+CUTF_MATH_IMIN(min   , unsigned int          , unsigned int          , int                   );
+CUTF_MATH_IMIN(min   , unsigned int          , int                   , unsigned int          );
+CUTF_MATH_IMIN(min   , int                   , int                   , int                   );
+
 
 // min
 CUTF_DEVICE_FUNC inline __half2 min(const __half2 a, const __half2 b) {
