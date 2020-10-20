@@ -1,6 +1,6 @@
 # CUDA Functions
 ## math
-CUDA built-in unary math functions. (SFU)
+CUDA built-in unary math functions.
 ```cpp
 // x : half, half2, float, double
 cutf::math::[operation](x);
@@ -45,6 +45,13 @@ cutf::math::[operation](x);
 
 Before Ampare architecture there is no `max` and `min` function for `half2`.
 These functions are implemented with `__byte_perm` built function.
+
+### math functions for integer
+|Operation|
+|:--------|
+|abs      |
+|max      |
+|min      |
 
 ## type
 ```cpp
