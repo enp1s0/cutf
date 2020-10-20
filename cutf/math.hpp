@@ -197,6 +197,44 @@ inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return __float2half(std::ma
 inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return __float2half(std::min(__half2float(a.x), __half2float(a.y)));}
 #endif
 } // namespace horizontal
+
+// math functions for integer
+#define CUTF_MATH_IABS(bfunc, type) CUTF_DEVICE_FUNC type abs(const type a) {return bfunc(a);}
+CUTF_MATH_IABS(abs  , int);
+CUTF_MATH_IABS(labs , long int);
+CUTF_MATH_IABS(llabs, long long int);
+
+#define CUTF_MATH_IMAX(bfunc, type_a, type_b) CUTF_DEVICE_FUNC type max(const type_a a, const type_b b) {return bfunc(a, b);}
+CUTF_MATH_IMAX(llmax , long long int, long long int);
+CUTF_MATH_IMAX(max   , long long int, unsigned long long int);
+CUTF_MATH_IMAX(max   , unsigned long long int, long long int);
+CUTF_MATH_IMAX(max   , unsigned long long int, unsigned long long int);
+CUTF_MATH_IMAX(max   , long long int, long long int);
+CUTF_MATH_IMAX(max   , unsigned long int, long int);
+CUTF_MATH_IMAX(max   , long int, unsigned long int);
+CUTF_MATH_IMAX(max   , long int, long int);
+CUTF_MATH_IMAX(max   , unsigned int, int);
+CUTF_MATH_IMAX(max   , int, unsigned int);
+CUTF_MATH_IMAX(max   , int, int);
+CUTF_MATH_IMAX(ullmax, unsigned long long int, unsigned long long int);
+CUTF_MATH_IMAX(umax  , unsigned int, unsigned int);
+
+#define CUTF_MATH_IMIN(bfunc, type_a, type_b) CUTF_DEVICE_FUNC type min(const type_a a, const type_b b) {return bfunc(a, b);}
+CUTF_MATH_IMIN(llmin , long long int, long long int);
+CUTF_MATH_IMIN(min   , long long int, unsigned long long int);
+CUTF_MATH_IMIN(min   , unsigned long long int, long long int);
+CUTF_MATH_IMIN(min   , unsigned long long int, unsigned long long int);
+CUTF_MATH_IMIN(min   , long long int, long long int);
+CUTF_MATH_IMIN(min   , unsigned long int, long int);
+CUTF_MATH_IMIN(min   , long int, unsigned long int);
+CUTF_MATH_IMIN(min   , long int, long int);
+CUTF_MATH_IMIN(min   , unsigned int, int);
+CUTF_MATH_IMIN(min   , int, unsigned int);
+CUTF_MATH_IMIN(min   , int, int);
+CUTF_MATH_IMIN(ullmin, unsigned long long int, unsigned long long int);
+CUTF_MATH_IMIN(umin  , unsigned int, unsigned int);
+
+
 } // math
 } // cutf
 #endif // __CUTF_MATH_CUH__
