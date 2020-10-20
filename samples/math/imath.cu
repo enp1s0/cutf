@@ -51,7 +51,7 @@ void test_abs(const std::size_t N){
 
 template <class T>
 void test_maxmin(const std::size_t N){
-	std::cout<<"# "<<cutf::type::get_type_name<T>()<<" test --"<<std::endl;
+	std::cout<<"# "<<cutf::debug::type::get_type_name<T>()<<" test --"<<std::endl;
 	auto dM0 = cutf::memory::get_device_unique_ptr<T>(N);
 	auto dM1 = cutf::memory::get_device_unique_ptr<T>(N);
 	auto hM0 = cutf::memory::get_host_unique_ptr<T>(N);
