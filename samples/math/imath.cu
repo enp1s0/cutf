@@ -2,6 +2,7 @@
 #include <cutf/memory.hpp>
 #include <cutf/math.hpp>
 #include <cutf/type.hpp>
+#include <cutf/debug/type.hpp>
 
 constexpr std::size_t N = 1 << 4;
 constexpr std::size_t threads_per_block = 1 << 7;
@@ -26,7 +27,7 @@ __global__ void maxmin_kernel(T* const max_array, T* const min_array, const T* c
 
 template <class T>
 void test_abs(const std::size_t N){
-	std::cout<<"# "<<cutf::type::get_type_name<T>()<<" test --"<<std::endl;
+	std::cout<<"# "<<cutf::debug::type::get_type_name<T>()<<" test --"<<std::endl;
 	auto dM = cutf::memory::get_device_unique_ptr<T>(N);
 	auto hM = cutf::memory::get_host_unique_ptr<T>(N);
 	std::cout<<"m = ";

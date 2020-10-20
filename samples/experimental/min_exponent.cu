@@ -3,6 +3,7 @@
 #include <cutf/memory.hpp>
 #include <cutf/type.hpp>
 #include <cutf/error.hpp>
+#include <cutf/debug/type.hpp>
 #include <cutf/experimental/exponent.hpp>
 
 constexpr std::size_t N = 1lu << 20;
@@ -15,12 +16,6 @@ __global__ void force_underflow_kernel(T* const dst_ptr, const T* const src_ptr,
 
 	dst_ptr[tid] = cutf::experimental::exponent::min_exponent(src_ptr[tid], min_exponent);
 }
-
-template <class T>
-std::string get_type_name_string();
-template <> std::string get_type_name_string<half  >() {return "half";}
-template <> std::string get_type_name_string<float >() {return "float";}
-template <> std::string get_type_name_string<double>() {return "double";}
 
 template <class T, int min_exponent>
 void test_force_underflow() {
@@ -53,7 +48,7 @@ void test_force_underflow() {
 		}
 	}
 
-	std::printf("type = %10s, min_exponent = %5d [%10lu / %10lu (%3.2f%%)]\n", get_type_name_string<T>().c_str(), min_exponent, error_count, N, static_cast<double>(error_count) / N * 100.0);
+	std::printf("type = %10s, min_exponent = %5d [%10lu / %10lu (%3.2f%%)]\n", cutf::debug::type::get_type_name<T>(), min_exponent, error_count, N, static_cast<double>(error_count) / N * 100.0);
 }
 
 int main() {
