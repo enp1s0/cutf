@@ -1,6 +1,6 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -Xcompiler="-Wall"
-TARGETS=abs.test maxmin.test horizontal.test
+NVCCFLAGS=-std=c++14 -arch=sm_75 -I../../ -Xcompiler="-Wall"
+TARGETS=abs.test maxmin.test horizontal.test imath.test
 
 all: $(TARGETS)
 
