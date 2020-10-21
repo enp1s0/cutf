@@ -56,6 +56,11 @@ CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<T>::type reinterpret_as_fp(co
 	return detail::reinterpret_medium<typename same_size_fp<T>::type, T>{.bs = bs}.fp;
 }
 
+template <>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<uint16_t>::type reinterpret_as_fp<uint16_t>(const uint16_t bs) {
+	return *reinterpret_cast<const half*>(&bs);
+}
+
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type mask_mantissa(const T fp) {
 	const auto uint = cutf::experimental::fp::reinterpret_as_uint(fp);
