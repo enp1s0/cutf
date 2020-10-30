@@ -4,7 +4,6 @@
 #include <cutf/memory.hpp>
 #include <cutf/cuda.hpp>
 #include <cutf/nvrtc.hpp>
-#include <cutf/error.hpp>
 
 int main(){
 	const std::size_t N = 1 << 8;

@@ -2,7 +2,6 @@
 #include <cutf/cublas.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/error.hpp>
 
 using compute_t = float;
 const std::size_t N = 1 << 10;
