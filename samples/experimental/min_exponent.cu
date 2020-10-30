@@ -2,7 +2,6 @@
 #include <random>
 #include <cutf/memory.hpp>
 #include <cutf/type.hpp>
-#include <cutf/error.hpp>
 #include <cutf/debug/type.hpp>
 #include <cutf/experimental/exponent.hpp>
 

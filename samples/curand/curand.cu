@@ -1,6 +1,5 @@
 #include <cutf/curand.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/error.hpp>
 
 constexpr std::size_t N = 1lu << 10;
 

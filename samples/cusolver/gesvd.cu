@@ -3,7 +3,6 @@
 #include <cutf/cusolver.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/error.hpp>
 
 using compute_t = float;
 constexpr std::size_t M = 1 << 4;

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cutf/device.hpp>
 #include <cutf/memory.hpp>
-#include <cutf/error.hpp>
 #include <cutf/type.hpp>
 
 constexpr std::size_t N = 1 << 16;

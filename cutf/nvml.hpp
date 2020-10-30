@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 #include <nvml.h>
+#include "error.hpp"
 
 namespace cutf{
 namespace error{
