@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cuda_device_runtime_api.h>
 #include <cuda.h>
+#include "error.hpp"
 
 namespace cutf{
 namespace error{

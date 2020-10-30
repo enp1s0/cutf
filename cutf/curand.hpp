@@ -5,6 +5,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include "error.hpp"
 
 namespace cutf {
 namespace error {

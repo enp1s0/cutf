@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "cuda.hpp"
+#include "error.hpp"
 
 namespace cutf{
 namespace error{
