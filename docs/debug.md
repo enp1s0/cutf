@@ -33,3 +33,17 @@ Supported types are below.
 - Floating point : `half`, `float`, `double`
 
 .
+
+## fragment namespace
+```cpp
+cutf::debug::fragment::*
+```
+
+- `print_fragment` : This function prints each element of a fragment.
+
+### Example
+```cpp
+nvcuda::wmma::fragment<nvcuda::wmma::matrix_a, N, N, N, half, nvcuda::wmma::col_major> fragment;
+nvcuda::wmma::load_matrix_sync(fragment, mat, N);
+cutf::debug::fragment::print_fragment(fragment, "frag");
+```
