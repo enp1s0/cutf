@@ -2,8 +2,6 @@
 #define __CUTF_DEBUG_FP_HPP__
 #include <stdio.h>
 #include <cuda_fp16.h>
-
-#include <cuda_fp16.h>
 #include <cstdint>
 namespace cutf {
 namespace debug {
