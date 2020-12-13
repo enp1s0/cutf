@@ -7,7 +7,7 @@
 
 namespace cutf {
 namespace debug {
-namespace fragment {
+namespace print {
 template <class Use, int M, int N, int K, class T, class Layout>
 __device__ void print_fragment(const nvcuda::wmma::fragment<Use, M, N, K, T, Layout>& fragment, const char* const name = nullptr) {
 	if (name != nullptr && cutf::thread::get_lane_id() == 0) {
@@ -23,7 +23,7 @@ __device__ void print_fragment(const nvcuda::wmma::fragment<Use, M, N, K, T, Lay
 		__syncthreads();
 	}
 }
-} // namespace fragment
+} // namespace print
 } // namespace debug
 } // namespace cutf
 #endif

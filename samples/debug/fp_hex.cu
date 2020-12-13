@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cutf/debug/print.hpp>
+#include <cutf/debug/fp.hpp>
 
 int main(){
 	cutf::debug::print::print_bin(1.0f / 3.0f, true);

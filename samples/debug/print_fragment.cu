@@ -14,7 +14,7 @@ __global__ void print_fragment_kernel() {
 
 	__syncthreads();
 	if (lane_id == 0) {
-		cutf::debug::matrix::print_matrix(mat, N, N, N, "mat");
+		cutf::debug::print::print_matrix(mat, N, N, N, "mat");
 	}
 
 	__syncthreads();
@@ -22,7 +22,7 @@ __global__ void print_fragment_kernel() {
 	nvcuda::wmma::load_matrix_sync(fragment, mat, N);
 
 	__syncthreads();
-	cutf::debug::fragment::print_fragment(fragment, "frag");
+	cutf::debug::print::print_fragment(fragment, "frag");
 }
 
 int main() {
