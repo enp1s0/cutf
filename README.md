@@ -4,6 +4,11 @@
 # cutf - CUDA Template Functions
 *The library of the CUDA/C++ Otaku, by the CUDA/C++ Otaku(?), for the CUDA/C++ Otaku shall not perish from the earth.*
 
+**Warning!**
+
+This library is under developing.
+Destructive changes may occur.
+
 ## Introduction
 cutf is a tiny CUDA template library.
 
