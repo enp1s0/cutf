@@ -7,7 +7,7 @@
 
 namespace cutf {
 namespace debug {
-namespace matrix {
+namespace print {
 
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
@@ -44,7 +44,7 @@ CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, std::size_t m
 		printf("\n");
 	}
 }
-} // namespace matrix
+} // namespace print
 } // namespace debug
 } // namespace cutf
 
