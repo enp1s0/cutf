@@ -59,16 +59,17 @@ inline cudaError_t copy_async(T* const dst, const T* const src, const std::size_
 }
 
 // asyn malloc/free
+// NOTE: These functions are only available in CUDA >= 11.2
 template <class T>
 inline T* malloc_async(const std::size_t count, const cudaStream_t stream) {
 	T* ptr;
-	cudaMallocAsync(&ptr, sizeof(T) * count);
+	cudaMallocAsync(&ptr, sizeof(T) * count, stream);
 	return ptr;
 }
 
 template <class T>
 inline cudaError_t free_async(T* const ptr, const cudaStream_t stream) {
-	return cudaFreeAsync(ptr);
+	return cudaFreeAsync(ptr, stream);
 }
 
 } // memory
