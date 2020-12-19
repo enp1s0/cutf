@@ -94,7 +94,15 @@ cutf::memory::copy(dst_ptr, src_ptr, N);
 |`cutf::memory::get_host_unique_ptr`|`cudaMallocHost` and returns `std::unique_ptr`|
 |`cutf::memory::copy`|`cudaMemcpy` with `cudaMemcpyDefault`|
 
-All functions whould throw runtime exception if anything should happen.
+All functions would throw runtime exception if anything should happen.
+
+### Async malloc/free
+| Function | description |
+|:--------------|:------------|
+|`cutf::memory::malloc_async`|`cudaMallocAsync` and returns raw pointer|
+|`cutf::memory::free_async`|`cudaFreeAsync` and returns `cudaError_t`|
+
+These functions are only available in CUDA >= 11.2.
 
 ## device
 ```cpp
