@@ -1,6 +1,6 @@
 NVCC=nvcc
 NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lnvrtc -lcuda
-TARGETS=async_copy.test
+TARGETS=async_copy.test async_malloc.test
 
 all: $(TARGETS)
 
