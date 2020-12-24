@@ -1,7 +1,6 @@
 #ifndef __CUTF_EXPERIMENTAL_FP_HPP__
 #define __CUTF_EXPERIMENTAL_FP_HPP__
 #include "../macro.hpp"
-#include "../debug/fp.hpp"
 #include <cuda_fp16.h>
 #include <cstdint>
 
