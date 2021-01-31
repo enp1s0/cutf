@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lnvrtc -lcuda -lnvidia-ml
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lnvrtc -lcuda -lnvidia-ml
 TARGETS=nvml.test
 
 all: $(TARGETS)

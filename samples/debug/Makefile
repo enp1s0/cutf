@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_86 -I../../ 
+NVCCFLAGS=-std=c++14 -arch=sm_86 -I../../include
 TARGETS=fp_hex.test print_fragment.test
 
 all: $(TARGETS)

@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lnvrtc -lcuda
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lnvrtc -lcuda
 TARGETS=nvrtc.test
 
 all: $(TARGETS)
