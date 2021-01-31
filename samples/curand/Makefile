@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ -lcurand
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lcurand
 TARGETS=curand.test
 
 all: $(TARGETS)

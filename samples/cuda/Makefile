@@ -1,5 +1,5 @@
 NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include
 TARGETS=cos.test type.test
 
 all: $(TARGETS)
