@@ -21,6 +21,9 @@ cutf is a tiny CUDA template library.
 
 ## Example
 ```cpp
+// sample.cu
+// Compile:
+// nvcc -I/path/to/cutf/include/ sample.cu ...
 #include <cutf/math.hpp>
 #include <cutf/type.hpp>
 #include <cutf/error.hpp>
