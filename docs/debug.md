@@ -29,10 +29,12 @@ Supported types are below.
 
 ### matrix (debug/matrix.hpp)
 - `print_matrix` : This function prints a matrix.
+- `print_numpy_matrix` : This function prints a matrix as a numpy matrix format
 
 #### Example
 ```cpp
 cutf::debug::print::print_matrix(mat_ptr, M, N, ldm, "mat_a");
+cutf::debug::print::print_numpy_matrix(mat_ptr, M, N, ldm, "mat_a");
 ```
 
 ### fragment (debug/fragment.hpp)
