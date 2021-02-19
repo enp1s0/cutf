@@ -40,11 +40,9 @@ struct cusolver_sp_deleter{
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_cusolver_sp_unique_ptr(const int device_id = 0){
-	cutf::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
+inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_cusolver_sp_unique_ptr(){
 	cusolverSpHandle_t *handle = new cusolverSpHandle_t;
 	cusolverSpCreate(handle);
-	cutf::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
 	return std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter>{handle};
 }
 struct cusolver_dn_deleter{
@@ -53,11 +51,9 @@ struct cusolver_dn_deleter{
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_unique_ptr(const int device_id = 0){
-	cutf::error::check(cudaSetDevice(device_id), __FILE__, __LINE__, __func__);
+inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_unique_ptr(){
 	cusolverDnHandle_t *handle = new cusolverDnHandle_t;
 	cusolverDnCreate(handle);
-	cutf::error::check(cudaSetDevice(0), __FILE__, __LINE__, __func__);
 	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
 }
 
