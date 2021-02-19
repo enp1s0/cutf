@@ -46,3 +46,7 @@ nvcuda::wmma::fragment<nvcuda::wmma::matrix_a, N, N, N, half, nvcuda::wmma::col_
 nvcuda::wmma::load_matrix_sync(fragment, mat, N);
 cutf::debug::print::print_fragment(fragment, "frag");
 ```
+
+## clock_breakdown
+
+See [clock_breakdown](clock_breakdown).
