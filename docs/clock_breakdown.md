@@ -19,14 +19,14 @@ __global__ void kernel(float* const ptr) {
 }
 ```
 
-### CUTF_CLOCK_BREAKDOWN_INIT
+### CUTF_CLOCK_BREAKDOWN_INIT(num_records)
 
 This macro declares an array for timestamps.
 
-### CUTF_CLOCK_BREAKDOWN_RECORD
+### CUTF_CLOCK_BREAKDOWN_RECORD(index)
 
 This macro sets clock on an element of the array.
 
-### CUTF_CLOCK_BREAKDOWN_DURATION
+### CUTF_CLOCK_BREAKDOWN_DURATION(start_index, end_index)
 
 This macro calculates the duration between two timestamps given by array indices.
