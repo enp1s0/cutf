@@ -1,5 +1,5 @@
-#ifndef __CUTF_DEVICE_HPP__
-#define __CUTF_DEVICE_HPP__
+#ifndef __CUTF_DRIVER_HPP__
+#define __CUTF_DRIVER_HPP__
 
 #include <functional>
 #include <vector>
@@ -106,4 +106,4 @@ inline void create_context(CUcontext* cucontext, const unsigned device_id) {
 
 } // cutf
 
-#endif // __CUTF_DEVICE_HPP__
+#endif // __CUTF_DRIVER_HPP__
