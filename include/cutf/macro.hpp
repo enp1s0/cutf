@@ -13,4 +13,7 @@
 #define CUTF_DEVICE_FUNC
 #endif
 
+// This macro prevents a warning "Unused variable"
+#define CUTF_UNUSED(a) do {(void)(a);} while (0)
+
 #endif // __CUTF_MACRO_HPP__
