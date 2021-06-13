@@ -14,6 +14,8 @@ __device__ inline unsigned get_warp_id() {
 	asm(R"({mov.s32 %0, %warpid;})":"=r"(warp_id));
 	return warp_id;
 }
+
+constexpr unsigned warp_size_const = 32;
 } // namespace threads
 } // namespace cutf
 #endif
