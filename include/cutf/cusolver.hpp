@@ -91,6 +91,18 @@ POTRI(double, D);
 POTRI(cuComplex, C);
 POTRI(cuDoubleComplex, Z);
 
+#define GETRF(type_name, short_type_name)\
+	inline cusolverStatus_t getrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name *Workspace, int *devIpiv, int *devInfo) {\
+		return cusolverDn##short_type_name##getrf(handle, m, n, A, lda, Workspace, devIpiv, devInfo); \
+	} \
+	inline cusolverStatus_t getrf_buffer_size(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##getrf_bufferSize(handle, m, n, A, lda, Lwork);\
+	}
+GETRF(float, S);
+GETRF(double, D);
+GETRF(cuComplex, C);
+GETRF(cuDoubleComplex, Z);
+
 #define GEQRF(type_name, short_type_name)\
 	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
