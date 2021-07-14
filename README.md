@@ -56,8 +56,13 @@ int main(){
 cutf 
 ├─ cublas
 ├─ cuda
+├─ debug
+│  ├─ fp
+│  └─ print
 ├─ device
 ├─ error
+├─ experimental
+│  └─ fp
 ├─ math
 ├─ memory
 ├─ type
@@ -65,6 +70,7 @@ cutf
 ├─ driver
 ├─ cublas
 ├─ curand
+├─ cusolver
 ├─ nvrtc
 ├─ thread
 └─ error
