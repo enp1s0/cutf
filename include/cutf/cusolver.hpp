@@ -58,6 +58,9 @@ inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_
 }
 
 namespace dn {
+// --------------------------------------------------------------------------
+// Choresky Factorization
+// --------------------------------------------------------------------------
 #define POTRF(type_name, short_type_name)\
 	inline cusolverStatus_t potrf(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##potrf(handle, uplo, n, A, lda, Workspace, Lwork, devInfo); \
@@ -91,6 +94,9 @@ POTRI(double, D);
 POTRI(cuComplex, C);
 POTRI(cuDoubleComplex, Z);
 
+// --------------------------------------------------------------------------
+// LU Factorization
+// --------------------------------------------------------------------------
 #define GETRF(type_name, short_type_name)\
 	inline cusolverStatus_t getrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name *Workspace, int *devIpiv, int *devInfo) {\
 		return cusolverDn##short_type_name##getrf(handle, m, n, A, lda, Workspace, devIpiv, devInfo); \
@@ -167,6 +173,9 @@ SYTRF(double, D);
 SYTRF(cuComplex, C);
 SYTRF(cuDoubleComplex, Z);
 
+// --------------------------------------------------------------------------
+// SVD
+// --------------------------------------------------------------------------
 template <class T>
 inline cusolverStatus_t gesvd_buffer_size(cusolverDnHandle_t handle, int m, int n, int *Lwork);
 #define GESVD(type_name, s_type_name, short_type_name)\
