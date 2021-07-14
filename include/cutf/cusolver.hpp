@@ -79,6 +79,18 @@ POTRS(double, D);
 POTRS(cuComplex, C);
 POTRS(cuDoubleComplex, Z);
 
+#define POTRI(type_name, short_type_name)\
+	inline cusolverStatus_t potri(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, type_name *Workspace, int Lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##potri(handle, uplo, n, A, lda, Workspace, Lwork, devInfo); \
+	} \
+	inline cusolverStatus_t potri_buffer_size(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##potri_bufferSize(handle, uplo, n, A, lda, Lwork);\
+	}
+POTRI(float, S);
+POTRI(double, D);
+POTRI(cuComplex, C);
+POTRI(cuDoubleComplex, Z);
+
 #define GEQRF(type_name, short_type_name)\
 	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
