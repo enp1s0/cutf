@@ -56,8 +56,13 @@ int main(){
 cutf 
 ├─ cublas
 ├─ cuda
+├─ debug
+│  ├─ fp
+│  └─ print
 ├─ device
 ├─ error
+├─ experimental
+│  └─ fp
 ├─ math
 ├─ memory
 ├─ type
@@ -65,6 +70,7 @@ cutf
 ├─ driver
 ├─ cublas
 ├─ curand
+├─ cusolver
 ├─ nvrtc
 ├─ thread
 └─ error
@@ -79,6 +85,9 @@ cutf
 ## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
 
+## cuSOLVER Functions
+[cutf cuSOLVER Functions Reference](./docs/cusolver.md)
+
 ## NVRTC Functions
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
 
@@ -89,6 +98,5 @@ cutf
 [cutf Experimental Functions Reference](./docs/experimental.md)
 
 ## License
-Copyright (c) 2018 - 2019 tsuki (enp1s0)  
+Copyright (c) 2018 - 2021 tsuki (enp1s0)
 Released under the MIT license  
-<img src="http://momo86.net/ipsolab.svg" width="120">

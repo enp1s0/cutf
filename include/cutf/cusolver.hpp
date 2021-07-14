@@ -58,6 +58,9 @@ inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_
 }
 
 namespace dn {
+// --------------------------------------------------------------------------
+// Choresky Factorization
+// --------------------------------------------------------------------------
 #define POTRF(type_name, short_type_name)\
 	inline cusolverStatus_t potrf(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##potrf(handle, uplo, n, A, lda, Workspace, Lwork, devInfo); \
@@ -79,6 +82,46 @@ POTRS(double, D);
 POTRS(cuComplex, C);
 POTRS(cuDoubleComplex, Z);
 
+#define POTRI(type_name, short_type_name)\
+	inline cusolverStatus_t potri(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, type_name *Workspace, int Lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##potri(handle, uplo, n, A, lda, Workspace, Lwork, devInfo); \
+	} \
+	inline cusolverStatus_t potri_buffer_size(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##potri_bufferSize(handle, uplo, n, A, lda, Lwork);\
+	}
+POTRI(float, S);
+POTRI(double, D);
+POTRI(cuComplex, C);
+POTRI(cuDoubleComplex, Z);
+
+// --------------------------------------------------------------------------
+// LU Factorization
+// --------------------------------------------------------------------------
+#define GETRF(type_name, short_type_name)\
+	inline cusolverStatus_t getrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name *Workspace, int *devIpiv, int *devInfo) {\
+		return cusolverDn##short_type_name##getrf(handle, m, n, A, lda, Workspace, devIpiv, devInfo); \
+	} \
+	inline cusolverStatus_t getrf_buffer_size(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##getrf_bufferSize(handle, m, n, A, lda, Lwork);\
+	}
+GETRF(float, S);
+GETRF(double, D);
+GETRF(cuComplex, C);
+GETRF(cuDoubleComplex, Z);
+
+#define GETRS(type_name, short_type_name)\
+	inline cusolverStatus_t getrs(cusolverDnHandle_t handle, cublasOperation_t trans, int n, int nrhs, const type_name *A, int lda, const int *devIpiv, type_name *B, int ldb, int *devInfo) {\
+		return cusolverDn##short_type_name##getrs(handle, trans, n, nrhs, A, lda, devIpiv, B, ldb, devInfo); \
+	}
+GETRS(float, S);
+GETRS(double, D);
+GETRS(cuComplex, C);
+GETRS(cuDoubleComplex, Z);
+
+
+// --------------------------------------------------------------------------
+// QR Factorization
+// --------------------------------------------------------------------------
 #define GEQRF(type_name, short_type_name)\
 	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
@@ -90,6 +133,18 @@ GEQRF(float, S);
 GEQRF(double, D);
 GEQRF(cuComplex, C);
 GEQRF(cuDoubleComplex, Z);
+
+#define MQR(type_name, short_type_name)\
+	inline cusolverStatus_t mqr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name* C, int ldc, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##mqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t mqr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, const type_name *A, int lda, const type_name* tau, const type_name *C, int ldc, int *lwork) {\
+		return cusolverDn##short_type_name##mqr_bufferSize(handle, side, trans, m, n, k, A, lda, tau, C, ldc, lwork);\
+	}
+MQR(float, Sor);
+MQR(double, Dor);
+MQR(cuComplex, Cun);
+MQR(cuDoubleComplex, Zun);
 
 #define GQR(type_name, short_type_name)\
 	inline cusolverStatus_t gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
@@ -103,6 +158,24 @@ GQR(double, Dor);
 GQR(cuComplex, Cun);
 GQR(cuDoubleComplex, Zun);
 
+// --------------------------------------------------------------------------
+// Bunch-Kaufman Factorization
+// --------------------------------------------------------------------------
+#define SYTRF(type_name, short_type_name)\
+	inline cusolverStatus_t sytrf(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, int *ipiv, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##sytrf(handle, uplo, n, A, lda, ipiv, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t sytrf_buffer_size(cusolverDnHandle_t handle, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##sytrf_bufferSize(handle, n, A, lda, Lwork);\
+	}
+SYTRF(float, S);
+SYTRF(double, D);
+SYTRF(cuComplex, C);
+SYTRF(cuDoubleComplex, Z);
+
+// --------------------------------------------------------------------------
+// SVD
+// --------------------------------------------------------------------------
 template <class T>
 inline cusolverStatus_t gesvd_buffer_size(cusolverDnHandle_t handle, int m, int n, int *Lwork);
 #define GESVD(type_name, s_type_name, short_type_name)\
