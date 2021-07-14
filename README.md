@@ -92,6 +92,5 @@ cutf
 [cutf Experimental Functions Reference](./docs/experimental.md)
 
 ## License
-Copyright (c) 2018 - 2019 tsuki (enp1s0)  
+Copyright (c) 2018 - 2021 tsuki (enp1s0)
 Released under the MIT license  
-<img src="http://momo86.net/ipsolab.svg" width="120">
