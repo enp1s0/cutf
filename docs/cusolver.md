@@ -81,4 +81,4 @@ int main(){
 
 
 ## Reference
-- [CUDA Toolkit Documentation](https://docs.nvidia.com/cuda/cublas/index.html)
+- [CUDA Toolkit Documentation](https://docs.nvidia.com/cuda/cusolver/index.html)
