@@ -112,6 +112,10 @@ GETRS(double, D);
 GETRS(cuComplex, C);
 GETRS(cuDoubleComplex, Z);
 
+
+// --------------------------------------------------------------------------
+// QR Factorization
+// --------------------------------------------------------------------------
 #define GEQRF(type_name, short_type_name)\
 	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
@@ -147,6 +151,21 @@ GQR(float, Sor);
 GQR(double, Dor);
 GQR(cuComplex, Cun);
 GQR(cuDoubleComplex, Zun);
+
+// --------------------------------------------------------------------------
+// Bunch-Kaufman Factorization
+// --------------------------------------------------------------------------
+#define SYTRF(type_name, short_type_name)\
+	inline cusolverStatus_t sytrf(cusolverDnHandle_t handle, cublasFillMode_t uplo, int n, type_name *A, int lda, int *ipiv, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##sytrf(handle, uplo, n, A, lda, ipiv, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t sytrf_buffer_size(cusolverDnHandle_t handle, int n, type_name *A, int lda, int *Lwork) {\
+		return cusolverDn##short_type_name##sytrf_bufferSize(handle, n, A, lda, Lwork);\
+	}
+SYTRF(float, S);
+SYTRF(double, D);
+SYTRF(cuComplex, C);
+SYTRF(cuDoubleComplex, Z);
 
 template <class T>
 inline cusolverStatus_t gesvd_buffer_size(cusolverDnHandle_t handle, int m, int n, int *Lwork);
