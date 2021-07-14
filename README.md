@@ -79,6 +79,9 @@ cutf
 ## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
 
+## cuSOLVER Functions
+[cutf cuSOLVER Functions Reference](./docs/cusolver.md)
+
 ## NVRTC Functions
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
 
