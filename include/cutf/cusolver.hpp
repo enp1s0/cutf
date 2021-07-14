@@ -103,6 +103,15 @@ GETRF(double, D);
 GETRF(cuComplex, C);
 GETRF(cuDoubleComplex, Z);
 
+#define GETRS(type_name, short_type_name)\
+	inline cusolverStatus_t getrs(cusolverDnHandle_t handle, cublasOperation_t trans, int n, int nrhs, const type_name *A, int lda, const int *devIpiv, type_name *B, int ldb, int *devInfo) {\
+		return cusolverDn##short_type_name##getrs(handle, trans, n, nrhs, A, lda, devIpiv, B, ldb, devInfo); \
+	}
+GETRS(float, S);
+GETRS(double, D);
+GETRS(cuComplex, C);
+GETRS(cuDoubleComplex, Z);
+
 #define GEQRF(type_name, short_type_name)\
 	inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, int m, int n, type_name *A, int lda, type_name* TAU, type_name *Workspace, int Lwork, int *devInfo) {\
 		return cusolverDn##short_type_name##geqrf(handle, m, n, A, lda, TAU, Workspace, Lwork, devInfo); \
