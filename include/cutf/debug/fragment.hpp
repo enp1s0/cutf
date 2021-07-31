@@ -16,7 +16,7 @@ __device__ void print_fragment(const nvcuda::wmma::fragment<Use, M, N, K, T, Lay
 	for (unsigned tid = 0; tid < warpSize; tid++) {
 		if (tid == cutf::thread::get_lane_id()) {
 			for (unsigned i = 0; i < fragment.num_elements; i++) {
-				printf("%e ", cutf::type::cast<float>(fragment.x[i]));
+				printf("%+e ", cutf::type::cast<float>(fragment.x[i]));
 			}
 			printf("\n");
 		}
