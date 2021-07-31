@@ -9,7 +9,7 @@ __global__ void print_fragment_kernel() {
 	const auto lane_id = cutf::thread::get_lane_id();
 
 	for (unsigned i = 0; i < N * N; i += warpSize) {
-		mat[i + lane_id] = cutf::type::cast<half>(static_cast<float>(i + lane_id));
+		mat[i + lane_id] = cutf::type::cast<half>(static_cast<float>(i + lane_id) - N * N / 2);
 	}
 
 	__syncthreads();
