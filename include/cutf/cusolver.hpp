@@ -35,42 +35,48 @@ inline void check(cusolverStatus_t error, const std::string filename, const std:
 } // error
 namespace cusolver{
 namespace sp {
-struct cusolver_sp_deleter{
+struct handle_deleter{
 	void operator()(cusolverSpHandle_t* handle){
 		cutf::error::check(cusolverSpDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_handle_unique_ptr(){
-	cusolverSpHandle_t *handle = new cusolverSpHandle_t;
+using handle_unique_ptr = std::unique_ptr<cusolverSpHandle_t, handle_deleter>;
+
+inline handle_unique_ptr get_handle_unique_ptr(){
+	auto *handle = new cusolverSpHandle_t;
 	cusolverSpCreate(handle);
-	return std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter>{handle};
+	return handle_unique_ptr{handle};
 }
 } // namespace sp
 
 namespace dn {
-struct cusolver_dn_deleter{
+struct handle_deleter{
 	void operator()(cusolverDnHandle_t* handle){
 		cutf::error::check(cusolverDnDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_handle_unique_ptr(){
-	cusolverDnHandle_t *handle = new cusolverDnHandle_t;
+using handle_unique_ptr = std::unique_ptr<cusolverDnHandle_t, handle_deleter>;
+
+inline handle_unique_ptr get_handle_unique_ptr(){
+	auto *handle = new cusolverDnHandle_t;
 	cusolverDnCreate(handle);
-	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
+	return handle_unique_ptr{handle};
 }
 
-struct cusolver_dn_params_deleter{
+struct params_deleter{
 	void operator()(cusolverDnParams_t* params){
 		cutf::error::check(cusolverDnDestroyParams(*params), __FILE__, __LINE__, __func__);
 		delete params;
 	}
 };
-inline std::unique_ptr<cusolverDnParams_t, cusolver_dn_params_deleter> get_params_unique_ptr(){
-	cusolverDnParams_t *params = new cusolverDnParams_t;
+using params_unique_ptr = std::unique_ptr<cusolverDnParams_t, params_deleter>;
+
+inline params_unique_ptr get_params_unique_ptr(){
+	auto *params = new cusolverDnParams_t;
 	cusolverDnCreateParams(params);
-	return std::unique_ptr<cusolverDnParams_t, cusolver_dn_params_deleter>{params};
+	return params_unique_ptr{params};
 }
 
 // --------------------------------------------------------------------------
