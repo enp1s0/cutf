@@ -47,6 +47,7 @@ inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_handle_uniqu
 	return std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter>{handle};
 }
 } // namespace sp
+
 namespace dn {
 struct cusolver_dn_deleter{
 	void operator()(cusolverDnHandle_t* handle){
@@ -58,6 +59,18 @@ inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_handle_uniqu
 	cusolverDnHandle_t *handle = new cusolverDnHandle_t;
 	cusolverDnCreate(handle);
 	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
+}
+
+struct cusolver_dn_params_deleter{
+	void operator()(cusolverDnParams_t* params){
+		cutf::error::check(cusolverDnDestroyParams(*params), __FILE__, __LINE__, __func__);
+		delete params;
+	}
+};
+inline std::unique_ptr<cusolverDnParams_t, cusolver_dn_params_deleter> get_params_unique_ptr(){
+	cusolverDnParams_t *params = new cusolverDnParams_t;
+	cusolverDnCreateParams(params);
+	return std::unique_ptr<cusolverDnParams_t, cusolver_dn_params_deleter>{params};
 }
 
 // --------------------------------------------------------------------------
