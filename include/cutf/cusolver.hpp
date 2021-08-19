@@ -34,30 +34,32 @@ inline void check(cusolverStatus_t error, const std::string filename, const std:
 }
 } // error
 namespace cusolver{
+namespace sp {
 struct cusolver_sp_deleter{
 	void operator()(cusolverSpHandle_t* handle){
 		cutf::error::check(cusolverSpDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_cusolver_sp_unique_ptr(){
+inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_handle_unique_ptr(){
 	cusolverSpHandle_t *handle = new cusolverSpHandle_t;
 	cusolverSpCreate(handle);
 	return std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter>{handle};
 }
+} // namespace sp
+namespace dn {
 struct cusolver_dn_deleter{
 	void operator()(cusolverDnHandle_t* handle){
 		cutf::error::check(cusolverDnDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_unique_ptr(){
+inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_handle_unique_ptr(){
 	cusolverDnHandle_t *handle = new cusolverDnHandle_t;
 	cusolverDnCreate(handle);
 	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
 }
 
-namespace dn {
 // --------------------------------------------------------------------------
 // Choresky Factorization
 // --------------------------------------------------------------------------
