@@ -12,7 +12,7 @@ __device__ inline uint32_t get_smem_ptr_uint(const void* const ptr) {
 
 template <unsigned Size>
 __device__ inline void cp_async(void* const smem, const void* const gmem) {
-#if __CUDA_ARCH__ >= 80
+#if __CUDA_ARCH__ >= 800
 	static_assert(Size == 4 || Size == 8 || Size == 16, "Size must be one of 4, 8 and 16");
 	const unsigned smem_int_ptr = detail::get_smem_ptr_uint(smem);
 	asm volatile("{cp.async.ca.shared.global [%0], [%1], %2;}" :: "r"(smem_int_ptr), "l"(gmem), "n"(Size));
@@ -24,20 +24,20 @@ __device__ inline void cp_async(void* const smem, const void* const gmem) {
 }
 
 __device__ inline void commit() {
-#if __CUDA_ARCH__ >= 80
+#if __CUDA_ARCH__ >= 800
 	asm volatile("{cp.async.commit_group;}\n");
 #endif
 }
 
 __device__ inline void wait_all() {
-#if __CUDA_ARCH__ >= 80
+#if __CUDA_ARCH__ >= 800
 	asm volatile("{cp.async.wait_all;}");
 #endif
 }
 
 template <int N>
 __device__ inline void wait_group() {
-#if __CUDA_ARCH__ >= 80
+#if __CUDA_ARCH__ >= 800
 	asm volatile("{cp.async.wait_group %0;}":: "n"(N));
 #endif
 }
