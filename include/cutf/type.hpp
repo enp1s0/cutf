@@ -51,30 +51,17 @@ template <class T>
 struct data_t {using type = T;};
 template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
 
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const int a);
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const half a);
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a);
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a);
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const int a)    {return static_cast<T>(a);};
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const half a)   {return static_cast<T>(a);};
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a)  {return static_cast<T>(a);};
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a) {return static_cast<T>(a);};
 
-CAST(int, int, a, a);
 CAST(int, half, __float2half(static_cast<float>(a)), a);
-CAST(int, float, static_cast<float>(a), a);
-CAST(int, double, static_cast<double>(a), a);
 
-CAST(half, int, static_cast<int>(__half2float(a)), a);
-CAST(half, half, a, a);
-CAST(half, float, __half2float(a), a);
-CAST(half, double, static_cast<double>(__half2float(a)), a);
-
-CAST(float, int, static_cast<int>(a), a);
-CAST(float, half, __float2half(a), a);
-CAST(float, float, a, a);
-CAST(float, double, static_cast<double>(a), a);
-
-CAST(double, int, static_cast<int>(a), a);
-CAST(double, half, __half2float(static_cast<float>(a)), a);
-CAST(double, float, static_cast<float>(a), a);
-CAST(double, double, a, a);
+CAST(half  , float , __half2float(a), a);
+CAST(half  , double, static_cast<double>(__half2float(a)), a);
+CAST(float , half  , __float2half(a), a);
+CAST(double, half  , __half2float(static_cast<float>(a)), a);
 
 // cast to tf32
 template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
@@ -175,15 +162,6 @@ DATA_TYPE_DEF(short, C, 8I);
 DATA_TYPE_DEF(unsigned char, R, 8U);
 DATA_TYPE_DEF(unsigned short, C, 8U);
 // }}}
-
-// name string
-template <class T>
-CUTF_DEVICE_HOST_FUNC inline const char* get_type_name();
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<double >() {return "double";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<float  >() {return "float";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__half >() {return "half";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__half2>() {return "half2";}
-
 } // namespace type	
 } // cutf
 

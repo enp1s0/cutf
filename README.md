@@ -4,6 +4,11 @@
 # cutf - CUDA Template Functions
 *The library of the CUDA/C++ Otaku, by the CUDA/C++ Otaku(?), for the CUDA/C++ Otaku shall not perish from the earth.*
 
+**Warning!**
+
+This library is under developing.
+Destructive changes may occur.
+
 ## Introduction
 cutf is a tiny CUDA template library.
 
@@ -16,6 +21,9 @@ cutf is a tiny CUDA template library.
 
 ## Example
 ```cpp
+// sample.cu
+// Compile:
+// nvcc -I/path/to/cutf/include/ sample.cu ...
 #include <cutf/math.hpp>
 #include <cutf/type.hpp>
 #include <cutf/error.hpp>
@@ -48,8 +56,13 @@ int main(){
 cutf 
 ├─ cublas
 ├─ cuda
+├─ debug
+│  ├─ fp
+│  └─ print
 ├─ device
 ├─ error
+├─ experimental
+│  └─ fp
 ├─ math
 ├─ memory
 ├─ type
@@ -57,6 +70,7 @@ cutf
 ├─ driver
 ├─ cublas
 ├─ curand
+├─ cusolver
 ├─ nvrtc
 ├─ thread
 └─ error
@@ -71,6 +85,9 @@ cutf
 ## cuBLAS Functions
 [cutf cuBLAS Functions Reference](./docs/cublas.md)
 
+## cuSOLVER Functions
+[cutf cuSOLVER Functions Reference](./docs/cusolver.md)
+
 ## NVRTC Functions
 [cutf NVRTC Functions Reference](./docs/nvrtc.md)
 
@@ -81,6 +98,5 @@ cutf
 [cutf Experimental Functions Reference](./docs/experimental.md)
 
 ## License
-Copyright (c) 2018 - 2019 tsuki (enp1s0)  
+Copyright (c) 2018 - 2021 tsuki (enp1s0)
 Released under the MIT license  
-<img src="http://momo86.net/ipsolab.svg" width="120">

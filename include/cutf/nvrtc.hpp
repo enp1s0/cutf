@@ -10,6 +10,7 @@
 #include <cuda.h>
 #include "cuda.hpp"
 #include "driver.hpp"
+#include "error.hpp"
 
 namespace cutf{
 namespace error{

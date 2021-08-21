@@ -1,7 +1,6 @@
 #ifndef __CUTF_EXPERIMENTAL_FP_HPP__
 #define __CUTF_EXPERIMENTAL_FP_HPP__
 #include "../macro.hpp"
-#include "../debug/fp.hpp"
 #include <cuda_fp16.h>
 #include <cstdint>
 
@@ -54,6 +53,11 @@ CUTF_DEVICE_HOST_FUNC inline typename same_size_uint<T>::type reinterpret_as_uin
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<T>::type reinterpret_as_fp(const T bs) {
 	return detail::reinterpret_medium<typename same_size_fp<T>::type, T>{.bs = bs}.fp;
+}
+
+template <>
+CUTF_DEVICE_HOST_FUNC inline typename same_size_fp<uint16_t>::type reinterpret_as_fp<uint16_t>(const uint16_t bs) {
+	return *reinterpret_cast<const half*>(&bs);
 }
 
 template <class T>
