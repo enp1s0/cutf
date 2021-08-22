@@ -56,24 +56,24 @@ int main(){
 cutf 
 ├─ cublas
 ├─ cuda
+├─ curand
+├─ cusolver
 ├─ debug
 │  ├─ fp
 │  └─ print
 ├─ device
+├─ driver
 ├─ error
+├─ event
 ├─ experimental
 │  └─ fp
+├─ graph
 ├─ math
 ├─ memory
+├─ nvrtc
 ├─ type
 │  └─ rounding
-├─ driver
-├─ cublas
-├─ curand
-├─ cusolver
-├─ nvrtc
-├─ thread
-└─ error
+└─ thread
 ```
 
 ## Smart pointers
