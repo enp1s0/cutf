@@ -1,5 +1,4 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_75 -I../../include -Xcompiler="-Wall"
+include ../Makefile.common
 TARGETS=abs.test maxmin.test horizontal.test imath.test
 
 all: $(TARGETS)

@@ -1,5 +1,4 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include
+include ../Makefile.common
 TARGETS=device_info.test specify_device.test
 
 all: $(TARGETS)

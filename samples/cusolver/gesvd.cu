@@ -3,29 +3,11 @@
 #include <cutf/cusolver.hpp>
 #include <cutf/type.hpp>
 #include <cutf/memory.hpp>
+#include <cutf/debug/matrix.hpp>
 
 using compute_t = float;
 constexpr std::size_t M = 1 << 4;
 constexpr std::size_t N = 1 << 5;
-
-template <class T>
-__device__ __host__ inline void print_matrix(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
-	if(name != nullptr) printf("%s = \n", name);
-	for(int i = 0; i < m; i++) {
-		for(int j = 0; j < n; j++) {
-			const auto val = cutf::type::cast<float>(ptr[j * m + i]);
-			if(val == 0) {
-				printf(" %.5f ", 0.0);
-			}else if(val < 0) {
-				printf("%.5f ", val);
-			}else{
-				printf(" %.5f ", val);
-			}
-		}
-		printf("\n");
-	}
-}
-
 
 int main(){
 	auto hA = cutf::memory::get_host_unique_ptr<compute_t>(M * N);
@@ -80,8 +62,8 @@ int main(){
 	cutf::memory::copy(hU.get(), dU.get(), M * num_s);
 	cutf::memory::copy(hVT.get(), dVT.get(), N * num_s);
 
-	print_matrix(hA.get(), M, N, "A");
-	print_matrix(hS.get(), 1, num_s, "S");
-	print_matrix(hU.get(), M, num_s, "U");
-	print_matrix(hVT.get(), num_s, N, "VT");
+	cutf::debug::print::print_matrix(hA.get(), M, N, "A");
+	cutf::debug::print::print_matrix(hS.get(), 1, num_s, "S");
+	cutf::debug::print::print_matrix(hU.get(), M, num_s, "U");
+	cutf::debug::print::print_matrix(hVT.get(), num_s, N, "VT");
 }

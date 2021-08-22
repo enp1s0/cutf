@@ -1,6 +1,6 @@
-include ../Makefile.common
-NVCCFLAGS+=-lnvidia-ml
-TARGETS=nvml.test
+NVCC=nvcc
+NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../ 
+TARGETS=elapsed_time.test
 
 all: $(TARGETS)
 

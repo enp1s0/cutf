@@ -1,5 +1,5 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lnvrtc -lcuda
+include ../Makefile.common
+NVCCFLAGS+=-lnvrtc -lcuda
 TARGETS=error_test.test
 
 all: $(TARGETS)

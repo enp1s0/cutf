@@ -1,6 +1,6 @@
-include ../Makefile.common
-NVCCFLAGS+=-lnvidia-ml
-TARGETS=nvml.test
+NVCC=nvcc
+NVCCFLAGS=-std=c++14 -arch=sm_86 -I../../include
+TARGETS=graph.test
 
 all: $(TARGETS)
 
