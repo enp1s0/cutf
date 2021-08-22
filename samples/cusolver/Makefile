@@ -1,5 +1,5 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lcusolver -lcublas
+include ../Makefile.common
+NVCCFLAGS+=-lcusolver -lcublas
 TARGETS=gesvd.test
 
 all: $(TARGETS)
