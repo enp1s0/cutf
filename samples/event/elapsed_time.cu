@@ -20,9 +20,9 @@ int main() {
 
 	cudaEventRecord(*event_start.get());
 	vector_add<<<N / block_size, block_size>>>(dC.get(), dA.get(), dB.get());
-	cudaEventSynchronize(*event_end.get());
 	cudaEventRecord(*event_end.get());
+	cudaEventSynchronize(*event_end.get());
 
 	const auto elapsed_time = cutf::event::get_elapsed_time(*event_start.get(), *event_end.get());
-	std::printf("Elapsed time = %e\n", elapsed_time);
+	std::printf("Elapsed time = %e [ms]\n", elapsed_time);
 }
