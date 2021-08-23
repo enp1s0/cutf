@@ -1,5 +1,4 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_80 -I../../include
+include ../Makefile.common
 TARGETS=cp_async.test
 
 all: $(TARGETS)
