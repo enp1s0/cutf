@@ -54,6 +54,7 @@ int main(){
 ## Namespace structure
 ```
 cutf 
+├─ cp_async
 ├─ cublas
 ├─ cuda
 ├─ curand
