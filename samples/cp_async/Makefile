@@ -1,6 +1,5 @@
 include ../Makefile.common
-NVCCFLAGS+=-lnvidia-ml
-TARGETS=nvml.test
+TARGETS=cp_async.test
 
 all: $(TARGETS)
 

@@ -1,5 +1,5 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lcublas
+include ../Makefile.common
+NVCCFLAGS+=-lcublas
 TARGETS=gemm.test c8i_gemm.test
 
 all: $(TARGETS)

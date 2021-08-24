@@ -1,5 +1,5 @@
-NVCC=nvcc
-NVCCFLAGS=-std=c++14 -arch=sm_61 -I../../include -lcurand
+include ../Makefile.common
+NVCCFLAGS+=-lcurand
 TARGETS=curand.test
 
 all: $(TARGETS)

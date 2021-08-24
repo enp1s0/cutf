@@ -195,6 +195,81 @@ SYTRF(cuComplex, C);
 SYTRF(cuDoubleComplex, Z);
 
 // --------------------------------------------------------------------------
+// Q^H * A * P = B
+// --------------------------------------------------------------------------
+template <class T>
+inline cusolverStatus_t gebrd_buffer_size(cusolverDnHandle_t handle, const int m, const int n, int *Lwork);
+#define GEBRD(type_name, DE_type_name, short_type_name)\
+	inline cusolverStatus_t gebrd(cusolverDnHandle_t handle, const int m, const int n, type_name *A, const int lda, DE_type_name* D, DE_type_name* E, type_name* TAUQ, type_name* TAUP, type_name* Work, const int Lwork, int* devInfo) {\
+		return cusolverDn##short_type_name##gebrd(handle, m, n, A, lda, D, E, TAUQ, TAUP, Work, Lwork, devInfo); \
+	} \
+  template <> \
+	inline cusolverStatus_t gebrd_buffer_size<type_name>(cusolverDnHandle_t handle, const int m, const int n, int *Lwork) {\
+		return cusolverDn##short_type_name##gebrd_bufferSize(handle, m, n, Lwork);\
+	}
+GEBRD(float, float, S);
+GEBRD(double, double, D);
+GEBRD(cuComplex, float, C);
+GEBRD(cuDoubleComplex, double, Z);
+
+#define GBR(type_name, matrix_name, short_type_name)\
+	inline cusolverStatus_t matrix_name##gbr(cusolverDnHandle_t handle, cublasSideMode_t side, const int m, const int n, const int k, type_name *A, const int lda, type_name* tau, type_name* work, const int lwork, int* devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##gbr(handle, side, m, n, k, A, lda, tau, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t matrix_name##gbr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, const int m, const int n, const int k, const type_name* A, const int lda, const type_name* tau, int* lwork) {\
+		return cusolverDn##short_type_name##matrix_name##gbr_bufferSize(handle, side, m, n, k, A, lda, tau, lwork);\
+	}
+GBR(float, or, S);
+GBR(double, or, D);
+GBR(cuComplex, un, C);
+GBR(cuDoubleComplex, un, Z);
+
+// --------------------------------------------------------------------------
+// Q^H * A * Q = T
+// --------------------------------------------------------------------------
+#define TRD(type_name, DE_type_name, matrix_name, short_type_name)\
+	inline cusolverStatus_t matrix_name##trd(cusolverDnHandle_t handle, cublasFillMode_t uplo, const int n, type_name *A, const int lda, DE_type_name* d, DE_type_name* e, type_name* tau, type_name* work, const int lwork, int* devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##trd(handle, uplo, n, A, lda, d, e, tau, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t matrix_name##trd_buffer_size(cusolverDnHandle_t handle, cublasFillMode_t uplo, const int n, const type_name* A, const int lda, const DE_type_name* d, const DE_type_name* e, const type_name* tau, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##trd_bufferSize(handle, uplo, n, A, lda, d, e, tau, lwork);\
+	}
+TRD(float, float, sy, S);
+TRD(double, double, sy, D);
+TRD(cuComplex, float, he, C);
+TRD(cuDoubleComplex, double, he, Z);
+
+// --------------------------------------------------------------------------
+// multiply Q
+// --------------------------------------------------------------------------
+#define MTR(type_name, matrix_name, short_type_name)\
+	inline cusolverStatus_t matrix_name##mtr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasFillMode_t uplo, cublasOperation_t trans, const int m, const int n, type_name *A, const int lda, type_name* tau, type_name* C, const int ldc, type_name* work, const int lwork, int* devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##mtr(handle, side, uplo, trans, m, n, A, lda, tau, C, ldc, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t matrix_name##trm_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasFillMode_t uplo, cublasOperation_t trans, const int m, const int n, type_name *A, const int lda, type_name* tau, type_name* C, const int ldc, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##mtr_bufferSize(handle, side, uplo, trans, m, n, A, lda, tau, C, ldc, lwork);\
+	}
+MTR(float, or, S);
+MTR(double, or, D);
+MTR(cuComplex, un, C);
+MTR(cuDoubleComplex, un, Z);
+
+// --------------------------------------------------------------------------
+// Generate Q
+// --------------------------------------------------------------------------
+#define GTR(type_name, matrix_name, short_type_name)\
+	inline cusolverStatus_t matrix_name##gtr(cusolverDnHandle_t handle, cublasFillMode_t uplo, const int n, type_name *A, const int lda, type_name* tau, type_name* work, const int lwork, int* devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##gtr(handle, uplo, n, A, lda, tau, work, lwork, devInfo); \
+	} \
+	inline cusolverStatus_t matrix_name##gtr_buffer_size(cusolverDnHandle_t handle, cublasFillMode_t uplo, const int n, type_name *A, const int lda, type_name* tau, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##gtr_bufferSize(handle, uplo, n, A, lda, tau, lwork);\
+	}
+GTR(float, or, S);
+GTR(double, or, D);
+GTR(cuComplex, un, C);
+GTR(cuDoubleComplex, un, Z);
+
+// --------------------------------------------------------------------------
 // SVD
 // --------------------------------------------------------------------------
 template <class T>

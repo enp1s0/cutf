@@ -64,11 +64,11 @@ int main(){
 
 ### Dense eigenvalue solver (in `dn` namespace)
 
-- [ ] `gebrd`
-- [ ] `orgbr`
-- [ ] `sytrd`
-- [ ] `ormtr`
-- [ ] `orgtr`
+- [x] `gebrd`
+- [x] `orgbr`
+- [x] `sytrd`
+- [x] `ormtr`
+- [x] `orgtr`
 - [x] `gesvd`
 - [x] `gesvdj`
 - [ ] `gesvdjBatched`
