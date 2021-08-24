@@ -42,7 +42,7 @@ int main(){
 	print_matrix(hA.get(), M, N, "A");
 
 	cutf::memory::copy(dA.get(), hA.get(), M * N);
-	auto cusolver = cutf::cusolver::get_cusolver_dn_unique_ptr();
+	auto cusolver = cutf::cusolver::dn::get_handle_unique_ptr();
 
 	int Lwork_geqrf, Lwork_orgqr;
 	CUTF_CHECK_ERROR(cutf::cusolver::dn::geqrf_buffer_size(

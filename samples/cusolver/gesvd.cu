@@ -31,7 +31,7 @@ int main(){
 	}
 
 	cutf::memory::copy(dA.get(), hA.get(), M * N);
-	auto cusolver = cutf::cusolver::get_cusolver_dn_unique_ptr();
+	auto cusolver = cutf::cusolver::dn::get_handle_unique_ptr();
 
 	int Lwork;
 	CUTF_CHECK_ERROR(cutf::cusolver::dn::gesvd_buffer_size<compute_t>(*cusolver.get(), M, N, &Lwork));

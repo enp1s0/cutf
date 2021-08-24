@@ -15,7 +15,7 @@ int main(){
 
 	auto dInfo = cutf::memory::get_device_unique_ptr<int>(1);
 
-	auto cusolver = cutf::cusolver::get_cusolver_dn_unique_ptr();
+	auto cusolver = cutf::cusolver::dn::get_handle_unique_ptr();
 
 	int Lwork_geqrf, Lwork_orgqr;
 	CUTF_CHECK_ERROR(cutf::cusolver::dn::geqrf_buffer_size(
@@ -44,7 +44,9 @@ int main(){
 ## Supported functions
 ### helper
 
-- [x] `get_cusolver_dn_unique_ptr`
+- [x] `dn::get_handle_unique_ptr`
+- [x] `sp::get_handle_unique_ptr`
+- [x] `dn::get_params_unique_ptr`
 
 ### Dense linear solver (in `dn` namespace)
 
