@@ -155,29 +155,29 @@ GEQRF(double, D);
 GEQRF(cuComplex, C);
 GEQRF(cuDoubleComplex, Z);
 
-#define MQR(type_name, short_type_name)\
-	inline cusolverStatus_t mqr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name* C, int ldc, type_name *work, int lwork, int *devInfo) {\
-		return cusolverDn##short_type_name##mqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc, work, lwork, devInfo); \
+#define MQR(type_name, short_type_name, matrix_name)\
+	inline cusolverStatus_t matrix_name##mqr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name* C, int ldc, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##mqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc, work, lwork, devInfo); \
 	} \
-	inline cusolverStatus_t mqr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, const type_name *A, int lda, const type_name* tau, const type_name *C, int ldc, int *lwork) {\
-		return cusolverDn##short_type_name##mqr_bufferSize(handle, side, trans, m, n, k, A, lda, tau, C, ldc, lwork);\
+	inline cusolverStatus_t matrix_name##mqr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, const type_name *A, int lda, const type_name* tau, const type_name *C, int ldc, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##mqr_bufferSize(handle, side, trans, m, n, k, A, lda, tau, C, ldc, lwork);\
 	}
-MQR(float, Sor);
-MQR(double, Dor);
-MQR(cuComplex, Cun);
-MQR(cuDoubleComplex, Zun);
+MQR(float, S, or);
+MQR(double, D, or);
+MQR(cuComplex, C, un);
+MQR(cuDoubleComplex, Z, un);
 
-#define GQR(type_name, short_type_name)\
-	inline cusolverStatus_t gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
-		return cusolverDn##short_type_name##gqr(handle, m, n, k, A, lda, tau, work, lwork, devInfo); \
+#define GQR(type_name, short_type_name, matrix_name)\
+	inline cusolverStatus_t matrix_name##gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##gqr(handle, m, n, k, A, lda, tau, work, lwork, devInfo); \
 	} \
-	inline cusolverStatus_t gqr_buffer_size(cusolverDnHandle_t handle, int m, int n, int k, const type_name *A, int lda, const type_name* tau, int *lwork) {\
-		return cusolverDn##short_type_name##gqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);\
+	inline cusolverStatus_t matrix_name##gqr_buffer_size(cusolverDnHandle_t handle, int m, int n, int k, const type_name *A, int lda, const type_name* tau, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##gqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);\
 	}
-GQR(float, Sor);
-GQR(double, Dor);
-GQR(cuComplex, Cun);
-GQR(cuDoubleComplex, Zun);
+GQR(float, S, or);
+GQR(double, D, or);
+GQR(cuComplex, C, un);
+GQR(cuDoubleComplex, Z, un);
 
 // --------------------------------------------------------------------------
 // Bunch-Kaufman Factorization
