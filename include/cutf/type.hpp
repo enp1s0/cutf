@@ -12,6 +12,7 @@
 #include <mma.h>
 #define __CUTF_AMPERE_MMA__
 #else
+struct __nv_bfloat16;
 namespace nvcuda {
 namespace wmma {
 namespace precision {
