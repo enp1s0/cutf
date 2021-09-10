@@ -14,7 +14,7 @@ inline void check(cutensorStatus_t error, const std::string filename, const std:
 		if(message.length() != 0){
 			ss<<" : "<<message;
 		}
-	    ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
+		ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
 		throw std::runtime_error(ss.str());
 	}
 }
