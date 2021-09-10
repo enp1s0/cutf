@@ -59,6 +59,7 @@ cutf
 ├─ cuda
 ├─ curand
 ├─ cusolver
+├─ cutensor
 ├─ debug
 │  ├─ fp
 │  └─ print
