@@ -57,6 +57,7 @@ cutf
 ├─ cp_async
 ├─ cublas
 ├─ cuda
+├─ cufft
 ├─ curand
 ├─ cusolver
 ├─ cutensor
