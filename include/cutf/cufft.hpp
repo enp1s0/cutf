@@ -2,14 +2,13 @@
 #define __CUTF_CUFTT_HPP__
 #include <string>
 #include <sstream>
-#include <cuda_runtime_api.h>
 #include <cufftXt.h>
 #include <memory>
 #include "error.hpp"
 
 namespace cutf {
 namespace error {
-inline void check(cufftResult error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
+inline void check(const cufftResult error, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = ""){
 	if(error != CUFFT_SUCCESS){
 		std::string error_string;
 #define CUFFT_ERROR_CASE(c) case c: error_string = #c; break
