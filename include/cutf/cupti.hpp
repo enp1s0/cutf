@@ -1,4 +1,4 @@
-#ifdef __CUTF_CUPTI_HPP__
+#ifndef __CUTF_CUPTI_HPP__
 #define __CUTF_CUPTI_HPP__
 #include <cupti.h>
 
