@@ -58,6 +58,7 @@ cutf
 ├─ cublas
 ├─ cuda
 ├─ cufft
+├─ cupti
 ├─ curand
 ├─ cusolver
 ├─ cutensor
