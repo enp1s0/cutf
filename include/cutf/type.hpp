@@ -57,12 +57,15 @@ template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(c
 template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a)  {return static_cast<T>(a);};
 template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a) {return static_cast<T>(a);};
 
+
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 1000
 CAST(int, half, __float2half(static_cast<float>(a)), a);
 
 CAST(half  , float , __half2float(a), a);
 CAST(half  , double, static_cast<double>(__half2float(a)), a);
 CAST(float , half  , __float2half(a), a);
 CAST(double, half  , __half2float(static_cast<float>(a)), a);
+#endif
 
 // cast to tf32
 template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
