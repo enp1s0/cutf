@@ -1,5 +1,5 @@
 include ../Makefile.common
-TARGETS=async_copy.test async_malloc.test
+TARGETS=async_copy.test async_malloc.test malloc.test
 
 all: $(TARGETS)
 
