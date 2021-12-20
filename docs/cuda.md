@@ -86,7 +86,7 @@ This function returns the type name (`const char*`).
 ```cpp
 auto dA = cutf::memory::get_device_unique_ptr<type>(N);
 auto hA = cutf::memory::get_host_unique_ptr<type>(N);
-cutf::memory::copy(dst_ptr, src_ptr, N);
+cutf::memory::copy(dst_ptr.get(), src_ptr.get(), N);
 ```
 
 | Function | description |
