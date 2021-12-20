@@ -99,12 +99,12 @@ inline void free_host(T* const ptr) {
 // allocater
 template <class T>
 inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
-	T* ptr = malloc<T>(size);
+	T* const ptr = malloc<T>(size);
 	return std::unique_ptr<T, device_deleter<T>>{ptr};
 }
 template <class T>
 inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
-	T* ptr = malloc_host<T>(size);
+	T* const ptr = malloc_host<T>(size);
 	return std::unique_ptr<T, host_deleter<T>>{ptr};
 }
 
