@@ -32,20 +32,6 @@ using device_unique_ptr = std::unique_ptr<T, device_deleter<T>>;
 template <class T>
 using host_unique_ptr = std::unique_ptr<T, host_deleter<T>>;
 
-// allocater
-template <class T>
-inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
-	T* ptr;
-	CUTF_CHECK_ERROR_M(cudaMalloc((void**)&ptr, sizeof(T) * size), "Failed to allocate " + std::to_string(size * sizeof(T)) + " Bytes of device memory");
-	return std::unique_ptr<T, device_deleter<T>>{ptr};
-}
-template <class T>
-inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
-	T* ptr;
-	CUTF_CHECK_ERROR_M(cudaMallocHost((void**)&ptr, sizeof(T) * size), "Failed to allocate " + std::to_string(size * sizeof(T)) + " Bytes of host memory");
-	return std::unique_ptr<T, host_deleter<T>>{ptr};
-}
-
 // copy
 template <class T>
 inline cudaError_t copy(T* const dst, const T* const src, const std::size_t size){
@@ -105,6 +91,21 @@ inline T* malloc_host(const std::size_t count) {
 template <class T>
 inline void free_host(T* const ptr) {
 	CUTF_CHECK_ERROR(cudaFreeHost(ptr));
+}
+
+// -----------------------------------------------
+// Unique ptrs
+// -----------------------------------------------
+// allocater
+template <class T>
+inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
+	T* ptr = malloc<T>(size);
+	return std::unique_ptr<T, device_deleter<T>>{ptr};
+}
+template <class T>
+inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
+	T* ptr = malloc_host<T>(size);
+	return std::unique_ptr<T, host_deleter<T>>{ptr};
 }
 
 } // memory
