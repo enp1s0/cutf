@@ -98,17 +98,17 @@ cutf::memory::copy(dst_ptr.get(), src_ptr.get(), N);
 All functions would throw runtime exception if anything should happen.
 
 ### malloc/free
+
+```cpp
+auto dA = cutf::memory::malloc_managed<type>(N);
+cutf::memory::free(dA);
+```
 | mallo | free | remarks |
 |:--------------|:------------|:------------|
 |`cutf::memory::malloc`| `cutf::memory::free` |  |
 |`cutf::memory::malloc_host`| `cutf::memory::free_host` |  |
 |`cutf::memory::malloc_managed`| (`cutf::memory::free`) |  |
 |`cutf::memory::malloc_async`| `cutf::memory::free_async` | CUDA >= 11.2 |
-
-```cpp
-auto dA = cutf::memory::malloc_managed<type>(N);
-cutf::memory::free(dA);
-```
 
 ## device
 ```cpp
