@@ -9,5 +9,5 @@ int main() {
 
 	auto a_ptr = cutf::memory::malloc_async<float>(N, *cuda_stream.get());
 
-	CUTF_CHECK_ERROR(cutf::memory::free_async(a_ptr, *cuda_stream.get()));
+	cutf::memory::free_async(a_ptr, *cuda_stream.get());
 }
