@@ -58,18 +58,53 @@ inline cudaError_t copy_async(T* const dst, const T* const src, const std::size_
 	return cudaMemcpyAsync(dst, src, sizeof(T) * size, cudaMemcpyDefault, stream);
 }
 
+// Standard malloc / free
+template <class T>
+inline T* malloc(const std::size_t count) {
+	T* ptr;
+	CUTF_CHECK_ERROR_M(cudaMalloc((void**)&ptr, sizeof(T) * count), "Failed to allocate " + std::to_string(count * sizeof(T)) + " Bytes of device memory");
+	return ptr;
+}
+
+template <class T>
+inline void free(T* const ptr) {
+	CUTF_CHECK_ERROR(cudaFree(ptr));
+}
+
 // asyn malloc/free
 // NOTE: These functions are only available in CUDA >= 11.2
 template <class T>
 inline T* malloc_async(const std::size_t count, const cudaStream_t stream) {
 	T* ptr;
-	cudaMallocAsync(&ptr, sizeof(T) * count, stream);
+	CUTF_CHECK_ERROR_M(cudaMallocAsync((void**)&ptr, sizeof(T) * count, stream), "Failed to allocate " + std::to_string(count * sizeof(T)) + " Bytes of device memory");
 	return ptr;
 }
 
 template <class T>
-inline cudaError_t free_async(T* const ptr, const cudaStream_t stream) {
-	return cudaFreeAsync(ptr, stream);
+inline void free_async(T* const ptr, const cudaStream_t stream) {
+	CUTF_CHECK_ERROR(cudaFreeAsync(ptr, stream));
+}
+
+// Managed
+// Managed memory should be released with cudaFree
+template <class T>
+inline T* malloc_managed(const std::size_t count) {
+	T* ptr;
+	CUTF_CHECK_ERROR_M(cudaMallocManaged((void**)&ptr, sizeof(T) * count), "Failed to allocate " + std::to_string(count * sizeof(T)) + " Bytes of managed memory");
+	return ptr;
+}
+
+// Host
+template <class T>
+inline T* malloc_host(const std::size_t count) {
+	T* ptr;
+	CUTF_CHECK_ERROR_M(cudaMallocHost((void**)&ptr, sizeof(T) * count), "Failed to allocate " + std::to_string(count * sizeof(T)) + " Bytes of host memory");
+	return ptr;
+}
+
+template <class T>
+inline void free_host(T* const ptr) {
+	CUTF_CHECK_ERROR(cudaFreeHost(ptr));
 }
 
 } // memory
