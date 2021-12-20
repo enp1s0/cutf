@@ -82,6 +82,7 @@ This function returns the type name (`const char*`).
 |`cutf::type::rounding::rz`|round-towards-zero mode|
 
 ## memory
+### Smart pointer
 ```cpp
 auto dA = cutf::memory::get_device_unique_ptr<type>(N);
 auto hA = cutf::memory::get_host_unique_ptr<type>(N);
@@ -96,13 +97,18 @@ cutf::memory::copy(dst_ptr, src_ptr, N);
 
 All functions would throw runtime exception if anything should happen.
 
-### Async malloc/free
-| Function | description |
-|:--------------|:------------|
-|`cutf::memory::malloc_async`|`cudaMallocAsync` and returns raw pointer|
-|`cutf::memory::free_async`|`cudaFreeAsync` and returns `cudaError_t`|
+### malloc/free
+| mallo | free | remarks |
+|:--------------|:------------|:------------|
+|`cutf::memory::malloc`| `cutf::memory::free` |  |
+|`cutf::memory::malloc_host`| `cutf::memory::free_host` |  |
+|`cutf::memory::malloc_managed`| (`cutf::memory::free`) |  |
+|`cutf::memory::malloc_async`| `cutf::memory::free_async` | CUDA >= 11.2 |
 
-These functions are only available in CUDA >= 11.2.
+```cpp
+auto dA = cutf::memory::malloc_managed<type>(N);
+cutf::memory::free(dA);
+```
 
 ## device
 ```cpp
