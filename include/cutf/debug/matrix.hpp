@@ -11,7 +11,7 @@ namespace debug {
 namespace print {
 
 template <class T>
-CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char* const name = nullptr) {
 	if(name != nullptr) printf("%s = \n", name);
 	for(std::size_t i = 0; i < m; i++) {
 		for(std::size_t j = 0; j < n; j++) {
@@ -23,12 +23,12 @@ CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::si
 }
 
 template <class T>
-CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const char* const name = nullptr) {
 	print_matrix(ptr, m, n, m, name);
 }
 
 template <class T>
-CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char* const name = nullptr) {
 	if(name != nullptr) printf("%s = ", name);
 	printf("[");
 	for(std::size_t i = 0; i < m; i++) {
@@ -43,13 +43,13 @@ CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const s
 }
 
 template <class T>
-CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const char *name = nullptr) {
+CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const char* const name = nullptr) {
 	print_numpy_matrix(ptr, m, n, m, name);
 }
 
 // For device moery
 template <class T>
-inline void print_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char *name = nullptr) {
+inline void print_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char* const name = nullptr) {
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(ldm * n);
 	cutf::memory::copy(host_uptr.get(), ptr, ldm * n);
@@ -58,7 +58,7 @@ inline void print_matrix_from_host(const T* const ptr, const std::size_t m, cons
 }
 
 template <class T>
-inline void print_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const char *name = nullptr) {
+inline void print_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const char* const name = nullptr) {
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(m * n);
 	cutf::memory::copy(host_uptr.get(), ptr, m * n);
@@ -67,7 +67,7 @@ inline void print_matrix_from_host(const T* const ptr, const std::size_t m, cons
 }
 
 template <class T>
-inline void print_numpy_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char *name = nullptr) {
+inline void print_numpy_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char* const name = nullptr) {
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(ldm * n);
 	cutf::memory::copy(host_uptr.get(), ptr, ldm * n);
@@ -76,7 +76,7 @@ inline void print_numpy_matrix_from_host(const T* const ptr, const std::size_t m
 }
 
 template <class T>
-inline void print_numpy_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const char *name = nullptr) {
+inline void print_numpy_matrix_from_host(const T* const ptr, const std::size_t m, const std::size_t n, const char* const name = nullptr) {
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(m * n);
 	cutf::memory::copy(host_uptr.get(), ptr, m * n);
