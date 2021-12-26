@@ -3,6 +3,7 @@
 #include <cutf/debug/matrix.hpp>
 
 __global__ void print_fragment_kernel() {
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 7000
 	constexpr unsigned N = 16;
 	__shared__ half mat[N * N];
 
@@ -23,6 +24,7 @@ __global__ void print_fragment_kernel() {
 
 	__syncthreads();
 	cutf::debug::print::print_fragment(fragment, "frag");
+#endif
 }
 
 int main() {

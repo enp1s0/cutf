@@ -29,7 +29,9 @@ Supported types are below.
 
 ### matrix (debug/matrix.hpp)
 - `print_matrix` : This function prints a matrix.
-- `print_numpy_matrix` : This function prints a matrix as a numpy matrix format
+- `print_matrix_from_host` : This function prints a matrix on the device memory from host code.
+- `print_numpy_matrix` : This function prints a matrix as a numpy matrix format.
+- `print_numpy_matrix_from_host` : This function prints a matrix as a numpy matrix format on the device memory from host code.
 
 #### Example
 ```cpp
