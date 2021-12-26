@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "../type.hpp"
 #include "../macro.hpp"
+#include "../memory.hpp"
 
 namespace cutf {
 namespace debug {
@@ -44,6 +45,43 @@ CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, std::si
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
 	print_numpy_matrix(ptr, m, n, m, name);
+}
+
+// For device moery
+template <class T>
+inline void print_matrix_from_host(const T* const ptr, std::size_t m, std::size_t n, std::size_t ldm, const char *name = nullptr) {
+	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(ldm * n);
+	cutf::memory::copy(host_uptr.get(), ptr, ldm * n);
+
+	print_matrix(host_uptr.get(), m, n, ldm, name);
+}
+
+template <class T>
+inline void print_matrix_from_host(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
+	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(m * n);
+	cutf::memory::copy(host_uptr.get(), ptr, m * n);
+
+	print_matrix(host_uptr.get(), m, n, name);
+}
+
+template <class T>
+inline void print_numpy_matrix_from_host(const T* const ptr, std::size_t m, std::size_t n, std::size_t ldm, const char *name = nullptr) {
+	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(ldm * n);
+	cutf::memory::copy(host_uptr.get(), ptr, ldm * n);
+
+	print_numpy_matrix(host_uptr.get(), m, n, ldm, name);
+}
+
+template <class T>
+inline void print_numpy_matrix_from_host(const T* const ptr, std::size_t m, std::size_t n, const char *name = nullptr) {
+	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+	auto host_uptr = cutf::memory::get_host_unique_ptr<T>(m * n);
+	cutf::memory::copy(host_uptr.get(), ptr, m * n);
+
+	print_numpy_matrix(host_uptr.get(), m, n, name);
 }
 } // namespace print
 } // namespace debug
