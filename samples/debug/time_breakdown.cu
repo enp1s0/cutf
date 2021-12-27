@@ -56,6 +56,7 @@ int main() {
 	profiler.stop_timer_sync("cudaMemcpy");
 
 	profiler.print_result(stdout);
+	profiler.print_result_csv(stdout);
 
 	cudaStreamDestroy(cuda_stream);
 }
