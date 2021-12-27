@@ -34,30 +34,51 @@ inline void check(cusolverStatus_t error, const std::string filename, const std:
 }
 } // error
 namespace cusolver{
-struct cusolver_sp_deleter{
+namespace sp {
+struct handle_deleter{
 	void operator()(cusolverSpHandle_t* handle){
 		cutf::error::check(cusolverSpDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter> get_cusolver_sp_unique_ptr(){
-	cusolverSpHandle_t *handle = new cusolverSpHandle_t;
+using handle_unique_ptr = std::unique_ptr<cusolverSpHandle_t, handle_deleter>;
+
+inline handle_unique_ptr get_handle_unique_ptr(){
+	auto *handle = new cusolverSpHandle_t;
 	cusolverSpCreate(handle);
-	return std::unique_ptr<cusolverSpHandle_t, cusolver_sp_deleter>{handle};
+	return handle_unique_ptr{handle};
 }
-struct cusolver_dn_deleter{
+} // namespace sp
+
+namespace dn {
+struct handle_deleter{
 	void operator()(cusolverDnHandle_t* handle){
 		cutf::error::check(cusolverDnDestroy(*handle), __FILE__, __LINE__, __func__);
 		delete handle;
 	}
 };
-inline std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter> get_cusolver_dn_unique_ptr(){
-	cusolverDnHandle_t *handle = new cusolverDnHandle_t;
+using handle_unique_ptr = std::unique_ptr<cusolverDnHandle_t, handle_deleter>;
+
+inline handle_unique_ptr get_handle_unique_ptr(){
+	auto *handle = new cusolverDnHandle_t;
 	cusolverDnCreate(handle);
-	return std::unique_ptr<cusolverDnHandle_t, cusolver_dn_deleter>{handle};
+	return handle_unique_ptr{handle};
 }
 
-namespace dn {
+struct params_deleter{
+	void operator()(cusolverDnParams_t* params){
+		cutf::error::check(cusolverDnDestroyParams(*params), __FILE__, __LINE__, __func__);
+		delete params;
+	}
+};
+using params_unique_ptr = std::unique_ptr<cusolverDnParams_t, params_deleter>;
+
+inline params_unique_ptr get_params_unique_ptr(){
+	auto *params = new cusolverDnParams_t;
+	cusolverDnCreateParams(params);
+	return params_unique_ptr{params};
+}
+
 // --------------------------------------------------------------------------
 // Choresky Factorization
 // --------------------------------------------------------------------------
@@ -134,29 +155,29 @@ GEQRF(double, D);
 GEQRF(cuComplex, C);
 GEQRF(cuDoubleComplex, Z);
 
-#define MQR(type_name, short_type_name)\
-	inline cusolverStatus_t mqr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name* C, int ldc, type_name *work, int lwork, int *devInfo) {\
-		return cusolverDn##short_type_name##mqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc, work, lwork, devInfo); \
+#define MQR(type_name, short_type_name, matrix_name)\
+	inline cusolverStatus_t matrix_name##mqr(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name* C, int ldc, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##mqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc, work, lwork, devInfo); \
 	} \
-	inline cusolverStatus_t mqr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, const type_name *A, int lda, const type_name* tau, const type_name *C, int ldc, int *lwork) {\
-		return cusolverDn##short_type_name##mqr_bufferSize(handle, side, trans, m, n, k, A, lda, tau, C, ldc, lwork);\
+	inline cusolverStatus_t matrix_name##mqr_buffer_size(cusolverDnHandle_t handle, cublasSideMode_t side, cublasOperation_t trans, int m, int n, int k, const type_name *A, int lda, const type_name* tau, const type_name *C, int ldc, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##mqr_bufferSize(handle, side, trans, m, n, k, A, lda, tau, C, ldc, lwork);\
 	}
-MQR(float, Sor);
-MQR(double, Dor);
-MQR(cuComplex, Cun);
-MQR(cuDoubleComplex, Zun);
+MQR(float, S, or);
+MQR(double, D, or);
+MQR(cuComplex, C, un);
+MQR(cuDoubleComplex, Z, un);
 
-#define GQR(type_name, short_type_name)\
-	inline cusolverStatus_t gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
-		return cusolverDn##short_type_name##gqr(handle, m, n, k, A, lda, tau, work, lwork, devInfo); \
+#define GQR(type_name, short_type_name, matrix_name)\
+	inline cusolverStatus_t matrix_name##gqr(cusolverDnHandle_t handle, int m, int n, int k, type_name *A, int lda, const type_name* tau, type_name *work, int lwork, int *devInfo) {\
+		return cusolverDn##short_type_name##matrix_name##gqr(handle, m, n, k, A, lda, tau, work, lwork, devInfo); \
 	} \
-	inline cusolverStatus_t gqr_buffer_size(cusolverDnHandle_t handle, int m, int n, int k, const type_name *A, int lda, const type_name* tau, int *lwork) {\
-		return cusolverDn##short_type_name##gqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);\
+	inline cusolverStatus_t matrix_name##gqr_buffer_size(cusolverDnHandle_t handle, int m, int n, int k, const type_name *A, int lda, const type_name* tau, int *lwork) {\
+		return cusolverDn##short_type_name##matrix_name##gqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);\
 	}
-GQR(float, Sor);
-GQR(double, Dor);
-GQR(cuComplex, Cun);
-GQR(cuDoubleComplex, Zun);
+GQR(float, S, or);
+GQR(double, D, or);
+GQR(cuComplex, C, un);
+GQR(cuDoubleComplex, Z, un);
 
 // --------------------------------------------------------------------------
 // Bunch-Kaufman Factorization

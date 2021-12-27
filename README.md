@@ -57,8 +57,11 @@ cutf
 ├─ cp_async
 ├─ cublas
 ├─ cuda
+├─ cufft
+├─ cupti
 ├─ curand
 ├─ cusolver
+├─ cutensor
 ├─ debug
 │  ├─ fp
 │  └─ print

@@ -1,5 +1,6 @@
 include ../Makefile.common
-TARGETS=fp_hex.test print_fragment.test breakdown.test time_breakdown.test print_matrix.test
+NVCCFLAGS+=-lcufft
+TARGETS=cufft.test
 
 all: $(TARGETS)
 
