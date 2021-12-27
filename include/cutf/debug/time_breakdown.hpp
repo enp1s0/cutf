@@ -82,13 +82,13 @@ public:
 				[&](const statistic_t& a, const statistic_t& b) {return a.sum > b.sum;}
 				);
 
-			std::printf("%*s  %13s %10s %10s %10s %10s\n",
-					static_cast<int>(longest_name_length), "Name",
-					"Total [ms]",
-					"N",
-					"Avg [ms]",
-					"Min [ms]",
-					"Max [ms]");
+		std::printf("%*s  %13s %10s %10s %10s %10s\n",
+				static_cast<int>(longest_name_length), "Name",
+				"Total [ms]",
+				"N",
+				"Avg [ms]",
+				"Min [ms]",
+				"Max [ms]");
 		for (const auto& s : statistic_list) {
 			std::printf("%*s  %13.3f %10lu %10.3f %10.3f %10.3f\n",
 					static_cast<int>(longest_name_length), s.name.c_str(),
@@ -97,6 +97,40 @@ public:
 					s.sum / s.n / 1000.0,
 					s.min / 1000.0,
 					s.max / 1000.0
+					);
+		}
+	}
+
+	void print_result_csv(FILE* const out = stderr) const {
+		// Find the longest entry name
+		struct statistic_t {
+			std::string name;
+			std::size_t n;
+			std::time_t sum;
+			std::time_t min;
+			std::time_t max;
+		};
+
+		std::vector<statistic_t> statistic_list;
+		for (const auto& t : elapsed_time_list_table) {
+			statistic_t s{t.first, t.second.size(), 0, -1, 0};
+			for (const auto &ti : t.second) {
+				s.sum += ti;
+				s.max = std::max(s.max, ti);
+				s.min = std::min(s.max, ti);
+			}
+			statistic_list.push_back(s);
+		}
+
+		std::printf("name,n,sum,avg,min,max\n");
+		for (const auto& s : statistic_list) {
+			std::printf("%s,%lu,%.3f,%.3f,%.3f,%.3f\n",
+					s.name.c_str(),
+					s.n,
+					s.sum / 1000.,
+					s.sum / 1000. / s.n,
+					s.min / 1000.,
+					s.max / 1000.
 					);
 		}
 	}
