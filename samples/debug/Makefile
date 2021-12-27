@@ -1,5 +1,5 @@
 include ../Makefile.common
-TARGETS=fp_hex.test print_fragment.test breakdown.test
+TARGETS=fp_hex.test print_fragment.test breakdown.test time_breakdown.test
 
 all: $(TARGETS)
 
