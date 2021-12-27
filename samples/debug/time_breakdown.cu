@@ -4,7 +4,20 @@
 constexpr unsigned N = 1u << 20;
 constexpr unsigned block_size = 1u << 8;
 
-__global__ void plus_one_kernel(
+__global__ void init_kernel(
+		float* const ptr,
+		const unsigned N
+		) {
+	const auto tid = blockDim.x * blockIdx.x + threadIdx.x;
+	if (tid >= N) {
+		return;
+	}
+
+	ptr[tid] = 1.f;
+}
+
+
+__global__ void add_1_kernel(
 		float* const ptr,
 		const unsigned N
 		) {
@@ -24,12 +37,23 @@ int main() {
 
 	float *da;
 	profiler.start_timer_sync("cudaMalloc");
-	cudaMalloc(reinterpret_cast<float**>(&da), sizeof(float));
+	cudaMalloc(reinterpret_cast<float**>(&da), sizeof(float) * N);
 	profiler.stop_timer_sync("cudaMalloc");
 
-	profiler.start_timer_sync("kernel");
-	plus_one_kernel<<<(N + block_size - 1) / block_size, block_size>>>(da, N);
-	profiler.stop_timer_sync("kernel");
+	profiler.start_timer_sync("init_kernel");
+	init_kernel<<<(N + block_size - 1) / block_size, block_size, 0, cuda_stream>>>(da, N);
+	profiler.stop_timer_sync("init_kernel");
+
+	for (unsigned i = 0; i < 100; i++) {
+		profiler.start_timer_sync("add_1_kernel");
+		add_1_kernel<<<(N + block_size - 1) / block_size, block_size, 0, cuda_stream>>>(da, N);
+		profiler.stop_timer_sync("add_1_kernel");
+	}
+
+	float ha[N];
+	profiler.start_timer_sync("cudaMemcpy");
+	cudaMemcpy(ha, da, sizeof(float) * N, cudaMemcpyDefault);
+	profiler.stop_timer_sync("cudaMemcpy");
 
 	profiler.print_result(stdout);
 
