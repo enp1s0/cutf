@@ -13,11 +13,14 @@ namespace time_breakdown {
 class profiler {
 	std::map<std::string, std::chrono::system_clock::time_point> start_timestamps;
 	std::map<std::string, std::vector<std::time_t>> elapsed_time_list_table;
+	cudaStream_t cuda_stream;
 public:
-	void register_start_timer_sync_device(
+	profiler(cudaStream_t cuda_stream = 0) :
+		cuda_stream(cuda_stream) {}
+	void start_timer_sync(
 			const std::string name			
 			) {
-		CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+		CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
 
 		const auto timestamp = std::chrono::system_clock::now();
 		if (start_timestamps.count(name) == 0) {
@@ -27,10 +30,12 @@ public:
 		}
 	}
 
-	void register_stop_timer_sync_device(
+	void set_cuda_stream(cudaStream_t stream) {cuda_stream = stream;}
+
+	void stop_timer_sync(
 			const std::string name			
 			) {
-		CUTF_CHECK_ERROR(cudaDeviceSynchronize());
+		CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
 
 		const auto timestamp = std::chrono::system_clock::now();
 		if (start_timestamps.count(name) == 0) {
