@@ -89,11 +89,11 @@ public:
 
 		std::printf("%*s  %13s %10s %10s %10s %10s\n",
 				static_cast<int>(longest_name_length), "Name",
-				"Total [ms]",
+				"Total [us]",
 				"N",
-				"Avg [ms]",
-				"Min [ms]",
-				"Max [ms]");
+				"Avg [us]",
+				"Min [us]",
+				"Max [us]");
 		for (const auto& s : statistic_list) {
 			std::printf("%*s  %13.3f %10lu %10.3f %10.3f %10.3f\n",
 					static_cast<int>(longest_name_length), s.name.c_str(),
