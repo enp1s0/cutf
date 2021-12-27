@@ -33,6 +33,11 @@ public:
 
 	void set_cuda_stream(cudaStream_t stream) {cuda_stream = stream;}
 
+	void clear() {
+		start_timestamps.clear();
+		elapsed_time_list_table.clear();
+	}
+
 	void stop_timer_sync(
 			const std::string name			
 			) {
