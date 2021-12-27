@@ -17,7 +17,10 @@ __global__ void plus_one_kernel(
 }
 
 int main() {
-	cutf::debug::time_breakdown::profiler profiler;
+	cudaStream_t cuda_stream;
+	cudaStreamCreate(&cuda_stream);
+
+	cutf::debug::time_breakdown::profiler profiler(cuda_stream);
 
 	float *da;
 	profiler.start_timer_sync("cudaMalloc");
@@ -29,4 +32,6 @@ int main() {
 	profiler.stop_timer_sync("kernel");
 
 	profiler.print_result(stdout);
+
+	cudaStreamDestroy(cuda_stream);
 }
