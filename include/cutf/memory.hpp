@@ -61,14 +61,24 @@ inline void free(T* const ptr) {
 // NOTE: These functions are only available in CUDA >= 11.2
 template <class T>
 inline T* malloc_async(const std::size_t count, const cudaStream_t stream) {
+#ifndef CUTF_DISABLE_MALLOC_ASYNC
 	T* ptr;
 	CUTF_CHECK_ERROR_M(cudaMallocAsync((void**)&ptr, sizeof(T) * count, stream), "Failed to allocate " + std::to_string(count * sizeof(T)) + " Bytes of device memory");
 	return ptr;
+#else
+	CUTF_CHECK_ERROR(cudaStreamSynchronize(stream));
+	return cutf::memory::malloc<T>(count);
+#endif
 }
 
 template <class T>
 inline void free_async(T* const ptr, const cudaStream_t stream) {
+#ifndef CUTF_DISABLE_MALLOC_ASYNC
 	CUTF_CHECK_ERROR(cudaFreeAsync(ptr, stream));
+#else
+	CUTF_CHECK_ERROR(cudaStreamSynchronize(stream));
+	return cutf::memory::free(ptr);
+#endif
 }
 
 // Managed

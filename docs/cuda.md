@@ -110,6 +110,20 @@ cutf::memory::free(dA);
 |`cutf::memory::malloc_managed`| (`cutf::memory::free`) |  |
 |`cutf::memory::malloc_async`| `cutf::memory::free_async` | CUDA >= 11.2 |
 
+Note.  
+CUDA < 11.2 does not support `cudaMallocAsync` and `cudaFreeAsync`.
+By defining `CUTF_DISABLE_MALLOC_ASYNC` before including `memory.hpp`, `malloc_async` and `free_async` use standard `malloc` and `free` with `cudaStreamSynchronize`.
+
+```cuda
+#define CUTF_DISABLE_MALLOC_ASYNC
+#include <cutf/memory.hpp>
+
+auto ptr = cutf::memory::malloc_async<T>(count, stream);
+// It is equivalent to
+// CUTF_CHECK_ERROR(cudaStreamSynchronize(stream));
+// auto ptr = cutf::memory::malloc<T>(count);
+```
+
 ## device
 ```cpp
 CUTF_CHECK_ERROR(cutf::device::use_device(
