@@ -72,6 +72,7 @@ public:
 			std::time_t max;
 		};
 
+		std::time_t time_total = 0;
 		std::vector<statistic_t> statistic_list;
 		for (const auto& t : elapsed_time_list_table) {
 			statistic_t s{t.first, t.second.size(), 0, -1, 0};
@@ -79,6 +80,7 @@ public:
 				s.sum += ti;
 				s.max = std::max(s.max, ti);
 				s.min = std::min(s.max, ti);
+				time_total += ti;
 			}
 			statistic_list.push_back(s);
 		}
@@ -87,7 +89,7 @@ public:
 				[&](const statistic_t& a, const statistic_t& b) {return a.sum > b.sum;}
 				);
 
-		std::printf("%*s  %13s %10s %10s %10s %10s\n",
+		std::printf("%*s %13s           %10s %10s %10s %10s\n",
 				static_cast<int>(longest_name_length), "Name",
 				"Total [us]",
 				"N",
@@ -95,9 +97,10 @@ public:
 				"Min [us]",
 				"Max [us]");
 		for (const auto& s : statistic_list) {
-			std::printf("%*s  %13.3f %10lu %10.3f %10.3f %10.3f\n",
+			std::printf("%*s %13.3f (%6.2f%%) %10lu %10.3f %10.3f %10.3f\n",
 					static_cast<int>(longest_name_length), s.name.c_str(),
 					s.sum / 1000.0,
+					s.sum * 100.0 / time_total,
 					s.n,
 					s.sum / s.n / 1000.0,
 					s.min / 1000.0,
