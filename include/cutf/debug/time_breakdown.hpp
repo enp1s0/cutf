@@ -79,7 +79,7 @@ public:
 			for (const auto &ti : t.second) {
 				s.sum += ti;
 				s.max = std::max(s.max, ti);
-				s.min = std::min(s.max, ti);
+				s.min = std::min(s.min, ti);
 				time_total += ti;
 			}
 			statistic_list.push_back(s);
@@ -125,7 +125,7 @@ public:
 			for (const auto &ti : t.second) {
 				s.sum += ti;
 				s.max = std::max(s.max, ti);
-				s.min = std::min(s.max, ti);
+				s.min = std::min(s.min, ti);
 			}
 			statistic_list.push_back(s);
 		}
