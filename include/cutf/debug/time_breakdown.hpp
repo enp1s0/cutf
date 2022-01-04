@@ -75,11 +75,11 @@ public:
 		std::time_t time_total = 0;
 		std::vector<statistic_t> statistic_list;
 		for (const auto& t : elapsed_time_list_table) {
-			statistic_t s{t.first, t.second.size(), 0, -1, 0};
+			statistic_t s{t.first, t.second.size(), 0, 0x7fffffffffffffffl, 0};
 			for (const auto &ti : t.second) {
 				s.sum += ti;
 				s.max = std::max(s.max, ti);
-				s.min = std::min(s.max, ti);
+				s.min = std::min(s.min, ti);
 				time_total += ti;
 			}
 			statistic_list.push_back(s);
@@ -121,11 +121,11 @@ public:
 
 		std::vector<statistic_t> statistic_list;
 		for (const auto& t : elapsed_time_list_table) {
-			statistic_t s{t.first, t.second.size(), 0, -1, 0};
+			statistic_t s{t.first, t.second.size(), 0, 0x7fffffffffffffffl, 0};
 			for (const auto &ti : t.second) {
 				s.sum += ti;
 				s.max = std::max(s.max, ti);
-				s.min = std::min(s.max, ti);
+				s.min = std::min(s.min, ti);
 			}
 			statistic_list.push_back(s);
 		}
