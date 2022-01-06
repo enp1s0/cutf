@@ -89,22 +89,23 @@ public:
 				[&](const statistic_t& a, const statistic_t& b) {return a.sum > b.sum;}
 				);
 
+		std::printf("# cutf time breakdown result (Total: %10.3f [ms])\n", time_total * 1e-6);
 		std::printf("%*s %13s           %10s %10s %10s %10s\n",
 				static_cast<int>(longest_name_length), "Name",
-				"Total [us]",
+				"Total [ms]",
 				"N",
-				"Avg [us]",
-				"Min [us]",
-				"Max [us]");
+				"Avg [ms]",
+				"Min [ms]",
+				"Max [ms]");
 		for (const auto& s : statistic_list) {
 			std::printf("%*s %13.3f (%6.2f%%) %10lu %10.3f %10.3f %10.3f\n",
 					static_cast<int>(longest_name_length), s.name.c_str(),
-					s.sum / 1000.0,
+					s.sum * 1e-6,
 					s.sum * 100.0 / time_total,
 					s.n,
-					s.sum / s.n / 1000.0,
-					s.min / 1000.0,
-					s.max / 1000.0
+					s.sum / s.n * 1e-6,
+					s.min * 1e-6,
+					s.max * 1e-6
 					);
 		}
 	}
@@ -130,15 +131,15 @@ public:
 			statistic_list.push_back(s);
 		}
 
-		std::printf("name,n,sum,avg,min,max\n");
+		std::printf("name,n,sum_us,avg_us,min_us,max_us\n");
 		for (const auto& s : statistic_list) {
 			std::printf("%s,%lu,%.3f,%.3f,%.3f,%.3f\n",
 					s.name.c_str(),
 					s.n,
-					s.sum / 1000.,
-					s.sum / 1000. / s.n,
-					s.min / 1000.,
-					s.max / 1000.
+					s.sum * 1e-3 ,
+					s.sum * 1e-3  / s.n,
+					s.min * 1e-3 ,
+					s.max * 1e-3
 					);
 		}
 	}
