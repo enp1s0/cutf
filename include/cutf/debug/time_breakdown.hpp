@@ -4,6 +4,7 @@
 #include <chrono>
 #include <string>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include "../cuda.hpp"
 #include "../error.hpp"
@@ -142,6 +143,15 @@ public:
 					s.max * 1e-3
 					);
 		}
+	}
+
+	void measure(
+			const std::string name,
+			const std::function<void(void)> func
+			) {
+		start_timer_sync(name);
+		func();
+		stop_timer_sync(name);
 	}
 };
 } // namespace time_breakdown

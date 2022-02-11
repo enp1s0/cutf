@@ -36,9 +36,11 @@ int main() {
 	cutf::debug::time_breakdown::profiler profiler(cuda_stream);
 
 	float *da;
-	profiler.start_timer_sync("cudaMalloc");
-	cudaMalloc(reinterpret_cast<float**>(&da), sizeof(float) * N);
-	profiler.stop_timer_sync("cudaMalloc");
+	profiler.measure(
+			"cudaMalloc",
+			[&]() {
+				cudaMalloc(reinterpret_cast<float**>(&da), sizeof(float) * N);
+			});
 
 	profiler.start_timer_sync("init_kernel");
 	init_kernel<<<(N + block_size - 1) / block_size, block_size, 0, cuda_stream>>>(da, N);
