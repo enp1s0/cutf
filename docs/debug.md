@@ -49,6 +49,33 @@ nvcuda::wmma::load_matrix_sync(fragment, mat, N);
 cutf::debug::print::print_fragment(fragment, "frag");
 ```
 
+## time_breakdown
+### Sample code
+```cpp
+cutf::debug::time_breakdown::profiler profiler(cuda_stream);
+
+// put some operations between start and stop functions
+profiler.start_timer_sync("malloc_a");
+cudaMalloc(...);
+profiler.stop_timer_sync("malloc_a");
+
+// give some operations to measure function as a lambda function
+profiler.measure("malloc_b", [&](){cudaMalloc(...);});
+
+// output time breakdown
+profiler.print_result();
+```
+
+### Sample result
+```
+# cutf time breakdown result (Total:      3.396 [ms])
+        Name    Total [ms]                    N   Avg [ms]   Min [ms]   Max [ms]
+  cudaMemcpy         2.225 ( 65.52%)          1      2.225      2.225      2.225
+add_1_kernel         1.070 ( 31.52%)        100      0.011      0.010      0.015
+  cudaMalloc         0.081 (  2.39%)          1      0.081      0.081      0.081
+ init_kernel         0.019 (  0.57%)          1      0.019      0.019      0.019
+```
+
 ## clock_breakdown
 
 See [clock_breakdown](clock_breakdown.md).
