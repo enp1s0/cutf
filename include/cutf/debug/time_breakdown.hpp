@@ -147,7 +147,7 @@ public:
 
 	void measure(
 			const std::string name,
-			std::function<void(void)> func
+			const std::function<void(void)> func
 			) {
 		start_timer_sync(name);
 		func();
