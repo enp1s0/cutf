@@ -94,8 +94,8 @@ public:
 				s.sum += ti;
 				time_total += ti;
 			}
-			s.max = t.second[0];
-			s.min = t.second[t.second.size() - 1];
+			s.min = t.second[0];
+			s.max = t.second[t.second.size() - 1];
 			if ((t.second.size() % 2) == 1) {
 				s.median = t.second[t.second.size() / 2];
 			} else {
@@ -150,8 +150,8 @@ public:
 			for (const auto &ti : t.second) {
 				s.sum += ti;
 			}
-			s.max = t.second[0];
-			s.min = t.second[t.second.size() - 1];
+			s.min = t.second[0];
+			s.max = t.second[t.second.size() - 1];
 			if ((t.second.size() % 2) == 1) {
 				s.median = t.second[t.second.size() / 2];
 			} else {
