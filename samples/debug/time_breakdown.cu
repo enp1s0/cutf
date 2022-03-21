@@ -52,6 +52,12 @@ int main() {
 		profiler.stop_timer_sync("add_1_kernel");
 	}
 
+	profiler.disable_measurement();
+	profiler.start_timer_sync("should_not_be_measured");
+	add_1_kernel<<<(N + block_size - 1) / block_size, block_size, 0, cuda_stream>>>(da, N);
+	profiler.stop_timer_sync("should_not_be_measured");
+	profiler.enable_measurement();
+
 	float ha[N];
 	profiler.start_timer_sync("cudaMemcpy");
 	cudaMemcpy(ha, da, sizeof(float) * N, cudaMemcpyDefault);
