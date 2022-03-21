@@ -16,19 +16,27 @@ class profiler {
 	std::unordered_map<std::string, std::chrono::system_clock::time_point> start_timestamps;
 	std::unordered_map<std::string, std::vector<std::time_t>> elapsed_time_list_table;
 	cudaStream_t cuda_stream;
+
+	bool enabled;
 public:
 	profiler(cudaStream_t cuda_stream = 0) :
-		cuda_stream(cuda_stream) {}
+		cuda_stream(cuda_stream), enabled(true) {}
+
+	void disable_measurement() {enabled = false;}
+	void enable_measurement() {enabled = true;}
+
 	void start_timer_sync(
 			const std::string name			
 			) {
-		CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
+		if (enabled) {
+			CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
 
-		const auto timestamp = std::chrono::system_clock::now();
-		if (start_timestamps.count(name) == 0) {
-			start_timestamps.insert(std::make_pair(name, timestamp));
-		} else {
-			start_timestamps[name] = timestamp;
+			const auto timestamp = std::chrono::system_clock::now();
+			if (start_timestamps.count(name) == 0) {
+				start_timestamps.insert(std::make_pair(name, timestamp));
+			} else {
+				start_timestamps[name] = timestamp;
+			}
 		}
 	}
 
@@ -42,20 +50,22 @@ public:
 	void stop_timer_sync(
 			const std::string name			
 			) {
-		CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
+		if (enabled) {
+			CUTF_CHECK_ERROR(cudaStreamSynchronize(cuda_stream));
 
-		const auto timestamp = std::chrono::system_clock::now();
-		if (start_timestamps.count(name) == 0) {
-			throw std::runtime_error("Timer \"" + name + "\" is not started");
-		} else {
-			const auto elapsed_time = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamp - start_timestamps[name]).count();
-			if (elapsed_time_list_table.count(name) == 0) {
-				std::vector<std::time_t> tmp_elapsed_time_list = {elapsed_time};
-				elapsed_time_list_table.insert(std::make_pair(name, tmp_elapsed_time_list));
+			const auto timestamp = std::chrono::system_clock::now();
+			if (start_timestamps.count(name) == 0) {
+				throw std::runtime_error("Timer \"" + name + "\" is not started");
 			} else {
-				elapsed_time_list_table[name].push_back(elapsed_time);
+				const auto elapsed_time = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamp - start_timestamps[name]).count();
+				if (elapsed_time_list_table.count(name) == 0) {
+					std::vector<std::time_t> tmp_elapsed_time_list = {elapsed_time};
+					elapsed_time_list_table.insert(std::make_pair(name, tmp_elapsed_time_list));
+				} else {
+					elapsed_time_list_table[name].push_back(elapsed_time);
+				}
+				start_timestamps.erase(name);
 			}
-			start_timestamps.erase(name);
 		}
 	}
 
