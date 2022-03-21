@@ -5,7 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <functional>
-#include <map>
+#include <unordered_map>
 #include "../cuda.hpp"
 #include "../error.hpp"
 
@@ -13,8 +13,8 @@ namespace cutf {
 namespace debug {
 namespace time_breakdown {
 class profiler {
-	std::map<std::string, std::chrono::system_clock::time_point> start_timestamps;
-	std::map<std::string, std::vector<std::time_t>> elapsed_time_list_table;
+	std::unordered_map<std::string, std::chrono::system_clock::time_point> start_timestamps;
+	std::unordered_map<std::string, std::vector<std::time_t>> elapsed_time_list_table;
 	cudaStream_t cuda_stream;
 public:
 	profiler(cudaStream_t cuda_stream = 0) :
