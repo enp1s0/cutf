@@ -24,6 +24,7 @@ public:
 
 	void disable_measurement() {enabled = false;}
 	void enable_measurement() {enabled = true;}
+	bool is_measure_enabled() const {return enabled;}
 
 	void start_timer_sync(
 			const std::string name			
