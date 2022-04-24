@@ -1,5 +1,6 @@
 #ifndef __CUTF_CP_ASYNC_HPP__
 #define __CUTF_CP_ASYNC_HPP__
+#include <cstdint>
 namespace cutf {
 namespace cp_async {
 namespace detail {
