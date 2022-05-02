@@ -1,6 +1,6 @@
 #include <cutf/type.hpp>
 #include <cutf/experimental/fp.hpp>
-#include <cutf/debug/print.hpp>
+#include <cutf/debug/fp.hpp>
 #include <iostream>
 #include <random>
 
