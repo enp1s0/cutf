@@ -78,6 +78,32 @@ template <> CUTF_DEVICE_FUNC inline int abs<int>(const int a){return ::abs(a);}
 template <> CUTF_DEVICE_FUNC inline long int abs<long int>(const long int a){return labs(a);}
 template <> CUTF_DEVICE_FUNC inline long long int abs<long long int>(const long long int a){return llabs(a);}
 
+// isinf
+template <class T>
+CUTF_DEVICE_FUNC inline bool isnan(const T value) {return isnan(value);}
+template <>
+CUTF_DEVICE_FUNC inline bool isnan<half>(const half value) {
+#ifdef __CUDA_ARCH__
+	return __hisnan(value);
+#else
+	const auto v = cutf::experimental::fp::reinterpret_as_uint(value);
+	return (((v >> 10) & 0x1f) == 0x1f) && (v & 0x3ff);
+#endif
+}
+
+// isnan
+template <class T>
+CUTF_DEVICE_FUNC inline bool isinf(const T value) {return isinf(value);}
+template <>
+CUTF_DEVICE_FUNC inline bool isinf<half>(const half value) {
+#ifdef __CUDA_ARCH__
+	return __hisinf(value);
+#else
+	const auto v = cutf::experimental::fp::reinterpret_as_uint(value);
+	return (((v >> 10) & 0x1f) == 0x1f) && !(v & 0x3ff);
+#endif
+}
+
 // get sign
 template <class T> CUTF_DEVICE_FUNC inline T sign(const T v);
 #ifdef __CUDA_ARCH__
