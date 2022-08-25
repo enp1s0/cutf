@@ -24,6 +24,16 @@ cutf::math::[operation](x);
 |sqrt|$`\sqrt{x}`$|
 |trunc|	Truncate input argument to the integral part|
 
+### isnan and isinf
+```cpp
+// x : half, float, double
+cutf::math::[operation](x);
+```
+|Operation| description |
+|:--------|:------------|
+|isinf| is inf |
+|isnan| is nan |
+
 ### cutf original function
 |Operation| description |
 |:--------|:------------|
