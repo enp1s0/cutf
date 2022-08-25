@@ -80,9 +80,9 @@ template <> CUTF_DEVICE_FUNC inline long long int abs<long long int>(const long 
 
 // isinf
 template <class T>
-CUTF_DEVICE_FUNC inline bool isnan(const T value) {return isnan(value);}
+CUTF_DEVICE_HOST_FUNC inline bool isnan(const T value) {return isnan(value);}
 template <>
-CUTF_DEVICE_FUNC inline bool isnan<half>(const half value) {
+CUTF_DEVICE_HOST_FUNC inline bool isnan<half>(const half value) {
 #ifdef __CUDA_ARCH__
 	return __hisnan(value);
 #else
@@ -93,9 +93,9 @@ CUTF_DEVICE_FUNC inline bool isnan<half>(const half value) {
 
 // isnan
 template <class T>
-CUTF_DEVICE_FUNC inline bool isinf(const T value) {return isinf(value);}
+CUTF_DEVICE_HOST_FUNC inline bool isinf(const T value) {return isinf(value);}
 template <>
-CUTF_DEVICE_FUNC inline bool isinf<half>(const half value) {
+CUTF_DEVICE_HOST_FUNC inline bool isinf<half>(const half value) {
 #ifdef __CUDA_ARCH__
 	return __hisinf(value);
 #else
