@@ -1,5 +1,5 @@
 include ../Makefile.common
-TARGETS=abs.test maxmin.test horizontal.test imath.test
+TARGETS=abs.test maxmin.test horizontal.test imath.test is.test
 
 all: $(TARGETS)
 
