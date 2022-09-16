@@ -67,13 +67,12 @@ template <class T> T abs(const T a);
 template <> CUTF_DEVICE_FUNC inline double abs<double>(const double a){return fabs(a);}
 template <> CUTF_DEVICE_FUNC inline float abs<float>(const float a){return fabsf(a);}
 template <> CUTF_DEVICE_FUNC inline __half abs<__half>(const __half a){
-    const auto abs_a = cutf::experimental::fp::reinterpret_as_uint(a) & 0x7fff;
-    return cutf::experimental::fp::reinterpret_as_fp(abs_a);
+    const uint16_t abs_a = cutf::experimental::fp::reinterpret_as_uint(a) & 0x7fff;
+    return cutf::experimental::fp::reinterpret_as_fp<uint16_t>(abs_a);
 }
 template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
     const auto abs_a = cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.fp = a}.bs & 0x7fff7fff;
-    // This reinterpretation can't avoid using `reinterpret_cast` because `__half2` is not a standard numeric type but struct.
-    return *reinterpret_cast<const __half2*>(&abs_a);
+		return cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.bs = abs_a}.fp;
 }
 template <> CUTF_DEVICE_FUNC inline int abs<int>(const int a){return ::abs(a);}
 template <> CUTF_DEVICE_FUNC inline long int abs<long int>(const long int a){return labs(a);}
