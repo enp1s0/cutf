@@ -72,7 +72,8 @@ template <> CUTF_DEVICE_FUNC inline __half abs<__half>(const __half a){
 }
 template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
     const auto abs_a = cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.fp = a}.bs & 0x7fff7fff;
-		return cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.bs = abs_a}.fp;
+		// This reinterpretation can't avoid using `reinterpret_cast` because `__half2` is not a standard numeric type but struct.
+		return *reinterpret_cast<const __half2*>(&abs_a);
 }
 template <> CUTF_DEVICE_FUNC inline int abs<int>(const int a){return ::abs(a);}
 template <> CUTF_DEVICE_FUNC inline long int abs<long int>(const long int a){return labs(a);}
