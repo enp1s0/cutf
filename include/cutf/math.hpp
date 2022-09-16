@@ -68,7 +68,7 @@ template <> CUTF_DEVICE_FUNC inline double abs<double>(const double a){return fa
 template <> CUTF_DEVICE_FUNC inline float abs<float>(const float a){return fabsf(a);}
 template <> CUTF_DEVICE_FUNC inline __half abs<__half>(const __half a){
     const uint16_t abs_a = cutf::experimental::fp::reinterpret_as_uint(a) & 0x7fff;
-    return cutf::experimental::fp::reinterpret_as_fp<uint16_t>(abs_a);
+    return cutf::experimental::fp::reinterpret_as_fp(abs_a);
 }
 template <> CUTF_DEVICE_FUNC inline __half2 abs<__half2>(const __half2 a){
     const auto abs_a = cutf::experimental::fp::detail::reinterpret_medium<__half2, uint32_t>{.fp = a}.bs & 0x7fff7fff;
