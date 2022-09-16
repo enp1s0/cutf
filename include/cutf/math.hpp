@@ -181,7 +181,7 @@ CUTF_DEVICE_FUNC inline float max(const float a, const float b) {return fmaxf(a,
 CUTF_DEVICE_FUNC inline double max(const double a, const double b) {return fmax(a, b);};
 
 // For math functions for integers
-#define CUTF_MATH_IMAX(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC type_r max(const type_a a, const type_b b) {return ::bfunc(a, b);}
+#define CUTF_MATH_IMAX(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC inline type_r max(const type_a a, const type_b b) {return ::bfunc(a, b);}
 CUTF_MATH_IMAX(max   , unsigned long long int, unsigned long long int, unsigned long long int);
 CUTF_MATH_IMAX(max   , unsigned long long int, long long int         , unsigned long long int);
 CUTF_MATH_IMAX(max   , unsigned long long int, unsigned long long int, long long int         );
@@ -224,7 +224,7 @@ CUTF_DEVICE_FUNC inline float min(const float a, const float b) {return fminf(a,
 CUTF_DEVICE_FUNC inline double min(const double a, const double b) {return fmin(a, b);};
 
 
-#define CUTF_MATH_IMIN(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC type_r min(const type_a a, const type_b b) {return ::bfunc(a, b);}
+#define CUTF_MATH_IMIN(bfunc, type_r, type_a, type_b) CUTF_DEVICE_FUNC inline type_r min(const type_a a, const type_b b) {return ::bfunc(a, b);}
 CUTF_MATH_IMIN(min   , unsigned long long int, unsigned long long int, unsigned long long int);
 CUTF_MATH_IMIN(min   , unsigned long long int, long long int         , unsigned long long int);
 CUTF_MATH_IMIN(min   , unsigned long long int, unsigned long long int, long long int         );
