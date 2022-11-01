@@ -6,11 +6,15 @@
 #include <cutf/debug/matrix.hpp>
 
 using compute_t = float;
-constexpr std::size_t N = 1 << 6;
+constexpr std::size_t default_N = 1 << 13;
 
-int main(){
+int main(int argc, char** argv){
+	std::size_t N = default_N;
+	if (argc >= 2) {
+		N = std::stoul(argv[1]);
+	}
+
 	auto hA = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
-	auto hT = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
 	auto dA = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
 
 	auto dInfo = cutf::memory::get_device_unique_ptr<int>(1);
@@ -19,32 +23,21 @@ int main(){
 	std::mt19937 mt(std::random_device{}());
 
 	for(auto i = decltype(N)(0); i < N * N; i++){
-		hT.get()[i] = cutf::type::cast<compute_t>(dist(mt));
-	}
-
-#pragma omp parallel for collapse(2)
-	for(auto i = decltype(N)(0); i < N; i++){
-		for(auto j = decltype(N)(0); j < N; j++){
-			compute_t c = 0;
-			for(auto k = decltype(N)(0); k < N; k++){
-				c += hT.get()[k * N + i] * hT.get()[k + j * N];
-			}
-			hA.get()[i + j * N] = c;
-		}
+		hA.get()[i] = cutf::type::cast<compute_t>(dist(mt));
 	}
 
 	cutf::memory::copy(dA.get(), hA.get(), N * N);
 	auto cusolver = cutf::cusolver::dn::get_handle_unique_ptr();
 
 	int Lwork;
-	CUTF_CHECK_ERROR(cutf::cusolver::dn::potrf_buffer_size(*cusolver.get(), CUBLAS_FILL_MODE_FULL, N, dA.get(), N, &Lwork));
+	CUTF_CHECK_ERROR(cutf::cusolver::dn::potrf_buffer_size(*cusolver.get(), CUBLAS_FILL_MODE_UPPER, N, dA.get(), N, &Lwork));
 	std::cout<<"Buffer size : "<<(sizeof(compute_t) * (Lwork))<<"B"<<std::endl;
 
 	auto dLwork_buffer = cutf::memory::get_device_unique_ptr<compute_t>(Lwork);
 
 	CUTF_CHECK_ERROR(cutf::cusolver::dn::potrf(
 				*cusolver.get(),
-				CUBLAS_FILL_MODE_FULL,
+				CUBLAS_FILL_MODE_UPPER,
 				N,
 				dA.get(), N,
 				dLwork_buffer.get(),
