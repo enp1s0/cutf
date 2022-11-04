@@ -5,6 +5,7 @@
 #include <cutf/cache.hpp>
 
 const std::size_t N = 1lu << 30;
+const std::size_t C = 1lu << 6;
 
 template <class prefetch>
 __global__ void prefetch_test_kernel(
@@ -13,7 +14,7 @@ __global__ void prefetch_test_kernel(
 		) {
 	const auto i_stride = blockDim.x * gridDim.x;
 	std::size_t i = threadIdx.x + blockIdx.x * blockDim.x;
-	if (i < length) {
+	if (i >= length) {
 		return;
 	}
 
@@ -61,7 +62,9 @@ void eval(const std::size_t N) {
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	const auto start_clock = std::chrono::system_clock::now();
 
-	prefetch_test<prefetch>(mem_array.get(), N);
+	for (unsigned i = 0; i < C; i++) {
+		prefetch_test<prefetch>(mem_array.get(), N);
+	}
 
 	CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 	const auto end_clock = std::chrono::system_clock::now();
@@ -70,7 +73,7 @@ void eval(const std::size_t N) {
 	std::printf(
 			"Prefetch mode = %s, Bandwidth = %e [TB/s]\n",
 			get_name_str<prefetch>().c_str(),
-			1. * N * sizeof(int) / elapsed_time * 1e-12
+			1. * N * sizeof(int) / elapsed_time * 1e-12 * C * 2
 			);
 }
 
