@@ -18,18 +18,15 @@ __global__ void prefetch_test_kernel(
 		return;
 	}
 
-	while (true) {
+	for (; i < length - i_stride; i += i_stride) {
 		ptr[i] += i;
 
-		i += i_stride;
-		if (i < length) {
-			if constexpr (!std::is_same<prefetch, void>::value) {
-				cutf::cache::prefetch<prefetch, cutf::cache::global>(ptr + i);
-			}
-		} else {
-			return;
+		if constexpr (!std::is_same<prefetch, void>::value) {
+			cutf::cache::prefetch<prefetch, cutf::cache::global>(ptr + i + i_stride);
 		}
 	}
+
+	ptr[i] += i;
 }
 
 template <class prefetch>
