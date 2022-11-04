@@ -6,7 +6,7 @@
 #include <cutf/debug/matrix.hpp>
 
 using compute_t = float;
-constexpr std::size_t M = 1 << 4;
+constexpr std::size_t M = 1 << 5;
 constexpr std::size_t N = 1 << 5;
 
 int main(){

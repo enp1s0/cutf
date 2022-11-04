@@ -1,6 +1,5 @@
 include ../Makefile.common
-NVCCFLAGS+=-lcusolver -lcublas -Xcompiler=-fopenmp
-TARGETS=gesvd.test potrf.test
+TARGETS=prefetch.test
 
 all: $(TARGETS)
 
