@@ -70,29 +70,22 @@ public:
 		}
 	}
 
-	void print_result(FILE* const out = stderr) const {
-		// Find the longest entry name
-		std::size_t longest_name_length = 0;
-		for (const auto& t : elapsed_time_list_table) {
-			longest_name_length = std::max(t.first.length(), longest_name_length);
-		}
-		struct statistic_t {
-			std::string name;
-			std::size_t n;
-			std::time_t sum;
-			std::time_t min;
-			std::time_t max;
-			std::time_t median;
-		};
+	struct statistic_t {
+		std::string name;
+		std::size_t n;
+		std::time_t sum;
+		std::time_t min;
+		std::time_t max;
+		std::time_t median;
+	};
 
-		std::time_t time_total = 0;
+	std::vector<statistic_t> get_statistics_list() const {
 		std::vector<statistic_t> statistic_list;
 		for (auto t : elapsed_time_list_table) {
 			statistic_t s{t.first, t.second.size(), 0, 0x7fffffffffffffffl, 0};
 			std::sort(t.second.begin(), t.second.end());
 			for (const auto &ti : t.second) {
 				s.sum += ti;
-				time_total += ti;
 			}
 			s.min = t.second[0];
 			s.max = t.second[t.second.size() - 1];
@@ -102,6 +95,21 @@ public:
 				s.median = (t.second[t.second.size() / 2 - 1] + t.second[t.second.size() / 2]) / 2;
 			}
 			statistic_list.push_back(s);
+		}
+		return statistic_list;
+	}
+
+	void print_result(FILE* const out = stderr) const {
+		// Find the longest entry name
+		std::size_t longest_name_length = 0;
+		for (const auto& t : elapsed_time_list_table) {
+			longest_name_length = std::max(t.first.length(), longest_name_length);
+		}
+
+		auto statistic_list = get_statistics_list();
+		std::time_t time_total = 0;
+		for (const auto s : statistic_list) {
+			time_total += s.sum;
 		}
 
 		std::sort(statistic_list.begin(), statistic_list.end(),
@@ -143,22 +151,7 @@ public:
 			std::time_t median;
 		};
 
-		std::vector<statistic_t> statistic_list;
-		for (auto t : elapsed_time_list_table) {
-			statistic_t s{t.first, t.second.size(), 0, 0x7fffffffffffffffl, 0};
-			std::sort(t.second.begin(), t.second.end());
-			for (const auto &ti : t.second) {
-				s.sum += ti;
-			}
-			s.min = t.second[0];
-			s.max = t.second[t.second.size() - 1];
-			if ((t.second.size() % 2) == 1) {
-				s.median = t.second[t.second.size() / 2];
-			} else {
-				s.median = (t.second[t.second.size() / 2 - 1] + t.second[t.second.size() / 2]) / 2;
-			}
-			statistic_list.push_back(s);
-		}
+		auto statistic_list = get_statistics_list();
 
 		std::printf("name,n,sum_us,avg_us,min_us,max_us,med_us\n");
 		for (const auto& s : statistic_list) {
