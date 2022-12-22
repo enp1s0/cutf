@@ -48,9 +48,4 @@ int main(int argc, char** argv){
 	int hInfo;
 	cutf::memory::copy(&hInfo, dInfo.get(), 1);
 	std::cout<<"gesvd info : "<<hInfo<<std::endl;
-
-	//cutf::debug::print::print_matrix(hA.get(), M, N, "A");
-	//cutf::debug::print::print_matrix(hS.get(), 1, num_s, "S");
-	//cutf::debug::print::print_matrix(hU.get(), M, num_s, "U");
-	//cutf::debug::print::print_matrix(hVT.get(), num_s, N, "VT");
 }
