@@ -33,7 +33,7 @@ CUTF_DEVICE_HOST_FUNC inline void print_matrix_hex(const T* const ptr, const std
 	if(name != nullptr) printf("%s = \n", name);
 	for(std::size_t i = 0; i < m; i++) {
 		for(std::size_t j = 0; j < n; j++) {
-			const auto val = cutf::type::cast<float>(ptr[j * ldm + i]);
+			const auto val = ptr[j * ldm + i];
 			print::print_hex(val, false);
 			printf(" ");
 		}
