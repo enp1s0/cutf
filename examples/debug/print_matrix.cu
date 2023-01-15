@@ -11,8 +11,10 @@ int main() {
 	}
 	std::printf("# print_matrix\n");
 	cutf::debug::print::print_matrix(h_mat, N, N);
+	cutf::debug::print::print_matrix_hex(h_mat, N, N);
 	cutf::debug::print::print_numpy_matrix(h_mat, N, N);
 	cutf::debug::print::print_matrix(h_mat, N, N, N);
+	cutf::debug::print::print_matrix_hex(h_mat, N, N, N);
 	cutf::debug::print::print_numpy_matrix(h_mat, N, N, N);
 
 	auto d_uptr = cutf::memory::get_device_unique_ptr<float>(N * N);
@@ -20,7 +22,9 @@ int main() {
 
 	std::printf("# print_matrix_from_host\n");
 	cutf::debug::print::print_matrix_from_host(d_uptr.get(), N, N);
+	cutf::debug::print::print_matrix_hex_from_host(d_uptr.get(), N, N);
 	cutf::debug::print::print_numpy_matrix_from_host(d_uptr.get(), N, N);
 	cutf::debug::print::print_matrix_from_host(d_uptr.get(), N, N, N);
+	cutf::debug::print::print_matrix_hex_from_host(d_uptr.get(), N, N, N);
 	cutf::debug::print::print_numpy_matrix_from_host(d_uptr.get(), N, N, N);
 }
