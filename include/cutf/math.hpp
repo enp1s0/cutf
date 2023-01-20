@@ -255,15 +255,15 @@ CUTF_DEVICE_FUNC inline double min(const double a, const double b);
 
 namespace horizontal {
 #ifdef __CUDA_ARCH__
-inline CUTF_DEVICE_FUNC __half add(const __half2 a) {return a.x + a.y;}
-inline CUTF_DEVICE_FUNC __half mul(const __half2 a) {return a.x * a.y;}
-inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return cutf::math::max(a.x, a.y);}
-inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return cutf::math::min(a.x, a.y);}
+inline CUTF_DEVICE_HOST_FUNC __half add(const __half2 a) {return a.x + a.y;}
+inline CUTF_DEVICE_HOST_FUNC __half mul(const __half2 a) {return a.x * a.y;}
+inline CUTF_DEVICE_HOST_FUNC __half max(const __half2 a) {return cutf::math::max(a.x, a.y);}
+inline CUTF_DEVICE_HOST_FUNC __half min(const __half2 a) {return cutf::math::min(a.x, a.y);}
 #else
-inline CUTF_DEVICE_FUNC __half add(const __half2 a) {return __float2half(__half2float(a.x) + __half2float(a.y));}
-inline CUTF_DEVICE_FUNC __half mul(const __half2 a) {return __float2half(__half2float(a.x) * __half2float(a.y));}
-inline CUTF_DEVICE_FUNC __half max(const __half2 a) {return __float2half(std::max(__half2float(a.x), __half2float(a.y)));}
-inline CUTF_DEVICE_FUNC __half min(const __half2 a) {return __float2half(std::min(__half2float(a.x), __half2float(a.y)));}
+inline CUTF_DEVICE_HOST_FUNC __half add(const __half2 a) {return __float2half(__half2float(a.x) + __half2float(a.y));}
+inline CUTF_DEVICE_HOST_FUNC __half mul(const __half2 a) {return __float2half(__half2float(a.x) * __half2float(a.y));}
+inline CUTF_DEVICE_HOST_FUNC __half max(const __half2 a) {return __float2half(std::max(__half2float(a.x), __half2float(a.y)));}
+inline CUTF_DEVICE_HOST_FUNC __half min(const __half2 a) {return __float2half(std::min(__half2float(a.x), __half2float(a.y)));}
 #endif
 } // namespace horizontal
 } // math
