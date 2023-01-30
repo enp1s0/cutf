@@ -28,6 +28,22 @@ template <> struct same_size_fp<uint32_t> {using type = float ;};
 template <> struct same_size_fp<uint64_t> {using type = double;};
 
 template <class T>
+struct size_of{static const unsigned value= 0;};
+template <> struct size_of<half       > {static const unsigned value = 2;};
+template <> struct size_of<float      > {static const unsigned value = 4;};
+template <> struct size_of<double     > {static const unsigned value = 8;};
+template <> struct size_of<uint8_t    > {static const unsigned value = 1;};
+template <> struct size_of<uint16_t   > {static const unsigned value = 2;};
+template <> struct size_of<uint32_t   > {static const unsigned value = 4;};
+template <> struct size_of<uint64_t   > {static const unsigned value = 8;};
+template <> struct size_of<__uint128_t> {static const unsigned value = 16;};
+template <> struct size_of<int8_t     > {static const unsigned value = 1;};
+template <> struct size_of<int16_t    > {static const unsigned value = 2;};
+template <> struct size_of<int32_t    > {static const unsigned value = 4;};
+template <> struct size_of<int64_t    > {static const unsigned value = 8;};
+template <> struct size_of<__int128_t > {static const unsigned value = 16;};
+
+template <class T>
 CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size();
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size<half  >() {return 5;}
 template <> CUTF_DEVICE_HOST_FUNC inline unsigned get_exponent_size<float >() {return 8;}

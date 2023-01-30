@@ -20,21 +20,24 @@ template <> struct bitstring_t<const half  > {using type = uint64_t;};
 namespace print {
 template <class T>
 __device__ __host__ inline void print_hex(const T v, const bool line_break = true);
-template <> __device__ __host__ inline void print_hex<uint64_t>(const uint64_t v, const bool line_break) {printf("0x%016lx", v);if(line_break)printf("\n");}
-template <> __device__ __host__ inline void print_hex<uint32_t>(const uint32_t v, const bool line_break) {printf("0x%08x", v);if(line_break)printf("\n");}
-template <> __device__ __host__ inline void print_hex<uint16_t>(const uint16_t v, const bool line_break) {printf("0x%04x", v);if(line_break)printf("\n");}
-template <> __device__ __host__ inline void print_hex<uint8_t >(const uint8_t  v, const bool line_break) {printf("0x%02x", v);if(line_break)printf("\n");}
+template <> __device__ __host__ inline void print_hex<uint64_t>(const uint64_t v, const bool line_break) {if(line_break)printf("0x%016lx\n", v);else printf("0x%016lx", v);}
+template <> __device__ __host__ inline void print_hex<uint32_t>(const uint32_t v, const bool line_break) {if(line_break)printf("0x%08x\n"  , v);else printf("0x%08x"  , v);}
+template <> __device__ __host__ inline void print_hex<uint16_t>(const uint16_t v, const bool line_break) {if(line_break)printf("0x%04x\n"  , v);else printf("0x%04x"  , v);}
+template <> __device__ __host__ inline void print_hex<uint8_t >(const uint8_t  v, const bool line_break) {if(line_break)printf("0x%02x\n"  , v);else printf("0x%02x"  , v);}
 template <> __device__ __host__ inline void print_hex<double  >(const double   v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
 template <> __device__ __host__ inline void print_hex<float   >(const float    v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
 template <> __device__ __host__ inline void print_hex<half    >(const half     v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
 
 template <class T>
 __device__ __host__ inline void print_bin(const T v, const bool line_break = true) {
+	char bs_str[cutf::experimental::fp::size_of<T>::value * 8 + 1] = {0};
 	for (int i = sizeof(T) * 8 - 1; i >= 0; i--) {
-		printf("%d", static_cast<int>(v >> i) & 0x1);
+		bs_str[cutf::experimental::fp::size_of<T>::value * 8 - 1 - i] = static_cast<char>(static_cast<int>('0') + (static_cast<int>(v >> i) & 0x1));
 	}
 	if (line_break) {
-		printf("\n");
+		printf("%s\n", bs_str);
+	} else {
+		printf("%s", bs_str);
 	}
 }
 template <> __device__ __host__ inline void print_bin<half  >(const half   v, const bool line_break) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
