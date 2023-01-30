@@ -4,4 +4,6 @@
 int main(){
 	cutf::debug::print::print_bin(1.0f / 3.0f, true);
 	cutf::debug::print::print_bin(1.0 / 3.0, true);
+	cutf::debug::print::print_hex(1.0f / 3.0f, true);
+	cutf::debug::print::print_hex(1.0 / 3.0, true);
 }
