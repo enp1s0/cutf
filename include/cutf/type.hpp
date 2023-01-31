@@ -161,10 +161,14 @@ DATA_TYPE_DEF(cuComplex, C, 32F);
 DATA_TYPE_DEF(double, R, 64F);
 DATA_TYPE_DEF(cuDoubleComplex, C, 64F);
 // Uncertain {{{
-DATA_TYPE_DEF(char, R, 8I);
-DATA_TYPE_DEF(short, C, 8I);
+DATA_TYPE_DEF(signed char, R, 8I);
+DATA_TYPE_DEF(signed short, R, 16I);
+DATA_TYPE_DEF(signed int, R, 32I);
+DATA_TYPE_DEF(signed long, R, 64I);
 DATA_TYPE_DEF(unsigned char, R, 8U);
-DATA_TYPE_DEF(unsigned short, C, 8U);
+DATA_TYPE_DEF(unsigned short, R, 16U);
+DATA_TYPE_DEF(unsigned int, R, 32U);
+DATA_TYPE_DEF(unsigned long, R, 64U);
 // }}}
 } // namespace type	
 } // cutf
