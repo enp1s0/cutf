@@ -60,6 +60,7 @@ cutf
 ├─ cufft
 ├─ cupti
 ├─ curand
+├─ curand_kernel
 ├─ cusolver
 ├─ cutensor
 ├─ debug
