@@ -53,7 +53,7 @@ template <> __device__ __host__ inline void print_hex<__uint128_t>(const __uint1
 }
 
 template <class T>
-__device__ __host__ inline void print_bin(const T v, const bool line_break = true, const bool prefix) {
+__device__ __host__ inline void print_bin(const T v, const bool line_break = true, const bool prefix = true) {
 	if (prefix) {
 		std::printf("0b");
 	}
