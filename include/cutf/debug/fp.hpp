@@ -53,7 +53,10 @@ template <> __device__ __host__ inline void print_hex<__uint128_t>(const __uint1
 }
 
 template <class T>
-__device__ __host__ inline void print_bin(const T v, const bool line_break = true) {
+__device__ __host__ inline void print_bin(const T v, const bool line_break = true, const bool prefix) {
+	if (prefix) {
+		std::printf("0b");
+	}
 	char bs_str[cutf::experimental::fp::size_of<T>::value * 8 + 1] = {0};
 	for (int i = sizeof(T) * 8 - 1; i >= 0; i--) {
 		bs_str[cutf::experimental::fp::size_of<T>::value * 8 - 1 - i] = static_cast<char>(static_cast<int>('0') + (static_cast<int>(v >> i) & 0x1));
