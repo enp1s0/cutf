@@ -64,9 +64,9 @@ __device__ __host__ inline void print_bin(const T v, const bool line_break = tru
 		printf("%s", bs_str);
 	}
 }
-template <> __device__ __host__ inline void print_bin<half  >(const half   v, const bool line_break) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
-template <> __device__ __host__ inline void print_bin<float >(const float  v, const bool line_break) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
-template <> __device__ __host__ inline void print_bin<double>(const double v, const bool line_break) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
+template <> __device__ __host__ inline void print_bin<half  >(const half   v, const bool line_break, const bool prefix) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break, prefix);}
+template <> __device__ __host__ inline void print_bin<float >(const float  v, const bool line_break, const bool prefix) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break, prefix);}
+template <> __device__ __host__ inline void print_bin<double>(const double v, const bool line_break, const bool prefix) {print_bin(cutf::experimental::fp::reinterpret_as_uint(v), line_break, prefix);}
 } // namespace print
 } // namespace debug
 } // namespace cutf
