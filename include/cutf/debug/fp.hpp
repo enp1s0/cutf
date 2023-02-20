@@ -19,18 +19,38 @@ template <> struct bitstring_t<const half  > {using type = uint64_t;};
 
 namespace print {
 template <class T>
-__device__ __host__ inline void print_hex(const T v, const bool line_break = true);
-template <> __device__ __host__ inline void print_hex<uint64_t>(const uint64_t v, const bool line_break) {if(line_break)printf("0x%016lx\n", v);else printf("0x%016lx", v);}
-template <> __device__ __host__ inline void print_hex<uint32_t>(const uint32_t v, const bool line_break) {if(line_break)printf("0x%08x\n"  , v);else printf("0x%08x"  , v);}
-template <> __device__ __host__ inline void print_hex<uint16_t>(const uint16_t v, const bool line_break) {if(line_break)printf("0x%04x\n"  , v);else printf("0x%04x"  , v);}
-template <> __device__ __host__ inline void print_hex<uint8_t >(const uint8_t  v, const bool line_break) {if(line_break)printf("0x%02x\n"  , v);else printf("0x%02x"  , v);}
-template <> __device__ __host__ inline void print_hex<int64_t >(const int64_t  v, const bool line_break) {if(line_break)printf("0x%016lx\n", v);else printf("0x%016lx", v);}
-template <> __device__ __host__ inline void print_hex<int32_t >(const int32_t  v, const bool line_break) {if(line_break)printf("0x%08x\n"  , v);else printf("0x%08x"  , v);}
-template <> __device__ __host__ inline void print_hex<int16_t >(const int16_t  v, const bool line_break) {if(line_break)printf("0x%04x\n"  , v);else printf("0x%04x"  , v);}
-template <> __device__ __host__ inline void print_hex<int8_t  >(const int8_t   v, const bool line_break) {if(line_break)printf("0x%02x\n"  , v);else printf("0x%02x"  , v);}
-template <> __device__ __host__ inline void print_hex<double  >(const double   v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
-template <> __device__ __host__ inline void print_hex<float   >(const float    v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
-template <> __device__ __host__ inline void print_hex<half    >(const half     v, const bool line_break) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
+__device__ __host__ inline void print_hex(const T v, const bool line_break = true, const bool prefix = true);
+template <> __device__ __host__ inline void print_hex<uint64_t>(const uint64_t v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%016lx\n", v);else printf("%016lx", v);}
+template <> __device__ __host__ inline void print_hex<uint32_t>(const uint32_t v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%08x\n"  , v);else printf("%08x"  , v);}
+template <> __device__ __host__ inline void print_hex<uint16_t>(const uint16_t v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%04x\n"  , v);else printf("%04x"  , v);}
+template <> __device__ __host__ inline void print_hex<uint8_t >(const uint8_t  v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%02x\n"  , v);else printf("%02x"  , v);}
+template <> __device__ __host__ inline void print_hex<int64_t >(const int64_t  v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%016lx\n", v);else printf("%016lx", v);}
+template <> __device__ __host__ inline void print_hex<int32_t >(const int32_t  v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%08x\n"  , v);else printf("%08x"  , v);}
+template <> __device__ __host__ inline void print_hex<int16_t >(const int16_t  v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%04x\n"  , v);else printf("%04x"  , v);}
+template <> __device__ __host__ inline void print_hex<int8_t  >(const int8_t   v, const bool line_break, const bool prefix) {if(prefix)printf("0x");if(line_break)printf("%02x\n"  , v);else printf("%02x"  , v);}
+template <> __device__ __host__ inline void print_hex<double  >(const double   v, const bool line_break, const bool prefix) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
+template <> __device__ __host__ inline void print_hex<float   >(const float    v, const bool line_break, const bool prefix) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
+template <> __device__ __host__ inline void print_hex<half    >(const half     v, const bool line_break, const bool prefix) {print_hex(cutf::experimental::fp::reinterpret_as_uint(v), line_break);}
+
+template <> __device__ __host__ inline void print_hex<__int128_t>(const __int128_t v, const bool line_break, const bool prefix) {
+	union {
+		std::int64_t v[2];
+		__int128_t w;
+	} a;
+	a.w = v;
+	print_hex(a.v[1], false, prefix);
+	print_hex(a.v[0], line_break, false);
+}
+
+template <> __device__ __host__ inline void print_hex<__uint128_t>(const __uint128_t v, const bool line_break, const bool prefix) {
+	union {
+		std::uint64_t v[2];
+		__uint128_t w;
+	} a;
+	a.w = v;
+	print_hex(a.v[1], false, prefix);
+	print_hex(a.v[0], line_break, false);
+}
 
 template <class T>
 __device__ __host__ inline void print_bin(const T v, const bool line_break = true) {
