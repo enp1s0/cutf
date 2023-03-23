@@ -5,8 +5,8 @@
 constexpr unsigned N = 4;
 
 int main() {
-	float h_mat[N * N];
-	for (unsigned i = 0; i < N * N; i++) {
+	float h_mat[2 * N * N];
+	for (unsigned i = 0; i < 2 * N * N; i++) {
 		h_mat[i] = i;
 	}
 	std::printf("# print_matrix\n");
@@ -16,6 +16,12 @@ int main() {
 	cutf::debug::print::print_matrix(h_mat, N, N, N);
 	cutf::debug::print::print_matrix_hex(h_mat, N, N, N);
 	cutf::debug::print::print_numpy_matrix(h_mat, N, N, N);
+
+	const auto h2_mat = reinterpret_cast<const cuComplex*>(h_mat);
+	cutf::debug::print::print_matrix(h2_mat, N, N);
+	cutf::debug::print::print_numpy_matrix(h2_mat, N, N);
+	cutf::debug::print::print_matrix(h2_mat, N, N, N);
+	cutf::debug::print::print_numpy_matrix(h2_mat, N, N, N);
 
 	auto d_uptr = cutf::memory::get_device_unique_ptr<float>(N * N);
 	cutf::memory::copy(d_uptr.get(), h_mat, N * N);
