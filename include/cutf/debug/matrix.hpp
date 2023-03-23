@@ -6,18 +6,36 @@
 #include "../macro.hpp"
 #include "../memory.hpp"
 #include "fp.hpp"
+#include <cuComplex.h>
 
 namespace cutf {
 namespace debug {
 namespace print {
+
+namespace detail {
+
+template <class T>
+CUTF_DEVICE_HOST_FUNC inline void print_fp(const T a) {
+	printf("%+e", cutf::type::cast<double>(a));
+}
+
+template <>
+CUTF_DEVICE_HOST_FUNC inline void print_fp<cuComplex>(const cuComplex a) {
+	printf("%+e%+ei", cutf::type::cast<double>(a.x), cutf::type::cast<double>(a.y));
+}
+template <>
+CUTF_DEVICE_HOST_FUNC inline void print_fp<cuDoubleComplex>(const cuDoubleComplex a) {
+	printf("%+e%+ei", cutf::type::cast<double>(a.x), cutf::type::cast<double>(a.y));
+}
+} // namespace detail
 
 template <class T>
 CUTF_DEVICE_HOST_FUNC inline void print_matrix(const T* const ptr, const std::size_t m, const std::size_t n, const std::size_t ldm, const char* const name = nullptr) {
 	if(name != nullptr) printf("%s = \n", name);
 	for(std::size_t i = 0; i < m; i++) {
 		for(std::size_t j = 0; j < n; j++) {
-			const auto val = cutf::type::cast<float>(ptr[j * ldm + i]);
-			printf("%+e ", val);
+			detail::print_fp(ptr[j * ldm + i]);
+			printf(" ");
 		}
 		printf("\n");
 	}
@@ -53,10 +71,13 @@ CUTF_DEVICE_HOST_FUNC inline void print_numpy_matrix(const T* const ptr, const s
 	for(std::size_t i = 0; i < m; i++) {
 		printf("[");
 		for(std::size_t j = 0; j < n; j++) {
-			const auto val = cutf::type::cast<float>(ptr[j * ldm + i]);
-			printf("%+e,", val);
+			detail::print_fp(ptr[j * ldm + i]);
+			if (j + 1 < n)
+				printf(",");
 		}
-		printf("],\n");
+		printf("]\n");
+		if (i + 1 < m)
+			printf(",");
 	}
 	printf("]\n");
 }
