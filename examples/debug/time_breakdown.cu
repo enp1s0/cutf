@@ -63,8 +63,12 @@ int main() {
 	cudaMemcpy(ha, da, sizeof(float) * N, cudaMemcpyDefault);
 	profiler.stop_timer_sync("cudaMemcpy");
 
-	profiler.print_result(stdout);
-	profiler.print_result_csv(stdout);
+	profiler.print_result();
+	profiler.print_result_csv();
+
+	std::printf("w/ tag\n");
+	profiler.print_result("TEST");
+	profiler.print_result_csv("TEST");
 
 	cudaStreamDestroy(cuda_stream);
 }

@@ -99,7 +99,7 @@ public:
 		return statistic_list;
 	}
 
-	void print_result(FILE* const out = stderr) const {
+	void print_result(const std::string profile_tag = "", FILE* const out = stderr) const {
 		// Find the longest entry name
 		std::size_t longest_name_length = 0;
 		for (const auto& t : elapsed_time_list_table) {
@@ -116,6 +116,9 @@ public:
 				[&](const statistic_t& a, const statistic_t& b) {return a.sum > b.sum;}
 				);
 
+		if (profile_tag.length() != 0) {
+			std::printf("## Profiling result: %s\n", profile_tag.c_str());
+		}
 		std::printf("# cutf time breakdown result (Total: %10.3f [ms])\n", time_total * 1e-6);
 		std::printf("%*s %13s           %10s %10s %10s %10s %10s\n",
 				static_cast<int>(longest_name_length), "Name",
@@ -140,7 +143,7 @@ public:
 		}
 	}
 
-	void print_result_csv(FILE* const out = stderr) const {
+	void print_result_csv(const std::string profile_tag = "", FILE* const out = stderr) const {
 		// Find the longest entry name
 		struct statistic_t {
 			std::string name;
@@ -153,8 +156,14 @@ public:
 
 		auto statistic_list = get_statistics_list();
 
+		if (profile_tag.length() != 0) {
+			std::printf("profile_tag,");
+		}
 		std::printf("name,n,sum_us,avg_us,min_us,max_us,med_us\n");
 		for (const auto& s : statistic_list) {
+		if (profile_tag.length() != 0) {
+			std::printf("%s,", profile_tag.c_str());
+		}
 			std::printf("%s,%lu,%.3f,%.3f,%.3f,%.3f,%.3f\n",
 					s.name.c_str(),
 					s.n,
