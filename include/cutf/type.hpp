@@ -170,6 +170,43 @@ DATA_TYPE_DEF(unsigned short, R, 16U);
 DATA_TYPE_DEF(unsigned int, R, 32U);
 DATA_TYPE_DEF(unsigned long, R, 64U);
 // }}}
+
+// Complex
+template <class T>
+struct real_type {using type = T;};
+template <> struct real_type<cuDoubleComplex> {using type = double;};
+template <> struct real_type<cuComplex      > {using type = float;};
+template <class T>
+struct complex_type {using type = T;};
+template <> struct complex_type<double> {using type = cuDoubleComplex;};
+template <> struct complex_type<float > {using type = cuComplex;};
+
+template <class DST_T> CUTF_DEVICE_HOST_FUNC inline DST_T cast(const cuComplex);
+template <class DST_T> CUTF_DEVICE_HOST_FUNC inline DST_T cast(const cuDoubleComplex);
+template <> CUTF_DEVICE_HOST_FUNC inline cuDoubleComplex cast<cuDoubleComplex>(const cuComplex a      ) {return make_cuDoubleComplex(a.x, a.y);}
+template <> CUTF_DEVICE_HOST_FUNC inline cuDoubleComplex cast<cuDoubleComplex>(const cuDoubleComplex a) {return a;}
+template <> CUTF_DEVICE_HOST_FUNC inline cuComplex       cast<cuComplex>      (const cuComplex a      ) {return a;}
+template <> CUTF_DEVICE_HOST_FUNC inline cuComplex       cast<cuComplex>      (const cuDoubleComplex a) {return make_cuComplex(a.x, a.y);}
+
+template <class COMPLEX_T, class REAL_T>
+CUTF_DEVICE_HOST_FUNC COMPLEX_T to_complex(const REAL_T r) {
+	COMPLEX_T c;
+	c.x = cast<typename real_type<COMPLEX_T>::type>(r);
+	c.y = 0;
+	return c;
+}
+
+template <class COMPLEX_T>
+CUTF_DEVICE_HOST_FUNC COMPLEX_T make_complex(
+		const typename real_type<COMPLEX_T>::type x,
+		const typename real_type<COMPLEX_T>::type y
+		) {
+	COMPLEX_T c;
+	c.x = x;
+	c.y = y;
+
+	return c;
+}
 } // namespace type	
 } // cutf
 
