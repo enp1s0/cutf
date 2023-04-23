@@ -151,9 +151,9 @@ RCASTS(unsigned long long int , ull, double, double);
 RCASTS(unsigned long long int , ull, float, float);
 
 #define DATA_TYPE_DEF(type_name, number_type, type_size) \
-	template <> inline cudaDataType_t get_data_type<type_name>(){return CUDA_##number_type##_##type_size;}
+template <> constexpr cudaDataType_t get_data_type<type_name>(){return CUDA_##number_type##_##type_size;}
 template <class T>
-inline cudaDataType_t get_data_type();
+constexpr cudaDataType_t get_data_type();
 DATA_TYPE_DEF(half, R, 16F);
 DATA_TYPE_DEF(half2, C, 16F);
 DATA_TYPE_DEF(float, R, 32F);
