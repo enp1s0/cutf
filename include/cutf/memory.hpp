@@ -34,14 +34,14 @@ using host_unique_ptr = std::unique_ptr<T, host_deleter<T>>;
 
 // copy
 template <class T>
-inline cudaError_t copy(T* const dst, const T* const src, const std::size_t size){
-	return cudaMemcpy(dst, src, sizeof(T) * size, cudaMemcpyDefault);
+inline cudaError_t copy(T* const dst, const T* const src, const std::size_t count){
+	return cudaMemcpy(dst, src, sizeof(T) * count, cudaMemcpyDefault);
 }
 
 // asynchronous copy
 template <class T>
-inline cudaError_t copy_async(T* const dst, const T* const src, const std::size_t size, cudaStream_t stream = 0){
-	return cudaMemcpyAsync(dst, src, sizeof(T) * size, cudaMemcpyDefault, stream);
+inline cudaError_t copy_async(T* const dst, const T* const src, const std::size_t count, cudaStream_t stream = 0){
+	return cudaMemcpyAsync(dst, src, sizeof(T) * count, cudaMemcpyDefault, stream);
 }
 
 // Standard malloc / free
@@ -108,20 +108,20 @@ inline void free_host(T* const ptr) {
 // -----------------------------------------------
 // allocater
 template <class T>
-inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t size){
-	T* const ptr = malloc<T>(size);
+inline device_unique_ptr<T> get_device_unique_ptr(const std::size_t count){
+	T* const ptr = malloc<T>(count);
 	return std::unique_ptr<T, device_deleter<T>>{ptr};
 }
 
 template <class T>
-inline device_unique_ptr<T> get_managed_unique_ptr(const std::size_t size){
-	T* const ptr = malloc_managed<T>(size);
+inline device_unique_ptr<T> get_managed_unique_ptr(const std::size_t count){
+	T* const ptr = malloc_managed<T>(count);
 	return std::unique_ptr<T, device_deleter<T>>{ptr};
 }
 
 template <class T>
-inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t size){
-	T* const ptr = malloc_host<T>(size);
+inline host_unique_ptr<T> get_host_unique_ptr(const std::size_t count){
+	T* const ptr = malloc_host<T>(count);
 	return std::unique_ptr<T, host_deleter<T>>{ptr};
 }
 
