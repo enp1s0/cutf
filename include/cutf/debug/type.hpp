@@ -20,6 +20,8 @@ template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<uint16_t>() {
 template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int64_t>() {return "int64_t";}
 template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int32_t>() {return "int32_t";}
 template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<int16_t>() {return "int8_t";}
+template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<cuDoubleComplex>() {return "cuDoubleComplex";}
+template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<cuComplex>() {return "cuComplex";}
 
 } // namespace type
 } // namespace debug
