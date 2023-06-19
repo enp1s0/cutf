@@ -12,7 +12,8 @@
 #include <mma.h>
 #define __CUTF_AMPERE_MMA__
 #else
-struct __nv_bfloat16;
+struct __nv_bfloat16  {std::uint16_t bs;};
+struct __nv_bfloat162 {std::uint32_t bs;};
 namespace nvcuda {
 namespace wmma {
 namespace precision {
@@ -52,20 +53,49 @@ template <class T>
 struct data_t {using type = T;};
 template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
 
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const int a)    {return static_cast<T>(a);};
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const half a)   {return static_cast<T>(a);};
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a)  {return static_cast<T>(a);};
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a) {return static_cast<T>(a);};
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const int a)    {return static_cast<T>(a);}
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a)  {return static_cast<T>(a);}
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a) {return static_cast<T>(a);}
 
 
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 1000
-CAST(int, half, __float2half(static_cast<float>(a)), a);
-
+// FP16
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const half a)   {return static_cast<T>(a);}
+CAST(half  , int   , static_cast<int>(__half2float(a)), a);
 CAST(half  , float , __half2float(a), a);
 CAST(half  , double, static_cast<double>(__half2float(a)), a);
-CAST(float , half  , __float2half(a), a);
-CAST(double, half  , __half2float(static_cast<float>(a)), a);
+
+CAST(int   , half, __float2half(static_cast<float>(a)), a);
+CAST(float , half, __float2half(a), a);
+CAST(double, half, __float2half(static_cast<float>(a)), a);
+
+CAST(half  , half, a, a);
+
+// BF16
+template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const __nv_bfloat16 a)   {return static_cast<T>(a);}
+
+template <>  CUTF_DEVICE_HOST_FUNC inline __nv_bfloat16 cast<__nv_bfloat16>(const float a) {
+#ifdef __CUTF_AMPERE_MMA__
+	return __float2bfloat16(a);
+#else
+	const auto bs = static_cast<std::uint16_t>(cutf::experimental::fp::reinterpret_as_uint(a) >> 16);
+	return cutf::experimental::fp::detail::reinterpret_medium<__nv_bfloat16, std::uint16_t>{.bs = bs}.fp;
 #endif
+}
+template <>  CUTF_DEVICE_HOST_FUNC inline float cast<float>(const __nv_bfloat16 a) {
+#ifdef __CUTF_AMPERE_MMA__
+	return __bfloat162float(a);
+#else
+	const std::uint32_t bs = cutf::experimental::fp::detail::reinterpret_medium<__nv_bfloat16, std::uint16_t>{.fp = a}.bs;
+	return cutf::experimental::fp::reinterpret_as_fp(bs << 16);
+#endif
+}
+CAST(__nv_bfloat16, int   , static_cast<int>(cast<float>(a)), a);
+CAST(__nv_bfloat16, double, static_cast<double>(cast<float>(a)), a);
+
+CAST(int   , __nv_bfloat16, cast<__nv_bfloat16>(static_cast<float>(a)), a);
+CAST(double, __nv_bfloat16, cast<__nv_bfloat16>(static_cast<float>(a)), a);
+
+CAST(__nv_bfloat16, __nv_bfloat16, a, a);
 
 // cast to tf32
 template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
@@ -156,6 +186,8 @@ template <class T>
 constexpr cudaDataType_t get_data_type();
 DATA_TYPE_DEF(half, R, 16F);
 DATA_TYPE_DEF(half2, C, 16F);
+DATA_TYPE_DEF(__nv_bfloat16, R, 16BF);
+DATA_TYPE_DEF(__nv_bfloat162, C, 16BF);
 DATA_TYPE_DEF(float, R, 32F);
 DATA_TYPE_DEF(cuComplex, C, 32F);
 DATA_TYPE_DEF(double, R, 64F);

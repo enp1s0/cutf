@@ -73,7 +73,7 @@ cutf::type::rcast<type, rounding>(x);
 
 |Cast| description |
 |:--------|:------------|
-|cast|`half`,`float`,`double`,`tf32` casts each other|
+|cast|`half`,`float`,`double`,`tf32`, `bf16`, `int` casts each other|
 |reinterpret|reinterpret cast|
 |rcast|rounding cast|
 

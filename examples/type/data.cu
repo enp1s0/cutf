@@ -5,7 +5,14 @@
 #define CHECK_TYPE(T, cuda_type) \
 	static_assert(cutf::type::get_data_type<T>() == cuda_type, "Type unmatched : " #cuda_type)
 
+#define TYPE_CAST_TEST(T) \
+{const auto a = cutf::type::cast<T>(1.0 );CUTF_UNUSED(a);} \
+{const auto a = cutf::type::cast<T>(1.0f);CUTF_UNUSED(a);} \
+{const auto a = cutf::type::cast<T>(1   );CUTF_UNUSED(a);}
+
 int main() {
+	CHECK_TYPE(half           , CUDA_R_16F);
+	CHECK_TYPE(__nv_bfloat16  , CUDA_R_16BF);
 	CHECK_TYPE(float          , CUDA_R_32F);
 	CHECK_TYPE(double         , CUDA_R_64F);
 	CHECK_TYPE(std::uint8_t   , CUDA_R_8U);
@@ -20,4 +27,8 @@ int main() {
 	CHECK_TYPE(int            , CUDA_R_32I);
 	CHECK_TYPE(cuComplex      , CUDA_C_32F);
 	CHECK_TYPE(cuDoubleComplex, CUDA_C_64F);
+
+	TYPE_CAST_TEST(half);
+	TYPE_CAST_TEST(__nv_bfloat16);
+	TYPE_CAST_TEST(nvcuda::wmma::precision::tf32);
 }
