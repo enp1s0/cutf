@@ -97,12 +97,9 @@ CUTF_DEVICE_HOST_FUNC inline uint64_t rounding_mantissa<cutf::rounding::rb>(cons
 }
 } // namespace detail
 
-template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
-CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v) {
-	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
-	static_assert(mantissa_length < 23, "mantissa_length must be smaller than 23");
-
-	constexpr unsigned cut_length = 23u - mantissa_length;
+template <class rounding = cutf::rounding::rr>
+CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v, unsigned mantissa_length) {
+	const unsigned cut_length = 23u - mantissa_length;
 	const uint32_t in = cutf::experimental::fp::reinterpret_as_uint(v);
 	const uint32_t e = (in & 0b0'11111111'00000000000000000000000u);
 	const uint32_t s = (in & 0b1'00000000'00000000000000000000000u);
@@ -115,12 +112,9 @@ CUTF_DEVICE_HOST_FUNC inline float cut_mantissa(const float v) {
 	return cutf::experimental::fp::reinterpret_as_fp(out);
 }
 
-template <unsigned mantissa_length, class rounding = cutf::rounding::rr>
-CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v) {
-	static_assert(mantissa_length > 0, "mantissa_length must be greater than 0");
-	static_assert(mantissa_length < 52, "mantissa_length must be smaller than 52");
-
-	constexpr unsigned cut_length = 52u - mantissa_length;
+template <class rounding = cutf::rounding::rr>
+CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v, unsigned mantissa_length) {
+	const unsigned cut_length = 52u - mantissa_length;
 	const uint64_t in = cutf::experimental::fp::reinterpret_as_uint(v);
 	const uint64_t e = (in & 0xfff0000000000000lu);
 	const uint64_t s = (in & 0x8000000000000000lu);
