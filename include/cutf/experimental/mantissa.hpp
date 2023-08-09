@@ -126,6 +126,10 @@ CUTF_DEVICE_HOST_FUNC inline double cut_mantissa(const double v, unsigned mantis
 	const uint64_t out = s | m_pre | e_pre;
 	return cutf::experimental::fp::reinterpret_as_fp(out);
 }
+template <unsigned mantissa_length, class T, class rounding = cutf::rounding::rr>
+CUTF_DEVICE_HOST_FUNC inline T cut_mantissa(const T v) {
+	return cut_mantissa(v, mantissa_length);
+}
 } // namespace mantissa
 } // namespace experimental
 } // namespace cutf
