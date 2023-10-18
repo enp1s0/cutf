@@ -5,6 +5,7 @@
 #include <sstream>
 #include <memory>
 #include "cuda.hpp"
+#include "type.hpp"
 #include "error.hpp"
 
 namespace cutf{
@@ -297,8 +298,42 @@ GESVDJ(float, float, S);
 GESVDJ(double, double, D);
 GESVDJ(cuComplex, float, C);
 GESVDJ(cuDoubleComplex, double, Z);
-} // namespace dn
 
+// --------------------------------------------------------------------------
+// GELS
+// --------------------------------------------------------------------------
+template <class lowest_type_name, class main_type_name>
+inline cusolverStatus_t gels_buffer_size(cusolverDnHandle_t handle, int m, int n, int nrhs, main_type_name* dA, int ldda, main_type_name* dB, int lddb, main_type_name* dX, int lddx, void* dwork, size_t* lwork_bytes);
+template <class lowest_type_name, class main_type_name>
+inline cusolverStatus_t gels(cusolverDnHandle_t handle, int m, int n, int nrhs, main_type_name* dA, int ldda, main_type_name* dB, int lddb, main_type_name* dX, int lddx, void* dwork, size_t lwork_bytes, int* niter, int* dinfo);
+
+#define GELS(main_type_name, short_main_type_name, lowest_type_name, short_lowest_type_name)\
+  template <> inline cusolverStatus_t gels_buffer_size<lowest_type_name, main_type_name>(cusolverDnHandle_t handle, int m, int n, int nrhs, main_type_name* dA, int ldda, main_type_name* dB, int lddb, main_type_name* dX, int lddx, void* dwork, size_t* lwork_bytes) {\
+		return cusolverDn##short_main_type_name##short_lowest_type_name##gels_bufferSize(handle, m, n, nrhs, dA, ldda, dB, lddb, dX, lddx, dwork, lwork_bytes); \
+	} \
+  template <> inline cusolverStatus_t gels<lowest_type_name, main_type_name>(cusolverDnHandle_t handle, int m, int n, int nrhs, main_type_name* dA, int ldda, main_type_name* dB, int lddb, main_type_name* dX, int lddx, void* dwork, size_t lwork_bytes, int* niter, int* dinfo) {\
+		return cusolverDn##short_main_type_name##short_lowest_type_name##gels(handle, m, n, nrhs, dA, ldda, dB, lddb, dX, lddx, dwork, lwork_bytes, niter, dinfo); \
+	}
+GELS(cuDoubleComplex, Z, double, Z);
+GELS(cuDoubleComplex, Z, float, C);
+GELS(cuDoubleComplex, Z, half, K);
+GELS(cuDoubleComplex, Z, __nv_bfloat16, E);
+GELS(cuDoubleComplex, Z, nvcuda::wmma::precision::tf32, Y);
+GELS(cuComplex, C, float, C);
+GELS(cuComplex, C, half, K);
+GELS(cuComplex, C, __nv_bfloat16, E);
+GELS(cuComplex, C, nvcuda::wmma::precision::tf32, Y);
+GELS(double, D, double, D);
+GELS(double, D, float, S);
+GELS(double, D, half, H);
+GELS(double, D, __nv_bfloat16, B);
+GELS(double, D, nvcuda::wmma::precision::tf32, X);
+GELS(float, S, float, S);
+GELS(float, S, half, H);
+GELS(float, S, __nv_bfloat16, B);
+GELS(float, S, nvcuda::wmma::precision::tf32, X);
+
+} // namespace dn
 } // cusolver
 } // cutf
 
