@@ -56,27 +56,32 @@ void eval(const std::vector<std::size_t>& dims) {
 
   auto in_uptr  = cutf::memory::get_managed_unique_ptr<IN_T >(num_elements);
   auto out_uptr = cutf::memory::get_managed_unique_ptr<OUT_T>(num_elements);
-  auto ref_uptr = cutf::memory::get_managed_unique_ptr<OUT_T>(num_elements);
+  auto ref_uptr = cutf::memory::get_managed_unique_ptr<IN_T >(num_elements);
 
   rand_init(in_uptr.get(), num_elements);
 
-  cufftHandle plan;
-  const auto type = cutf::cufft::get_type<IN_T, OUT_T>();
+  cufftHandle fw_plan, bw_plan;
+  const auto fw_type = cutf::cufft::get_type<IN_T, OUT_T>();
+  const auto bw_type = cutf::cufft::get_type<OUT_T, IN_T>();
   switch (dims.size()) {
     case 1:
-      CUTF_HANDLE_ERROR(cufftPlan1d(&plan, dims[0], type, 1));
+      CUTF_HANDLE_ERROR(cufftPlan1d(&fw_plan, dims[0], fw_type, 1));
+      CUTF_HANDLE_ERROR(cufftPlan1d(&bw_plan, dims[0], bw_type, 1));
+      break;
     case 2:
-      CUTF_HANDLE_ERROR(cufftPlan2d(&plan, dims[0], dims[1], type));
+      CUTF_HANDLE_ERROR(cufftPlan2d(&fw_plan, dims[0], dims[1], fw_type));
+      CUTF_HANDLE_ERROR(cufftPlan2d(&bw_plan, dims[0], dims[1], bw_type));
       break;
     case 3:
-      CUTF_HANDLE_ERROR(cufftPlan3d(&plan, dims[0], dims[1], dims[2], type));
+      CUTF_HANDLE_ERROR(cufftPlan3d(&fw_plan, dims[0], dims[1], dims[2], fw_type));
+      CUTF_HANDLE_ERROR(cufftPlan3d(&bw_plan, dims[0], dims[1], dims[2], bw_type));
       break;
     default:
       break;
   }
 
-  CUTF_CHECK_ERROR(cufftXtExec(plan, in_uptr.get(), out_uptr.get(),CUFFT_FORWARD));
-  CUTF_CHECK_ERROR(cufftXtExec(plan, out_uptr.get(), ref_uptr.get(),CUFFT_INVERSE));
+  CUTF_CHECK_ERROR(cufftXtExec(fw_plan, in_uptr.get(), out_uptr.get(), CUFFT_FORWARD));
+  CUTF_CHECK_ERROR(cufftXtExec(bw_plan, out_uptr.get(), ref_uptr.get(), CUFFT_INVERSE));
 
   CUTF_CHECK_ERROR(cudaDeviceSynchronize());
 
@@ -89,12 +94,10 @@ void eval(const std::vector<std::size_t>& dims) {
 }
 
 int main() {
-  for (const auto dims : std::vector<std::vector<std::size_t>>{{1024}, {256, 256}, {32, 32, 32}}) {
-    eval<float    , cuComplex>(dims);
-    eval<cuComplex, cuComplex>(dims);
-    eval<cuComplex, float    >(dims);
+  for (const auto dims : std::vector<std::vector<std::size_t>>{{1lu << 16}, {1lu << 8, 1lu << 8}, {32, 32, 32}}) {
+    eval<float          , cuComplex      >(dims);
+    eval<cuComplex      , cuComplex      >(dims);
     eval<double         , cuDoubleComplex>(dims);
     eval<cuDoubleComplex, cuDoubleComplex>(dims);
-    eval<cuDoubleComplex, double         >(dims);
   }
 }
