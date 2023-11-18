@@ -1,5 +1,5 @@
 include ../Makefile.common
-NVCCFLAGS+=-lcufft
+NVCCFLAGS+=-lcufft -lcurand
 TARGETS=cufft.test
 
 all: $(TARGETS)
