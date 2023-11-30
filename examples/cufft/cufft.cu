@@ -5,6 +5,13 @@
 #include <vector>
 #include <random>
 
+template <class T>
+std::string get_str();
+template <> std::string get_str<double         >() {return "double";};
+template <> std::string get_str<float          >() {return "float";};
+template <> std::string get_str<cuComplex      >() {return "cuComplex";};
+template <> std::string get_str<cuDoubleComplex>() {return "cuDoubleComplex";};
+
 std::string vec_str(const std::vector<std::size_t>& v) {
   std::string str = "";
   for (std::size_t i = 0; i < v.size(); i++) {
@@ -90,11 +97,15 @@ void eval(const std::vector<std::size_t>& dims) {
     max_error = std::max(static_cast<double>(real_value(in_uptr.get()[i])) - real_value(ref_uptr.get()[i]), max_error);
   }
 
-  std::printf("dims=(%s), max_error=%e\n", vec_str(dims).c_str(), max_error);
+  std::printf("in=%15s, out=%15s, dims=(%15s), max_error=%5e\n",
+              get_str<IN_T>().c_str(),
+              get_str<OUT_T>().c_str(),
+              vec_str(dims).c_str(),
+              max_error);
 }
 
 int main() {
-  for (const auto dims : std::vector<std::vector<std::size_t>>{{1lu << 16}, {1lu << 8, 1lu << 8}, {32, 32, 32}}) {
+  for (const auto& dims : std::vector<std::vector<std::size_t>>{{1lu << 16}, {1lu << 8, 1lu << 8}, {32, 32, 32}}) {
     eval<float          , cuComplex      >(dims);
     eval<cuComplex      , cuComplex      >(dims);
     eval<double         , cuDoubleComplex>(dims);
