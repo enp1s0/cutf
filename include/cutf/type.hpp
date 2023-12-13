@@ -12,15 +12,17 @@
 #include <mma.h>
 #define __CUTF_AMPERE_MMA__
 #else
-//struct __nv_bfloat16  {std::uint16_t bs;};
-//struct __nv_bfloat162 {std::uint32_t bs;};
 namespace nvcuda {
 namespace wmma {
 namespace precision {
 struct tf32;
 } // precision
+} // wmma
 } // nvcuda
-} // nvcuda
+#endif
+#ifndef __CUDA_BF16_TYPES_EXIST__
+struct __nv_bfloat16  {std::uint16_t bs;};
+struct __nv_bfloat162 {std::uint32_t bs;};
 #endif
 
 #define CAST(from_t, to_t, func, val) \
