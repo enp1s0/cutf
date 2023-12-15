@@ -2,6 +2,7 @@
 #define __CUTF_TYPE_CUH__
 
 #include <cuda_fp16.h>
+#include <cuda_bf16.h>
 #include <cuComplex.h>
 #include "experimental/tf32.hpp"
 #include "experimental/fp.hpp"
@@ -21,8 +22,12 @@ struct tf32;
 } // nvcuda
 #endif
 #ifndef __CUDA_BF16_TYPES_EXIST__
-struct __nv_bfloat16  {std::uint16_t bs;};
-struct __nv_bfloat162 {std::uint32_t bs;};
+struct __CUDA_ALIGN__(2) __nv_bfloat16 {
+    unsigned short __x;
+};
+struct __CUDA_ALIGN__(4) __nv_bfloat162 {
+    unsigned __x;
+};
 #endif
 
 #define CAST(from_t, to_t, func, val) \
