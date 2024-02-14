@@ -7,27 +7,30 @@ using compute_t = float;
 const std::size_t N = 1 << 10;
 
 int main(){
-	auto hA = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
-	auto hB = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
-	auto hC = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
-	auto dA = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
-	auto dB = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
-	auto dC = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
+  auto hA = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
+  auto hB = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
+  auto hC = cutf::memory::get_host_unique_ptr<compute_t>(N * N);
+  auto dA = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
+  auto dB = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
+  auto dC = cutf::memory::get_device_unique_ptr<compute_t>(N * N);
 
-	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
-	std::mt19937 mt(std::random_device{}());
+  const cublasOperation_t trans_A = CUBLAS_OP_T;
+  const cublasOperation_t trans_B = CUBLAS_OP_N;
 
-	for(auto i = decltype(N)(0); i < N * N; i++){
-		hA.get()[i] = dist(mt);
-		hB.get()[i] = dist(mt);
-	}
+  std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+  std::mt19937 mt(std::random_device{}());
 
-	cutf::memory::copy(dA.get(), hA.get(), N * N);
-	cutf::memory::copy(dB.get(), hB.get(), N * N);
+  for(auto i = decltype(N)(0); i < N * N; i++){
+    hA.get()[i] = dist(mt);
+    hB.get()[i] = dist(mt);
+  }
 
-	auto cublaslt_handle = cutf::cublaslt::create_handle_unique_ptr();
-	compute_t alpha = cutf::type::cast<compute_t>(1.0f);
-	compute_t beta = cutf::type::cast<compute_t>(1.0f);
+  cutf::memory::copy(dA.get(), hA.get(), N * N);
+  cutf::memory::copy(dB.get(), hB.get(), N * N);
+
+  auto cublaslt_handle = cutf::cublaslt::create_handle_unique_ptr();
+  const auto alpha = cutf::type::cast<compute_t>(1.0f);
+  const auto beta = cutf::type::cast<compute_t>(1.0f);
 
   auto a_desc_uptr = cutf::cublaslt::create_matrix_layout_uptr(
       N, N, N, dA.get()
@@ -43,6 +46,9 @@ int main(){
       CUBLAS_COMPUTE_32F,
       cutf::type::get_data_type<compute_t>()
       );
+  CUTF_CHECK_ERROR(cublasLtMatmulDescSetAttribute(*cublaslt_op_desc.get(), CUBLASLT_MATMUL_DESC_TRANSA, &trans_A, sizeof(trans_A)));
+  CUTF_CHECK_ERROR(cublasLtMatmulDescSetAttribute(*cublaslt_op_desc.get(), CUBLASLT_MATMUL_DESC_TRANSB, &trans_B, sizeof(trans_A)));
+
 
   auto cublaslt_preference_uptr = cutf::cublaslt::create_preference_unique_ptr();
   const std::size_t worksize = 4lu << 20;
@@ -67,6 +73,10 @@ int main(){
           &heuristic_result,
           &returned_results
           ));
+  if (returned_results == 0) {
+    std::fprintf(stderr, "Error in cublasLtMatmulAlgoGetHeuristic\n");
+    return 1;
+  }
 
   auto workspace_uptr = cutf::memory::get_device_unique_ptr<std::uint8_t>(worksize);
 
@@ -74,16 +84,16 @@ int main(){
           *cublaslt_handle.get(),
           *cublaslt_op_desc.get(),
           &alpha,
-          a_desc_uptr.get(), *a_desc_uptr.get(),
-          b_desc_uptr.get(), *b_desc_uptr.get(),
+          dA.get(), *a_desc_uptr.get(),
+          dB.get(), *b_desc_uptr.get(),
           &beta,
-          c_desc_uptr.get(), *c_desc_uptr.get(),
-          c_desc_uptr.get(), *c_desc_uptr.get(),
+          dC.get(), *c_desc_uptr.get(),
+          dC.get(), *c_desc_uptr.get(),
           &heuristic_result.algo,
           workspace_uptr.get(),
           worksize,
           0
           ));
 
-	cutf::memory::copy(hC.get(), dC.get(), N * N);
+  cutf::memory::copy(hC.get(), dC.get(), N * N);
 }
