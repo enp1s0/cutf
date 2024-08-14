@@ -2,6 +2,7 @@
 #define __CUTF_TYPE_CUH__
 
 #include <cuda_fp16.h>
+#include <cuda_bf16.h>
 #include <cuComplex.h>
 #include "experimental/tf32.hpp"
 #include "experimental/fp.hpp"
