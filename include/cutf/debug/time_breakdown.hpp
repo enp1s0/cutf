@@ -108,7 +108,7 @@ public:
 
 		auto statistic_list = get_statistics_list();
 		std::time_t time_total = 0;
-		for (const auto s : statistic_list) {
+		for (const auto &s : statistic_list) {
 			time_total += s.sum;
 		}
 
