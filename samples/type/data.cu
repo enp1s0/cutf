@@ -6,7 +6,7 @@
 	static_assert(cutf::type::get_data_type<T>() == cuda_type, "Type unmatched : " #cuda_type)
 
 #define TYPE_CAST_TEST(DST, SRC) \
-{const SRC a = 1; const auto v = cutf::type::cast<DST>(a);CUTF_UNUSED(v);}
+{const SRC a = cutf::type::cast<SRC>(1); const auto v = cutf::type::cast<DST>(a);CUTF_UNUSED(v);}
 
 #ifdef __CUTF_FP8_EXIST__
 #define TYPE_CAST_TEST_1(DST) \
