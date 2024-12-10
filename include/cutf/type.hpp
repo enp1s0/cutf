@@ -9,6 +9,10 @@
 #include "rounding_mode.hpp"
 #include "macro.hpp"
 
+#ifdef __CUTF_FP8_EXIST__
+#include <cuda_fp8.h>
+#endif
+
 #if defined(CUDART_VERSION) && CUDART_VERSION >= 11000 && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 800
 #include <mma.h>
 #define __CUTF_AMPERE_MMA__
@@ -29,9 +33,6 @@ struct __CUDA_ALIGN__(4) __nv_bfloat162 {
     unsigned __x;
 };
 #endif
-
-#define CAST(from_t, to_t, func, val) \
-	 template <> CUTF_DEVICE_HOST_FUNC inline typename data_t<to_t>::type cast<to_t>(const from_t val){return func;}
 
 #ifdef __CUDA_ARCH__
 #define REINTERPRET(src_type, src_ty, dst_type, dst_ty) \
@@ -60,95 +61,58 @@ template <class T>
 struct data_t {using type = T;};
 template <> struct data_t<nvcuda::wmma::precision::tf32> {using type = float;};
 
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const int a)    {return static_cast<T>(a);}
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const float a)  {return static_cast<T>(a);}
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const double a) {return static_cast<T>(a);}
+namespace detail {
+template <class DST_T, class SRC_T>
+struct cast_op {
+  inline __device__ typename data_t<DST_T>::type operator()(const SRC_T a) {
+    return static_cast<typename data_t<DST_T>::type>(a);
+  }
+};
 
-
-// FP16
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const half a)   {return static_cast<T>(a);}
-CAST(half  , int   , static_cast<int>(__half2float(a)), a);
-CAST(half  , float , __half2float(a), a);
-CAST(half  , double, static_cast<double>(__half2float(a)), a);
-
-CAST(int   , half, __float2half(static_cast<float>(a)), a);
-CAST(float , half, __float2half(a), a);
-CAST(double, half, __float2half(static_cast<float>(a)), a);
-
-CAST(half  , half, a, a);
-
-// BF16
-template <class T>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const __nv_bfloat16 a)   {return static_cast<T>(a);}
-
-template <>  CUTF_DEVICE_HOST_FUNC inline __nv_bfloat16 cast<__nv_bfloat16>(const float a) {
-#ifdef __CUTF_AMPERE_MMA__
-	return __float2bfloat16(a);
-#else
-	const auto bs = static_cast<std::uint16_t>(cutf::experimental::fp::reinterpret_as_uint(a) >> 16);
-	return cutf::experimental::fp::detail::reinterpret_medium<__nv_bfloat16, std::uint16_t>{.bs = bs}.fp;
-#endif
-}
-template <>  CUTF_DEVICE_HOST_FUNC inline float cast<float>(const __nv_bfloat16 a) {
-#ifdef __CUTF_AMPERE_MMA__
-	return __bfloat162float(a);
-#else
-	const std::uint32_t bs = cutf::experimental::fp::detail::reinterpret_medium<__nv_bfloat16, std::uint16_t>{.fp = a}.bs;
-	return cutf::experimental::fp::reinterpret_as_fp(bs << 16);
-#endif
-}
-CAST(__nv_bfloat16, int   , static_cast<int>(cast<float>(a)), a);
-CAST(__nv_bfloat16, double, static_cast<double>(cast<float>(a)), a);
-
-CAST(int   , __nv_bfloat16, cast<__nv_bfloat16>(static_cast<float>(a)), a);
-CAST(double, __nv_bfloat16, cast<__nv_bfloat16>(static_cast<float>(a)), a);
-
-CAST(__nv_bfloat16, __nv_bfloat16, a, a);
-
-// cast to tf32
-template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const int a) {
+template <class SRC_T>
+struct cast_op<nvcuda::wmma::precision::tf32, SRC_T> {
+  inline __device__ typename data_t<nvcuda::wmma::precision::tf32>::type operator()(const SRC_T a) {
+    const auto v = cutf::type::detail::cast_op<float, SRC_T>{}(a);
 #if defined(__CUTF_AMPERE_MMA__)
     float ret;
     asm("{.reg .b32 %mr;\n"
         "cvt.rna.tf32.f32 %mr, %1;\n"
-        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
+        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(v));
     return ret;
 #else
-	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
+	return cutf::experimental::tf32::to_tf32(v);
 #endif
-}
-template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const half a) {
-#if defined(__CUTF_AMPERE_MMA__)
-    float ret;
-    asm("{.reg .b32 %mr;\n"
-        "cvt.rna.tf32.f32 %mr, %1;\n"
-        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
-    return ret;
-#else
-	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
-#endif
-}
-template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const float a) {
-#if defined(__CUTF_AMPERE_MMA__)
-    float ret;
-    asm("{.reg .b32 %mr;\n"
-        "cvt.rna.tf32.f32 %mr, %1;\n"
-        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
-    return ret;
-#else
-	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
-#endif
-}
-template <>  CUTF_DEVICE_HOST_FUNC inline typename data_t<nvcuda::wmma::precision::tf32>::type cast<nvcuda::wmma::precision::tf32>(const double a) {
-#if defined(__CUTF_AMPERE_MMA__)
-    float ret;
-    asm("{.reg .b32 %mr;\n"
-        "cvt.rna.tf32.f32 %mr, %1;\n"
-        "mov.b32 %0, %mr;}\n" : "=f"(ret) : "f"(cutf::type::cast<float>(a)));
-    return ret;
-#else
-	return cutf::experimental::tf32::to_tf32(cutf::type::cast<float>(a));
-#endif
-}
+  }
+};
+
+template <>
+struct cast_op<cuDoubleComplex, cuComplex> {
+  inline __device__ typename data_t<cuDoubleComplex>::type operator()(const cuComplex a) {
+    return make_cuDoubleComplex(a.x, a.y);
+  }
+};
+template <>
+struct cast_op<cuComplex, cuComplex> {
+  inline __device__ typename data_t<cuComplex>::type operator()(const cuComplex a) {
+    return make_cuComplex(a.x, a.y);
+  }
+};
+template <>
+struct cast_op<cuComplex, cuDoubleComplex> {
+  inline __device__ typename data_t<cuComplex>::type operator()(const cuDoubleComplex a) {
+    return make_cuComplex(a.x, a.y);
+  }
+};
+template <>
+struct cast_op<cuDoubleComplex, cuDoubleComplex> {
+  inline __device__ typename data_t<cuDoubleComplex>::type operator()(const cuDoubleComplex a) {
+    return make_cuDoubleComplex(a.x, a.y);
+  }
+};
+} // namespace detail
+
+// cast
+template <class T, class S>  CUTF_DEVICE_HOST_FUNC inline typename data_t<T>::type cast(const S a)   {return detail::cast_op<T, S>{}(a);}
 
 // reinterpret
 template <class T>  CUTF_DEVICE_FUNC inline T reinterpret(const float a);
@@ -199,6 +163,10 @@ DATA_TYPE_DEF(float, R, 32F);
 DATA_TYPE_DEF(cuComplex, C, 32F);
 DATA_TYPE_DEF(double, R, 64F);
 DATA_TYPE_DEF(cuDoubleComplex, C, 64F);
+#ifdef __CUTF_FP8_EXIST__
+DATA_TYPE_DEF(__nv_fp8_e5m2, R, 8F_E5M2);
+DATA_TYPE_DEF(__nv_fp8_e4m3, R, 8F_E4M3);
+#endif
 // Uncertain {{{
 DATA_TYPE_DEF(signed char, R, 8I);
 DATA_TYPE_DEF(signed short, R, 16I);
@@ -219,13 +187,6 @@ template <class T>
 struct complex_type {using type = T;};
 template <> struct complex_type<double> {using type = cuDoubleComplex;};
 template <> struct complex_type<float > {using type = cuComplex;};
-
-template <class DST_T> CUTF_DEVICE_HOST_FUNC inline DST_T cast(const cuComplex);
-template <class DST_T> CUTF_DEVICE_HOST_FUNC inline DST_T cast(const cuDoubleComplex);
-template <> CUTF_DEVICE_HOST_FUNC inline cuDoubleComplex cast<cuDoubleComplex>(const cuComplex a      ) {return make_cuDoubleComplex(a.x, a.y);}
-template <> CUTF_DEVICE_HOST_FUNC inline cuDoubleComplex cast<cuDoubleComplex>(const cuDoubleComplex a) {return a;}
-template <> CUTF_DEVICE_HOST_FUNC inline cuComplex       cast<cuComplex>      (const cuComplex a      ) {return a;}
-template <> CUTF_DEVICE_HOST_FUNC inline cuComplex       cast<cuComplex>      (const cuDoubleComplex a) {return make_cuComplex(a.x, a.y);}
 
 template <class COMPLEX_T, class REAL_T>
 CUTF_DEVICE_HOST_FUNC COMPLEX_T to_complex(const REAL_T r) {
