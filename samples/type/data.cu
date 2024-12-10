@@ -8,6 +8,43 @@
 #define TYPE_CAST_TEST(DST, SRC) \
 {const SRC a = 1; const auto v = cutf::type::cast<DST>(a);CUTF_UNUSED(v);}
 
+#ifdef __CUTF_FP8_EXIST__
+#define TYPE_CAST_TEST_1(DST) \
+	TYPE_CAST_TEST(DST, half           ) \
+	TYPE_CAST_TEST(DST, __nv_bfloat16  ) \
+	TYPE_CAST_TEST(DST, float          ) \
+	TYPE_CAST_TEST(DST, double         ) \
+	TYPE_CAST_TEST(DST, std::uint8_t   ) \
+	TYPE_CAST_TEST(DST, std::int8_t    ) \
+	TYPE_CAST_TEST(DST, std::uint16_t  ) \
+	TYPE_CAST_TEST(DST, std::int16_t   ) \
+	TYPE_CAST_TEST(DST, std::uint32_t  ) \
+	TYPE_CAST_TEST(DST, std::int32_t   ) \
+	TYPE_CAST_TEST(DST, std::uint64_t  ) \
+	TYPE_CAST_TEST(DST, std::int64_t   ) \
+	TYPE_CAST_TEST(DST, unsigned       ) \
+	TYPE_CAST_TEST(DST, int            ) \
+	TYPE_CAST_TEST(DST, __nv_fp8_e5m2  ) \
+	TYPE_CAST_TEST(DST, __nv_fp8_e4m3  )
+
+#define TYPE_CAST_TEST_2 \
+	TYPE_CAST_TEST_1(half           ) \
+	TYPE_CAST_TEST_1(__nv_bfloat16  ) \
+	TYPE_CAST_TEST_1(float          ) \
+	TYPE_CAST_TEST_1(double         ) \
+	TYPE_CAST_TEST_1(std::uint8_t   ) \
+	TYPE_CAST_TEST_1(std::int8_t    ) \
+	TYPE_CAST_TEST_1(std::uint16_t  ) \
+	TYPE_CAST_TEST_1(std::int16_t   ) \
+	TYPE_CAST_TEST_1(std::uint32_t  ) \
+	TYPE_CAST_TEST_1(std::int32_t   ) \
+	TYPE_CAST_TEST_1(std::uint64_t  ) \
+	TYPE_CAST_TEST_1(std::int64_t   ) \
+	TYPE_CAST_TEST_1(unsigned       ) \
+	TYPE_CAST_TEST_1(int            ) \
+	TYPE_CAST_TEST_1(__nv_fp8_e5m2  ) \
+	TYPE_CAST_TEST_1(__nv_fp8_e4m3  )
+#else
 #define TYPE_CAST_TEST_1(DST) \
 	TYPE_CAST_TEST(DST, half           ) \
 	TYPE_CAST_TEST(DST, __nv_bfloat16  ) \
@@ -39,6 +76,7 @@
 	TYPE_CAST_TEST_1(std::int64_t   ) \
 	TYPE_CAST_TEST_1(unsigned       ) \
 	TYPE_CAST_TEST_1(int            )
+#endif
 
 int main() {
 	CHECK_TYPE(half           , CUDA_R_16F);
