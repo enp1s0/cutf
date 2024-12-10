@@ -30,8 +30,8 @@ template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<cuDoubleCompl
 template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<cuComplex>() {return "cuComplex";}
 
 #ifdef __CUTF_FP8_EXIST__
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__nv_fp8_e5m2>() {return "E5M2";}
-template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__nv_fp8_e4m3>() {return "E4M3";}
+template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__nv_fp8_e5m2>() {return "e5m2";}
+template <> CUTF_DEVICE_HOST_FUNC inline const char* get_type_name<__nv_fp8_e4m3>() {return "e4m3";}
 #endif //__CUTF_FP8_EXIST__
 
 } // namespace type
