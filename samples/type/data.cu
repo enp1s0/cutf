@@ -28,6 +28,11 @@ int main() {
 	CHECK_TYPE(cuComplex      , CUDA_C_32F);
 	CHECK_TYPE(cuDoubleComplex, CUDA_C_64F);
 
+#ifdef __CUTF_FP8_EXIST__
+	CHECK_TYPE(__nv_fp8_e5m2, CUDA_R_8F_E5M2);
+	CHECK_TYPE(__nv_fp8_e4m3, CUDA_R_8F_E4M3);
+#endif
+
 	TYPE_CAST_TEST(half);
 	TYPE_CAST_TEST(__nv_bfloat16);
 	TYPE_CAST_TEST(nvcuda::wmma::precision::tf32);
