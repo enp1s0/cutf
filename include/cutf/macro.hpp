@@ -16,4 +16,8 @@
 // This macro prevents a warning "Unused variable"
 #define CUTF_UNUSED(a) do {(void)(a);} while (0)
 
+#if defined(CUDART_VERSION) && CUDART_VERSION >= 11800
+#define __CUTF_FP8_EXIST__
+#endif
+
 #endif // __CUTF_MACRO_HPP__
