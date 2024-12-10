@@ -109,6 +109,18 @@ struct cast_op<cuDoubleComplex, cuDoubleComplex> {
     return make_cuDoubleComplex(a.x, a.y);
   }
 };
+
+#define INTERMEDIATE_CAST(DST_T, SRC_T, INTER_T) \
+template <> struct cast_op<DST_T, SRC_T> { \
+  inline __device__ typename data_t<DST_T>::type operator()(const SRC_T a) { \
+    const auto v = cast_op<INTER_T, SRC_T>{}(a); \
+    return static_cast<typename data_t<DST_T>::type>(v); \
+  } \
+}
+#ifdef __CUTF_FP8_EXIST__
+INTERMEDIATE_CAST(__nv_fp8_e5m2, __nv_fp8_e4m3, float);
+INTERMEDIATE_CAST(__nv_fp8_e4m3, __nv_fp8_e5m2, float);
+#endif
 } // namespace detail
 
 // cast
