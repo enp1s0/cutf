@@ -1,6 +1,8 @@
 #ifndef __CUTF_DEBUG_CLOCK_BREAKDOWN_HPP__
 #define __CUTF_DEBUG_CLOCK_BREAKDOWN_HPP__
 
+#ifdef CUTF_ENABLE_CLOCK_BREAKDOWN
+// When enabled
 #define CUTF_CLOCK_BREAKDOWN_INIT(num_timestamps) \
 	long long int _cutf_timestamp_list[num_timestamps]
 
@@ -9,5 +11,14 @@
 
 #define CUTF_CLOCK_BREAKDOWN_DURATION(start_index, end_index) \
 	(_cutf_timestamp_list[end_index] - _cutf_timestamp_list[start_index])
+#else
+// When disabled
+#define CUTF_CLOCK_BREAKDOWN_INIT(num_timestamps)
+
+#define CUTF_CLOCK_BREAKDOWN_RECORD(timestamp_index)
+
+#define CUTF_CLOCK_BREAKDOWN_DURATION(start_index, end_index) \
+    static_cast<long long int>(0)
+#endif
 
 #endif

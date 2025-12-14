@@ -2,6 +2,9 @@
 
 ## Usage
 ```cuda
+#define CUTF_ENABLE_CLOCK_BREAKDOWN
+#include <cutf/debug/clock_breakdown.hpp>
+
 __global__ void kernel(float* const ptr) {
 	CUTF_CLOCK_BREAKDOWN_INIT(2);
 	CUTF_CLOCK_BREAKDOWN_RECORD(0);
