@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cutf/memory.hpp>
+
+#define CUTF_ENABLE_CLOCK_BREAKDOWN
 #include <cutf/debug/clock_breakdown.hpp>
 
 constexpr std::size_t N = 256;
