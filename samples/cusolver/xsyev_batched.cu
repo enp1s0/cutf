@@ -70,27 +70,15 @@ int main(){
   auto hInfo_uptr = cutf::memory::get_host_unique_ptr<int>(batch_size);
   cutf::memory::copy(hInfo_uptr.get(), dInfo.get(), batch_size);
 
-  /*
-  cutf::memory::copy(hS.get(), dS.get(), num_s);
-  cutf::memory::copy(hU.get(), dU.get(), M * num_s);
-  cutf::memory::copy(hVT.get(), dVT.get(), N * num_s);
-
-  double base_norm2 = 0;
-  double diff_norm2 = 0;
-
-#pragma omp parallel for collapse(2) reduction(+: base_norm2) reduction(+: diff_norm2)
-  for (std::size_t i = 0; i < M; i++) {
-    for (std::size_t j = 0; j < N; j++) {
-      double c = 0;
-      for (std::size_t s = 0; s < num_s; s++) {
-        c += hU.get()[i + s * M] * hS.get()[s] * hVT.get()[s + j * num_s];
-      }
-      base_norm2 += c * c;
-      const auto diff = c - hA.get()[i + j * M];
-      diff_norm2 += diff * diff;
+  bool error = false;
+  for (std::uint32_t i = 0; i < batch_size; i++) {
+    if (hInfo_uptr.get()[i] != 0) {
+      error = true;
     }
   }
-  const auto relative_error = std::sqrt(diff_norm2 / base_norm2);
-  std::printf("relative error = %e\n", relative_error);
-  */
+  if (error) {
+    std::printf("Error(s) occured\n");
+  } else {
+    std::printf("Passed\n");
+  }
 }
